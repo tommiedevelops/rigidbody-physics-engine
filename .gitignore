@@ -1,1 +1,5 @@
 .vs/
+out/
+engine/
+external/glad/include
+external/glad/src

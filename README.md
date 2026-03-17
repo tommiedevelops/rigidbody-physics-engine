@@ -2,6 +2,17 @@
 
 A 3D Physics engine written in C++ for the purpose of learning how they work.
 
+## Requirements
+* OpenGL 3.0 or greater
+- Check with OpenGL Viewer Extension on Windows
+- Check with XXX for Linux
+- Check with XXX for mac
+
+* GLAD for dynamically retrieving OpenGL functions
+- Use this website to get zip file and extract into external/glad directory
+- https://glad.dav1d.de/
+
+
 ## Scope
 - Develop a 3D physics engine with collisions, gravity, friction, restitution.
 - Render the scene with a basic renderer using OpenGL
