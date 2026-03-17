@@ -12,6 +12,9 @@ A 3D Physics engine written in C++ for the purpose of learning how they work.
 - Use this website to get zip file and extract into external/glad directory
 - https://glad.dav1d.de/
 
+* GLFW for handling Window creation and management
+- should already be a submodule but if not clone from glfw github
+
 
 ## Scope
 - Develop a 3D physics engine with collisions, gravity, friction, restitution.
