@@ -2,6 +2,12 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+const float vertices[] = {
+	-0.5f, -0.5f, 0.0f,
+	 0.5f, -0.5f, 0.0f,
+	 0.0f,  0.5f, 0.0f
+};
+
 const char* vertShaderSource
 {
 	"#version 420 core\n"
@@ -72,6 +78,9 @@ int main(int argc, char** argv) {
 	int numVertices = 1;
 	glGenBuffers(numVertices, &VBO_id);
 
+	unsigned int VAO_id;
+	glGenVertexArrays(1, &VAO_id);
+
 	unsigned int vertShader_id;
 	vertShader_id = glCreateShader(GL_VERTEX_SHADER);
 
@@ -121,25 +130,25 @@ int main(int argc, char** argv) {
 		std::cout << "ERROR::LOG::SHADER::LINKING_FAILED\n" << infoLog_prog << std::endl;
 	}
 
+	glBindVertexArray(VAO_id);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_id);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
 	glUseProgram(shaderProgram_id);
 
 	glDeleteShader(vertShader_id);
 	glDeleteShader(fragShader_id);
-
-	float vertices[] = {
-		-0.5f, -0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		 0.0f,  0.5f, 0.0f
-	};
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput(window);
 
 		glClear(GL_COLOR_BUFFER_BIT);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
