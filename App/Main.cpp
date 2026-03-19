@@ -1,20 +1,21 @@
-#include "renderer.h"
+#include "renderer/renderer.h"
 #include "constants.h"
 
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-const float vertices[] = {
+ float vertices[] = {
 	-0.5f, -0.5f, 0.0f,
-	 0.5f, -0.5f, 0.0f,
-	 0.0f,  0.5f, 0.0f,
-	 0.5f,  0.5f, 0.5f
+	-0.5f,  0.5f, 0.0f,
+	 0.5f,  0.5f, 0.0f,
+	 0.5f, -0.5f, 0.0f
+
 };
 
-unsigned int indices[] = {
+int indices[] = {
 	0, 1, 2,
-	1, 2, 3
+	0, 2, 3
 };
 
 // global constants for now
@@ -49,7 +50,7 @@ int main(int argc, char** argv) {
 
 	setCallBacks(window);
 
-	glfwMakeContextCurrent(window);
+	glfwMakeContextCurrent(window); // im guessing this is where the window is linked to opengl?
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -57,14 +58,13 @@ int main(int argc, char** argv) {
 		return -1;
 	}
 
-	prepareOpenGLRender(vertices, sizeof(vertices)); // openGL maintains a global state
+	prepareOpenGLRender(vertices, sizeof(vertices), indices, sizeof(indices)); // openGL maintains a global state
 
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput(window);
-
-		glClear(GL_COLOR_BUFFER_BIT);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		
+		render();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

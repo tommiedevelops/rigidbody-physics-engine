@@ -9,10 +9,16 @@ add_subdirectory(external/glfw)
 add_subdirectory(external/glad)
 
 add_library(core
-	core/renderer.cpp
-	"core/renderer.h"
+	"core/renderer/renderer.cpp"
+	"core/renderer/renderer.h"
 	"core/constants.h"
-)
+    "core/physics/physics_world.cpp"
+	"core/physics/physics_world.h"
+	"core/scene/scene.cpp"
+	"core/scene/scene.h"
+	"core/app.cpp"
+	"core/app.h"
+ "core/game_math/vector.cpp" "core/game_math/vector.h" "core/game_math/matrix.cpp" "core/game_math/matrix.h" "core/game_math/quaternion.cpp" "core/game_math/quaternion.h")
 
 find_package(OpenGL REQUIRED)
 target_link_libraries(core PUBLIC OpenGL::GL)
@@ -26,6 +32,6 @@ target_include_directories(core
 add_executable(app
 	app/main.cpp	
     "core/constants.h"
-)
+ "core/physics/physics_world.cpp" "core/physics/physics_world.h" "core/scene/scene.cpp" "core/scene/scene.h" "core/app.cpp" "core/app.h" "core/game_math/vector.cpp" "core/game_math/vector.h" "core/game_math/matrix.cpp" "core/game_math/matrix.h" "core/game_math/quaternion.cpp" "core/game_math/quaternion.h")
 
 target_link_libraries(app PRIVATE core)
