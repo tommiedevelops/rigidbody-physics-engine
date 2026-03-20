@@ -1,70 +1,17 @@
+#include "constants.h"
+#include "shader.h"
+
 #include <iostream>
 #include <GLAD/glad.h>
-#include <GLFW/glfw3.h> // temporary coupling here
-#include "constants.h"
+#include <GLFW/glfw3.h> 
 
 void configureViewport()
 {
-	glViewport(0, 0, Constants::windowWidth, Constants::windowHeight);
+	glViewport(0, 0, Constants::SCR_WIDTH, Constants::SCR_HEIGHT);
 	glClearColor(0.8f, 0.9f, 0.7f, 1.0f);
 }
 
 int vertexColorLocation;  // temporary global var
-
-void compileAndBindShaders()
-{
-	GLuint vertexShader{ glCreateShader(GL_VERTEX_SHADER) };
-
-	glShaderSource(vertexShader, 1, &Constants::vertShaderSource, NULL);
-	glCompileShader(vertexShader);
-
-	GLuint fragShader{ glCreateShader(GL_FRAGMENT_SHADER) };
-
-	glShaderSource(fragShader, 1, &Constants::fragShaderSource, NULL);
-	glCompileShader(fragShader);
-
-	int success;
-	char infoLog[512];
-
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-
-	if (!success)
-	{
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	glGetShaderiv(fragShader, GL_COMPILE_STATUS, &success);
-
-	if (!success)
-	{
-		glGetShaderInfoLog(fragShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl; 
-	}
-
-	GLuint shaderProgram{ glCreateProgram() };
-
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragShader);
-	glLinkProgram(shaderProgram);
-
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-
-	if (!success)
-	{
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		std::cout << "ERROR::LOG::SHADER::LINKING_FAILED\n" << infoLog << std::endl;
-	}
-
-
-	vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
-
-	glUseProgram(shaderProgram);
-
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragShader);
-
-}
 
 void prepareVertices(const float* vertices,
 				     const std::size_t vertices_size,
@@ -124,7 +71,10 @@ void prepareOpenGLRender(const float* vertices,
 )
 {
 	configureViewport();
-	compileAndBindShaders();
+
+	auto shader{ Shader("../resources/shaders/shader.vert", "../resources/shaders/shader.frag") };
+	shader.use();
+
 	prepareVertices(vertices, vertices_size, indicies, indicies_size);
 }
 

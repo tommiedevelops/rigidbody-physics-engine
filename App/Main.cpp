@@ -38,7 +38,7 @@ int main(int argc, char** argv) {
 
 	glfwInit();
 
-	auto window{ glfwCreateWindow(Constants::windowWidth,Constants::windowHeight,"My Application",NULL,NULL) };
+	auto window{ glfwCreateWindow(Constants::SCR_WIDTH,Constants::SCR_HEIGHT,"My Application",NULL,NULL) };
 
 	if (!window)
 	{

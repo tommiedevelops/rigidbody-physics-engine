@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <filesystem>
 
 #include <GLAD/glad.h>
 
@@ -58,6 +59,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	catch(std::ifstream::failure e)
 	{
 		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+		std::cout << "CWD = " << std::filesystem::current_path() << std::endl;
 	}
 
 	const char* vShaderCode = vertexCode.c_str();
