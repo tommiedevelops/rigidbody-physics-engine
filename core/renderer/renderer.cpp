@@ -61,8 +61,6 @@ void compileAndBindShaders()
 
 	glUseProgram(shaderProgram);
 
-
-
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragShader);
 
