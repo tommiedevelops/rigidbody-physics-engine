@@ -6,7 +6,7 @@
 void configureViewport()
 {
 	glViewport(0, 0, Constants::windowWidth, Constants::windowHeight);
-	glClearColor(0.1f, 0.9f, 0.4f, 1.0f);
+	glClearColor(0.8f, 0.9f, 0.7f, 1.0f);
 }
 
 int vertexColorLocation;  // temporary global var
@@ -90,9 +90,13 @@ void prepareVertices(const float* vertices,
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_size, indices, GL_STATIC_DRAW); // indices
 
 	// this is how the data is laid out 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	const std::size_t stride = 6 * sizeof(float);
 
-	glEnableVertexAttribArray(0); // send the data?
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (void*)0);
+	glEnableVertexAttribArray(0); // enable the position data
+
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 }
 

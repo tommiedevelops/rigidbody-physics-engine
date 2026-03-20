@@ -6,15 +6,15 @@
 #include <GLFW/glfw3.h>
 
  float vertices[] = { //NDC
-	-0.5f, -0.5f, 0.0f,
-	-0.5f,  0.5f, 0.0f,
-	 0.5f,  0.5f, 0.0f,
-	 0.5f, -0.5f, 0.0f
+
+	 // positions          // colors
+	 0.5f, -0.5f, 0.0f,    1.0f, 0.0f, 0.0f,
+	-0.5f, -0.5f, 0.0f,    0.0f, 1.0f, 0.0f,
+	 0.0f,  0.5f, 0.0f,    0.0f, 0.0f, 1.0f
  };
 
  int indices[] = {
 	 0, 1, 2,
-	 0, 2, 3
  };
 
  // global constants for now
