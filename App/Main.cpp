@@ -5,22 +5,21 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
- float vertices[] = {
+ float vertices[] = { //NDC
 	-0.5f, -0.5f, 0.0f,
 	-0.5f,  0.5f, 0.0f,
 	 0.5f,  0.5f, 0.0f,
 	 0.5f, -0.5f, 0.0f
+ };
 
-};
+ int indices[] = {
+	 0, 1, 2,
+	 0, 2, 3
+ };
 
-int indices[] = {
-	0, 1, 2,
-	0, 2, 3
-};
-
-// global constants for now
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
+ // global constants for now
+ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+ {
 	glViewport(0, 0, width, height);
 }
 
@@ -59,6 +58,8 @@ int main(int argc, char** argv) {
 	}
 
 	prepareOpenGLRender(vertices, sizeof(vertices), indices, sizeof(indices)); // openGL maintains a global state
+
+	printMaxVertAttribs();
 
 	while (!glfwWindowShouldClose(window))
 	{

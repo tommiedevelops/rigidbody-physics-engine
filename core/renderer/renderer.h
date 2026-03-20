@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-class Renderer {};
+class Renderer{};
 
 void prepareOpenGLRender(const float* vertices,
 	const std::size_t vertices_size,
@@ -12,5 +12,6 @@ void prepareOpenGLRender(const float* vertices,
 );
 
 void render();
+void printMaxVertAttribs();
 
 #endif
