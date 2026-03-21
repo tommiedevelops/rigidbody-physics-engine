@@ -18,7 +18,21 @@ add_library(core
 	"core/scene/scene.h"
 	"core/app.cpp"
 	"core/app.h"
- "core/game_math/vector.cpp" "core/game_math/vector.h" "core/game_math/matrix.cpp" "core/game_math/matrix.h" "core/game_math/quaternion.cpp" "core/game_math/quaternion.h" "core/resource_manager/mesh.cpp" "core/resource_manager/mesh.h" "core/window/window.cpp" "core/window/window.h" "core/renderer/shader.h" "core/renderer/shader.cpp")
+    "core/game_math/vector.cpp"
+	"core/game_math/vector.h"
+	"core/game_math/matrix.cpp"
+	"core/game_math/matrix.h"
+	"core/game_math/quaternion.cpp"
+	"core/game_math/quaternion.h"
+	"core/resource_manager/mesh.cpp"
+	"core/resource_manager/mesh.h"
+	"core/window/window.cpp"
+	"core/window/window.h"
+	"core/renderer/shader.h"
+	"core/renderer/shader.cpp"
+	"core/renderer/texture.cpp"
+	"core/renderer/texture.h"
+)
 
 find_package(OpenGL REQUIRED)
 target_link_libraries(core PUBLIC OpenGL::GL)
@@ -26,12 +40,12 @@ target_link_libraries(core PUBLIC glfw)
 target_link_libraries(core PUBLIC glad) 
 
 target_include_directories(core
-	PUBLIC core
+	PUBLIC core external
 )
 
 add_executable(app
 	app/main.cpp	
     "core/constants.h"
- "core/physics/physics_world.cpp" "core/physics/physics_world.h" "core/scene/scene.cpp" "core/scene/scene.h" "core/app.cpp" "core/app.h" "core/game_math/vector.cpp" "core/game_math/vector.h" "core/game_math/matrix.cpp" "core/game_math/matrix.h" "core/game_math/quaternion.cpp" "core/game_math/quaternion.h" "core/resource_manager/mesh.cpp" "core/resource_manager/mesh.h" "core/window/window.cpp" "core/window/window.h" "core/renderer/shader.h" "core/renderer/shader.cpp")
+ "core/physics/physics_world.cpp" "core/physics/physics_world.h" "core/scene/scene.cpp" "core/scene/scene.h" "core/app.cpp" "core/app.h" "core/game_math/vector.cpp" "core/game_math/vector.h" "core/game_math/matrix.cpp" "core/game_math/matrix.h" "core/game_math/quaternion.cpp" "core/game_math/quaternion.h" "core/resource_manager/mesh.cpp" "core/resource_manager/mesh.h" "core/window/window.cpp" "core/window/window.h" "core/renderer/shader.h" "core/renderer/shader.cpp" "core/renderer/texture.cpp" "core/renderer/texture.h")
 
 target_link_libraries(app PRIVATE core)

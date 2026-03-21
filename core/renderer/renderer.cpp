@@ -1,5 +1,6 @@
 #include "constants.h"
 #include "shader.h"
+#include "texture.h"
 
 #include <iostream>
 #include <GLAD/glad.h>
@@ -22,6 +23,9 @@ void prepareVertices(const float* vertices,
 
 	unsigned int VAO, VBO, EBO;
 
+	Texture texture("../resources/textures/container.jpg");
+	glBindTexture(GL_TEXTURE_2D, texture.getID());
+
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
@@ -35,14 +39,16 @@ void prepareVertices(const float* vertices,
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_size, indices, GL_STATIC_DRAW); // indices
 
 	// this is how the data is laid out 
-	const std::size_t stride = 6 * sizeof(float);
+	const std::size_t stride = 8 * sizeof(float);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (void*)0);
 	glEnableVertexAttribArray(0); // enable the position data
 
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(1); // color data
 
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2); // tex coords
 }
 
 void printMaxVertAttribs()
@@ -72,8 +78,10 @@ void prepareOpenGLRender(const float* vertices,
 {
 	configureViewport();
 
-	auto shader{ Shader("../resources/shaders/shader.vert", "../resources/shaders/shader.frag") };
+	Shader shader("../resources/shaders/shader.vert", "../resources/shaders/shader.frag");
 	shader.use();
+
+	shader.setFloatUniform("offset", 0.5f);
 
 	prepareVertices(vertices, vertices_size, indicies, indicies_size);
 }
