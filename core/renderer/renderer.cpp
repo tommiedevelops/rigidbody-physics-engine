@@ -24,7 +24,12 @@ void prepareVertices(const float* vertices,
 	unsigned int VAO, VBO, EBO;
 
 	Texture texture("../resources/textures/container.jpg");
+	Texture texture2("../resources/textures/awesomeface.png");
+
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture.getID());
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture2.getID());
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -80,6 +85,8 @@ void prepareOpenGLRender(const float* vertices,
 
 	Shader shader("../resources/shaders/shader.vert", "../resources/shaders/shader.frag");
 	shader.use();
+	shader.setIntUniform("texture1", 0);
+	shader.setIntUniform("texture1", 1);
 
 	shader.setFloatUniform("offset", 0.5f);
 
