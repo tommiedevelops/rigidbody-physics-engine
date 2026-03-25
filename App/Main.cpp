@@ -1,8 +1,12 @@
+#include "app/app.h"
 // #include "scene1.h"
 // #include "scene2.h"
 
 int main()
 {
+	App app{};
+	app.Run();
+
 	/*
 	App app();		
 	
