@@ -1,10 +1,9 @@
 #include "constants.h"
-#include "shader.h"
-#include "texture.h"
+#include "renderer/opengl/shader.h"
+#include "renderer/opengl/texture.h"
 
 #include <iostream>
 #include <GLAD/glad.h>
-#include <GLFW/glfw3.h> 
 
 void configureViewport()
 {
@@ -68,8 +67,9 @@ void render()
 {
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		float timeValue = glfwGetTime(); // temporarily allowed here but request from Window in future
-		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+		//float timeValue = glfwGetTime(); // temporarily allowed here but request from Window in future
+		//float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+		float greenValue = 1.0f;
 		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

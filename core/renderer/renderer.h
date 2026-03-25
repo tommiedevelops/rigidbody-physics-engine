@@ -3,7 +3,11 @@
 
 #include <iostream>
 
-class Renderer{};
+class Renderer
+{
+public:
+	void Render();
+};
 
 void prepareOpenGLRender(const float* vertices,
 	const std::size_t vertices_size,

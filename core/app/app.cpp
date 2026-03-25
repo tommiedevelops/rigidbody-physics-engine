@@ -1,11 +1,19 @@
 #include "app.h"
 
 App::App()
+	: m_Window{ Window(500,500,"Title") }
 {
-
 }
 
 void App::Run()
 {
-	std::cout << "Hello World!\n";
-}
+	while (!m_Window.ShouldClose())
+	{
+		m_Window.PollEvents();
+		m_Window.ProcessInput();
+
+		// render here
+
+		m_Window.SwapBuffers();
+	}
+};

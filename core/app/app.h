@@ -11,6 +11,7 @@ struct VTable
 class App
 {
 public:
+	App();
 	void Run();
 private:
 	Window         m_Window;
