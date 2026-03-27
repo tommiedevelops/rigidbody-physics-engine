@@ -15,7 +15,7 @@ public:
 	void Run();
 private:
 	Window         m_Window;
-	Scene          m_Scene;
+	Scene          m_CurrentScene;
 	PhysicsWorld   m_PhysicsWorld;
 	Renderer       m_Renderer;
 	VTable         m_VTable;

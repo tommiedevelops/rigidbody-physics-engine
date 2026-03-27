@@ -1,16 +1,21 @@
 #include "Entity.h"
+
 #include <iostream>
+
+Entity::Entity(entt::entity id, entt::registry& r) 
+	: m_id { id }
+	, m_registry { r  }
+{
+}
 
 template <typename T>
 T& Entity::GetComponent()
 {
-	// NOOP
-	throw std::logic_error("not implemented");
-	return nullptr;
+	m_registry.get<T>(m_id);
 }
 
 template <typename T>
 void Entity::AddComponent(T& t)
 {
-	throw std::logic_error("not implemented");
+	m_registry.emplace<T>(m_id)
 };

@@ -1,9 +1,16 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include <entt/entt.hpp>
+
 class Entity
 {
+private:
+	const entt::entity m_id;
+	const entt::registry& m_registry;
 public:
+	Entity(entt::entity id, entt::registry& r);
+
 	template <typename T>
 	T& GetComponent();
 

@@ -1,58 +1,56 @@
-#include <vector>
-
 #ifndef SCENE_H
 #define SCENE_H
 
-class Material
+#include "glm/glm.hpp"
+
+#include "Entity.h"
+
+#include <vector>
+
+
+// This is where I implement ECS
+
+struct TransformComponent
 {
-	
+	glm::mat4 model;
 };
 
-class Mesh
+struct MeshComponent
 {
 
 };
 
-class Transform
+struct MaterialComponent
 {
-private:
-	float position;
-	float rotation;
-	float scale;
+
 };
 
-class GameObject
+struct RigidBodyComponent
 {
-	enum Authority
-	{
-		DYNAMIC, // physics engine responsible for update
-		KINEMATIC, // gameplay responsible for update
-		STATIC // gameplay responsible for update (once)
-	};
 
-private:
-	Transform m_transform;
-	Mesh m_mesh;
-	Material m_material;
-};
-
-class Camera
-{
-private:
-	Transform m_transform;
-};
-
-class Light
-{
-private:
-	Transform m_transform;
 };
 
 class Scene
 {
+public:
+	Scene()  = default;
+	~Scene() = default;
+
+	Entity CreateEntity();
+
+	entt::registry& GetRegistry() { return m_registry;  }
+	const entt::registry& const GetRegistry() { return m_registry; }
+
+	/*
+	template <typename T>
+	std::array<T> GetAllEntitiesWith<T>();
+
+	template<typename T>
+	
+	*/
+
 private:
-	std::vector<GameObject> m_gameObjects;
-	Camera m_camera;
-	Light m_light;
+	entt::registry m_registry; // can't copy this
 };
+
 #endif

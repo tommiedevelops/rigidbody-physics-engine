@@ -2,8 +2,8 @@
 
 App::App()
 	: m_Window{ Window(500,500,"Title") }
-{
-}
+	, m_Renderer{ Renderer() }
+{}
 
 void App::Run()
 {
@@ -13,6 +13,7 @@ void App::Run()
 		m_Window.ProcessInput();
 
 		// render here
+//		m_Renderer.Render(m_CurrentScene);
 
 		m_Window.SwapBuffers();
 	}

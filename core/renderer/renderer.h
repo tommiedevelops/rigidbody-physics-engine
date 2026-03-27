@@ -3,10 +3,13 @@
 
 #include <iostream>
 
+typedef class Scene Scene;
+
 class Renderer
 {
 public:
-	void Render();
+	Renderer() = default;
+	void Render(Scene& scene);
 };
 
 void prepareOpenGLRender(const float* vertices,

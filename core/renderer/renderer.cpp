@@ -1,9 +1,20 @@
 #include "constants.h"
-#include "renderer/opengl/shader.h"
-#include "renderer/opengl/texture.h"
+
+#include "Renderer.h"
+
+#include "opengl/shader.h"
+#include "opengl/texture.h"
+
+#include "scene/scene.h" // The renderer should know the internals of the Scene structure
+// should it?
 
 #include <iostream>
 #include <GLAD/glad.h>
+
+void Renderer::Render(Scene& scene)
+{
+	std::cout << "not implemented yet\n";
+}
 
 void configureViewport()
 {
