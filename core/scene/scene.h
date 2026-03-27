@@ -39,7 +39,7 @@ public:
 	Entity CreateEntity();
 
 	entt::registry& GetRegistry() { return m_registry;  }
-	const entt::registry& const GetRegistry() { return m_registry; }
+	const entt::registry& GetRegistry() const { return m_registry; }
 
 	/*
 	template <typename T>

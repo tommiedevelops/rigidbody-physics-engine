@@ -9,11 +9,42 @@
 // should it?
 
 #include <iostream>
+#include <entt/entt.hpp>
 #include <GLAD/glad.h>
+
+class Transform
+{
+	glm::mat4 modelMatrix;
+};
+
+class Vertex
+{
+	glm::vec4 pos;
+	glm::vec2 uv;
+	glm::vec3 n;
+};
+
+class Mesh
+{
+	std::vector<Vertex> vertices;
+	std::vector<uint32_t> indices;
+};
+
+class Material
+{
+	glm::vec4 albedo;
+};
 
 void Renderer::Render(Scene& scene)
 {
-	std::cout << "not implemented yet\n";
+	//const entt::registry& creg{ scene.GetRegistry() };
+
+	//// Retrieve all entities with a Transform, Mesh and Material 
+	//auto view = creg.view<TransformComponent, MeshComponent, MaterialComponent>();
+
+	//view.each([](auto entity, const auto& tr, const auto& mesh, const auto& mat) {
+	//	// talk with OpenGL to render the Mesh using the Tr and Mat
+	//	});
 }
 
 void configureViewport()
@@ -25,9 +56,9 @@ void configureViewport()
 int vertexColorLocation;  // temporary global var
 
 void prepareVertices(const float* vertices,
-				     const std::size_t vertices_size,
-					 const int* indices,
-				     const std::size_t indices_size
+	const std::size_t vertices_size,
+	const int* indices,
+	const std::size_t indices_size
 )
 {
 
@@ -76,20 +107,20 @@ void printMaxVertAttribs()
 
 void render()
 {
-		glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);
 
-		//float timeValue = glfwGetTime(); // temporarily allowed here but request from Window in future
-		//float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-		float greenValue = 1.0f;
-		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+	//float timeValue = glfwGetTime(); // temporarily allowed here but request from Window in future
+	//float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+	float greenValue = 1.0f;
+	glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
 void prepareOpenGLRender(const float* vertices,
-					     const std::size_t vertices_size,
-						 const int* indicies,
-						 const std::size_t indicies_size
+	const std::size_t vertices_size,
+	const int* indicies,
+	const std::size_t indicies_size
 )
 {
 	configureViewport();

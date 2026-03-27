@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-typedef class Scene Scene;
+class Scene;
 
 class Renderer
 {

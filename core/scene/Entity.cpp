@@ -17,5 +17,5 @@ T& Entity::GetComponent()
 template <typename T>
 void Entity::AddComponent(T& t)
 {
-	m_registry.emplace<T>(m_id)
+	m_registry.emplace<T>(m_id);
 };
