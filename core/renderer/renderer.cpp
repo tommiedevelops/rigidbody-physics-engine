@@ -12,7 +12,7 @@
 #include <entt/entt.hpp>
 #include <GLAD/glad.h>
 
-class Transform
+class TransformComponent
 {
 	glm::mat4 modelMatrix;
 };
@@ -24,27 +24,28 @@ class Vertex
 	glm::vec3 n;
 };
 
-class Mesh
+class MeshComponent
 {
 	std::vector<Vertex> vertices;
 	std::vector<uint32_t> indices;
 };
 
-class Material
+class MaterialComponent
 {
 	glm::vec4 albedo;
 };
 
 void Renderer::Render(Scene& scene)
 {
-	//const entt::registry& creg{ scene.GetRegistry() };
+	const entt::registry& creg{ scene.GetRegistry() };
 
 	//// Retrieve all entities with a Transform, Mesh and Material 
-	//auto view = creg.view<TransformComponent, MeshComponent, MaterialComponent>();
+	auto view = creg.view<TransformComponent, MeshComponent>();
 
-	//view.each([](auto entity, const auto& tr, const auto& mesh, const auto& mat) {
-	//	// talk with OpenGL to render the Mesh using the Tr and Mat
-	//	});
+	view.each([](const auto entity, const auto& transform, const auto& mesh) {
+		std::cout << "noop";
+	});
+
 }
 
 void configureViewport()

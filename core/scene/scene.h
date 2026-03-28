@@ -10,26 +10,6 @@
 
 // This is where I implement ECS
 
-struct TransformComponent
-{
-	glm::mat4 model;
-};
-
-struct MeshComponent
-{
-
-};
-
-struct MaterialComponent
-{
-
-};
-
-struct RigidBodyComponent
-{
-
-};
-
 class Scene
 {
 public:
