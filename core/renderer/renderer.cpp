@@ -24,11 +24,6 @@ class Vertex
 	glm::vec3 n;
 };
 
-class MeshComponent
-{
-	std::vector<Vertex> vertices;
-	std::vector<uint32_t> indices;
-};
 
 class MaterialComponent
 {
