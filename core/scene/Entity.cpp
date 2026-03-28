@@ -1,5 +1,4 @@
 #include "Entity.h"
-
 #include <iostream>
 
 Entity::Entity(entt::entity id, entt::registry& r) 
