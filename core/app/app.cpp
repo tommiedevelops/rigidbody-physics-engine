@@ -1,9 +1,15 @@
 #include "app.h"
 
-App::App()
+App::App(Scene* initialScene)
 	: m_Window{ Window(500,500,"Title") }
 	, m_Renderer{ Renderer() }
+	, m_CurrentScene { initialScene }
 {}
+
+void App::SetCurrentScene(Scene* newScene)
+{
+	m_CurrentScene = newScene;
+};
 
 void App::Run()
 {
@@ -13,7 +19,7 @@ void App::Run()
 		m_Window.ProcessInput();
 
 		// render here
-//		m_Renderer.Render(m_CurrentScene);
+		m_Renderer.Render(m_CurrentScene);
 
 		m_Window.SwapBuffers();
 	}

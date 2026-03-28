@@ -35,11 +35,11 @@ class MaterialComponent
 	glm::vec4 albedo;
 };
 
-void Renderer::Render(Scene& scene)
+void Renderer::Render(Scene* scene)
 {
-	const entt::registry& creg{ scene.GetRegistry() };
+	const entt::registry& creg{ scene->GetRegistry() };
 
-	//// Retrieve all entities with a Transform, Mesh and Material 
+	// Retrieve all entities with a Transform, Mesh and Material 
 	auto view = creg.view<TransformComponent, MeshComponent>();
 
 	view.each([](const auto entity, const auto& transform, const auto& mesh) {

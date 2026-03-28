@@ -11,11 +11,12 @@ struct VTable
 class App
 {
 public:
-	App();
+	App(Scene* initialScene);
 	void Run();
+	void SetCurrentScene(Scene* newScene);
 private:
 	Window         m_Window;
-	Scene          m_CurrentScene;
+	Scene*         m_CurrentScene;
 	PhysicsWorld   m_PhysicsWorld;
 	Renderer       m_Renderer;
 	VTable         m_VTable;

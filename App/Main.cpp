@@ -4,7 +4,10 @@
 
 int main()
 {
-	App app{};
+	Scene initialScene{};
+
+	App app{ &initialScene };
+
 	app.Run();
 
 	/*

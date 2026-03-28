@@ -9,7 +9,7 @@ class Renderer
 {
 public:
 	Renderer() = default;
-	void Render(Scene& scene);
+	void Render(Scene* scene);
 };
 
 void prepareOpenGLRender(const float* vertices,
