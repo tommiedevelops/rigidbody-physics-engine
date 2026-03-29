@@ -16,7 +16,7 @@ public:
 	~Model() = default;
 private:
 	std::vector<Mesh> m_Meshes;
-	std::string       directory;
+	std::string       m_Directory;
 
 	void loadModel(std::string path);
 
