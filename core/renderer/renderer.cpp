@@ -5,6 +5,7 @@
 #include "opengl/shader.h"
 #include "opengl/texture.h"
 
+#include "Mesh.h"
 #include "scene/scene.h" // The renderer should know the internals of the Scene structure
 // should it?
 
@@ -17,14 +18,6 @@ class TransformComponent
 	glm::mat4 modelMatrix;
 };
 
-class Vertex
-{
-	glm::vec4 pos;
-	glm::vec2 uv;
-	glm::vec3 n;
-};
-
-
 class MaterialComponent
 {
 	glm::vec4 albedo;
@@ -35,11 +28,11 @@ void Renderer::Render(Scene* scene)
 	const entt::registry& creg{ scene->GetRegistry() };
 
 	// Retrieve all entities with a Transform, Mesh and Material 
-	auto view = creg.view<TransformComponent, MeshComponent>();
+//	auto view = creg.view<TransformComponent, MeshComponent>();
 
-	view.each([](const auto entity, const auto& transform, const auto& mesh) {
-		std::cout << "noop";
-	});
+	//view.each([](const auto entity, const auto& transform, const auto& mesh) {
+	//	std::cout << "noop";
+	//});
 
 }
 

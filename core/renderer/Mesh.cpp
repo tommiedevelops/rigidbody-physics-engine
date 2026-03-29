@@ -1,7 +1,9 @@
 #include "Mesh.h"
 
-Mesh::Mesh(std::vector<Vertex>   vertices, 
-		   std::vector<uint32_t> indices)
+Mesh::Mesh(
+    std::vector<Vertex>   vertices, 
+    std::vector<uint32_t> indices
+)
 {
     m_Vertices = vertices;
     m_Indices = indices;
@@ -9,28 +11,40 @@ Mesh::Mesh(std::vector<Vertex>   vertices,
 
 void Mesh::SetUpMesh()
 {
+    // Generate Buffer Objects
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
 
+    // Bind Buffer Objects
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
-    glBufferData(GL_ARRAY_BUFFER, m_Vertices.size() * sizeof(Vertex), &m_Vertices[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Indices.size() * sizeof(uint32_t), &m_Indices[0], GL_STATIC_DRAW);
+    // Send data to GPU buffer
+    glBufferData(
+        GL_ARRAY_BUFFER,
+        m_Vertices.size() * sizeof(Vertex),
+        m_Vertices.data(),
+        GL_STATIC_DRAW
+    );
 
-    // Vertex Positions
+    glBufferData(
+        GL_ELEMENT_ARRAY_BUFFER,
+        m_Indices.size() * sizeof(uint32_t),
+        m_Indices.data(),
+        GL_STATIC_DRAW
+    );
+
+    // Positions
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0,3,GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 
     // Vertex Normals
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normals));
 
     // uvs
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uvs));
-
-    glBindVertexArray(0);
-
 }

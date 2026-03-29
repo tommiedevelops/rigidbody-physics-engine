@@ -9,6 +9,7 @@ add_subdirectory(external/glfw)
 add_subdirectory(external/glad)
 add_subdirectory(external/glm)
 add_subdirectory(external/entt)
+add_subdirectory(external/assimp)
 
 add_library(core
 	"core/renderer/renderer.cpp"
@@ -32,6 +33,7 @@ target_link_libraries(core PUBLIC glfw)
 target_link_libraries(core PUBLIC glad) 
 target_link_libraries(core PUBLIC glm) 
 target_link_libraries(core PUBLIC EnTT::EnTT)
+target_link_libraries(core PUBLIC assimp)
 
 target_include_directories(core
 	PUBLIC core external
