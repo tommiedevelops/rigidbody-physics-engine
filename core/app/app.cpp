@@ -1,4 +1,5 @@
 #include "app.h"
+#include "renderer/Model.h" // remove (just doing for compilation)
 
 App::App(Scene* initialScene)
 	: m_Window{ Window(500,500,"Title") }

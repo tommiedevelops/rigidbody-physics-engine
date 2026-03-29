@@ -7,6 +7,7 @@ Mesh::Mesh(
 {
     m_Vertices = vertices;
     m_Indices = indices;
+    SetUpMesh();
 }
 
 void Mesh::SetUpMesh()
@@ -47,4 +48,7 @@ void Mesh::SetUpMesh()
     // uvs
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
     glEnableVertexAttribArray(2);
+
+    // unbind the current VAO
+    glBindVertexArray(0);
 }

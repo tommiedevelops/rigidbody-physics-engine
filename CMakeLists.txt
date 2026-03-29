@@ -12,6 +12,7 @@ add_subdirectory(external/entt)
 add_subdirectory(external/assimp)
 
 add_library(core
+	"core/renderer/Model.h"
 	"core/renderer/renderer.cpp"
 	"core/renderer/renderer.h"
 	"core/constants.h"
@@ -58,6 +59,7 @@ add_executable( app
 	"core/renderer/opengl/shader.cpp"
 	"core/renderer/opengl/texture.cpp"
 	"core/renderer/opengl/texture.h"
+	"core/renderer/Mesh.h"
 )
 
 target_link_libraries(app PRIVATE core)
