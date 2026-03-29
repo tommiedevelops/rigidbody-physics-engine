@@ -24,7 +24,6 @@ add_library(core
 	"core/renderer/opengl/shader.cpp"
 	"core/renderer/opengl/texture.cpp"
 	"core/renderer/opengl/texture.h"
-	"core/renderer/RenderContext.h"
 )
 
 find_package(OpenGL REQUIRED)
@@ -39,6 +38,11 @@ target_include_directories(core
 )
 
 add_executable( app
+	"app/Main.cpp"
+	"core/app/app.cpp"
+	"core/app/app.h"
+	"core/app/window.cpp"
+	"core/app/window.h"
 	"core/renderer/renderer.cpp"
 	"core/renderer/renderer.h"
 	"core/constants.h"
@@ -52,7 +56,6 @@ add_executable( app
 	"core/renderer/opengl/shader.cpp"
 	"core/renderer/opengl/texture.cpp"
 	"core/renderer/opengl/texture.h"
-	"core/renderer/RenderContext.h"
 )
 
 target_link_libraries(app PRIVATE core)
