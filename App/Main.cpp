@@ -4,9 +4,9 @@
 
 int main()
 {
-	Scene initialScene{};
+	PhysicsEngine::Scene initialScene{};
 
-	App app{ &initialScene };
+	PhysicsEngine::App app{ &initialScene };
 
 	app.Run();
 

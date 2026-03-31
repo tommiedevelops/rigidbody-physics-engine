@@ -1,26 +1,27 @@
-#ifndef PHYSICS_WORLD_H
-#define PHYSICS_WORLD_H
+#pragma once
+
+namespace PhysicsEngine
+{
 
 #include <vector>
 
-class RigidBody {};
-class Collider {};
-class ContactManifold {};
-class Broadphase {};
-class Narrowphase {};
-class ConstraintSolver {};
+	class RigidBody {};
+	class Collider {};
+	class ContactManifold {};
+	class Broadphase {};
+	class Narrowphase {};
+	class ConstraintSolver {};
 
-class PhysicsWorld
-{ 
-private:
-	std::vector<RigidBody>          m_bodies;
-	std::vector<Collider>           m_colliders;
-	std::vector<ContactManifold>    m_contacts;
+	class PhysicsWorld
+	{
+	private:
+		std::vector<RigidBody>          m_bodies;
+		std::vector<Collider>           m_colliders;
+		std::vector<ContactManifold>    m_contacts;
 
-	Broadphase         m_broadphase;
-	Narrowphase        m_narrowphase;
-	ConstraintSolver   m_solver;
+		Broadphase         m_broadphase;
+		Narrowphase        m_narrowphase;
+		ConstraintSolver   m_solver;
 
-};
-
-#endif
+	};
+}

@@ -1,24 +1,25 @@
-#ifndef RENDER_H
-#define RENDER_H
+#pragma once
 
 #include <iostream>
 
-class Scene;
-
-class Renderer
+namespace PhysicsEngine
 {
-public:
-	Renderer() = default;
-	void Render(Scene* scene);
-};
+	class Scene;
 
-void prepareOpenGLRender(const float* vertices,
-	const std::size_t vertices_size,
-	const int* indicies,
-	const std::size_t indicies_size
-);
+	class Renderer
+	{
+	public:
+		Renderer() = default;
+		void Render(Scene* scene);
+	};
 
-void render();
-void printMaxVertAttribs();
+	void prepareOpenGLRender(const float* vertices,
+		const std::size_t vertices_size,
+		const int* indicies,
+		const std::size_t indicies_size
+	);
 
-#endif
+	void render();
+	void printMaxVertAttribs();
+
+}

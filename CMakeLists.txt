@@ -40,7 +40,7 @@ target_include_directories(core
 	PUBLIC core external
 )
 
-add_executable( app
+add_executable(app
 	"app/Main.cpp"
 	"core/app/app.cpp"
 	"core/app/app.h"

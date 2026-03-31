@@ -1,36 +1,32 @@
-#ifndef SCENE_H
-#define SCENE_H
+#pragma once
 
 #include "glm/glm.hpp"
-
 #include "Entity.h"
-
 #include <vector>
 
-
-// This is where I implement ECS
-
-class Scene
+namespace PhysicsEngine
 {
-public:
-	Scene()  = default;
-	~Scene() = default;
+	class Scene
+	{
+	public:
+		Scene() = default;
+		~Scene() = default;
 
-	Entity CreateEntity();
+		Entity CreateEntity();
 
-	entt::registry& GetRegistry() { return m_registry;  }
-	const entt::registry& GetRegistry() const { return m_registry; }
+		entt::registry& GetRegistry() { return m_registry; }
+		const entt::registry& GetRegistry() const { return m_registry; }
 
-	/*
-	template <typename T>
-	std::array<T> GetAllEntitiesWith<T>();
+		/*
+		template <typename T>
+		std::array<T> GetAllEntitiesWith<T>();
 
-	template<typename T>
-	
-	*/
+		template<typename T>
 
-private:
-	entt::registry m_registry; // can't copy this
-};
+		*/
 
-#endif
+	private:
+		// entities stored here
+		entt::registry m_registry; // can't copy this
+	};
+}

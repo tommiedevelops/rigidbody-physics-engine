@@ -1,23 +1,24 @@
-#ifndef WINDOW_H
-#define WINDOW_H
+#pragma once
 
 #include <GLFW/glfw3.h> 
 
-class Window
+namespace PhysicsEngine
 {
-public:
+	class Window
+	{
+	public:
 
-	Window(int, int, const char*);
-	~Window();
+		Window(int, int, const char*);
+		~Window();
 
-	bool ShouldClose();
-	void PollEvents();
-	void SwapBuffers();
-	void Start();
-	void ProcessInput();
+		bool ShouldClose();
+		void PollEvents();
+		void SwapBuffers();
+		void Start();
+		void ProcessInput();
 
-private:
-	GLFWwindow* m_glfwWindow;
-};
+	private:
+		GLFWwindow* m_glfwWindow;
+	};
 
-#endif
+}

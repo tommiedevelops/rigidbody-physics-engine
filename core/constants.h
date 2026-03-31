@@ -1,10 +1,9 @@
-#ifndef CONSTANTS_H
-#define CONSTANTS_H
-
-namespace Constants
+#pragma once
+namespace PhysicsEngine
 {
-	inline int SCR_WIDTH{ 500 };
-	inline int SCR_HEIGHT{ 500 };
-};
-
-#endif
+	namespace Constants
+	{
+		inline int SCR_WIDTH{ 500 };
+		inline int SCR_HEIGHT{ 500 };
+	};
+}

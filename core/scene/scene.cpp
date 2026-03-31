@@ -1,8 +1,10 @@
 #include "scene.h"
 
-Entity Scene::CreateEntity()
+namespace PhysicsEngine
 {
-	return Entity(m_registry.create(), m_registry);
+	Entity Scene::CreateEntity()
+	{
+		return Entity(m_registry.create(), m_registry);
+	}
 }
-
 

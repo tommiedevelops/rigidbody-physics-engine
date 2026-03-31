@@ -1,21 +1,21 @@
-#ifndef ENTITY_H
-#define ENTITY_H
-
+#pragma once
 #include <entt/entt.hpp>
 
-class Entity
+namespace PhysicsEngine
 {
-private:
-	const entt::entity m_id;
-	const entt::registry& m_registry;
-public:
-	Entity(entt::entity id, entt::registry& r);
+	class Entity
+	{
+	private:
+		const entt::entity m_id;
+		const entt::registry& m_registry;
+	public:
+		Entity(entt::entity id, entt::registry& r);
 
-	template <typename T>
-	T& GetComponent();
+		template <typename T>
+		T& GetComponent();
 
-	template <typename T>
-	void AddComponent(T& t);
-};
+		template <typename T>
+		void AddComponent(T& t);
+	};
+}
 
-#endif

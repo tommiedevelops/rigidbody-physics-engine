@@ -1,18 +1,17 @@
-#ifndef TEXTURE_H
-#define TEXTURE_H
-
+#pragma once
 #include <string>
 
-class Texture
+namespace PhysicsEngine
 {
-private:
-	unsigned int m_ID;
-public:
-	std::string type;
-	std::string path;
+	class Texture
+	{
+	private:
+		unsigned int m_ID;
+	public:
+		std::string type;
+		std::string path;
 
-	Texture(const char* pathToTexture);
-	unsigned int getID() const;
-};
-
-#endif
+		Texture(const char* pathToTexture);
+		unsigned int getID() const;
+	};
+}
