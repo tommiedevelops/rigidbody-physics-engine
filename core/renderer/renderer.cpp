@@ -2,8 +2,8 @@
 
 #include "Renderer.h"
 
-#include "opengl/shader.h"
-#include "opengl/texture.h"
+#include "shader.h"
+#include "texture.h"
 
 #include "Mesh.h"
 #include "scene/scene.h" // The renderer should know the internals of the Scene structure

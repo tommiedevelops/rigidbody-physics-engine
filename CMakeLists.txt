@@ -22,10 +22,10 @@ add_library(core
 	"core/scene/Entity.h"
 	"core/scene/scene.cpp"
 	"core/scene/scene.h"
-	"core/renderer/opengl/shader.h"
-	"core/renderer/opengl/shader.cpp"
-	"core/renderer/opengl/texture.cpp"
-	"core/renderer/opengl/texture.h"
+	"core/renderer/shader.h"
+	"core/renderer/shader.cpp"
+	"core/renderer/texture.cpp"
+	"core/renderer/texture.h"
 )
 
 find_package(OpenGL REQUIRED)
@@ -55,10 +55,10 @@ add_executable( app
 	"core/scene/Entity.h"
 	"core/scene/scene.cpp"
 	"core/scene/scene.h"
-	"core/renderer/opengl/shader.h"
-	"core/renderer/opengl/shader.cpp"
-	"core/renderer/opengl/texture.cpp"
-	"core/renderer/opengl/texture.h"
+	"core/renderer/shader.h"
+	"core/renderer/shader.cpp"
+	"core/renderer/texture.cpp"
+	"core/renderer/texture.h"
 	"core/renderer/Mesh.h"
 )
 
