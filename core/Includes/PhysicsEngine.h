@@ -1,8 +1,9 @@
 #pragma once
 
+#include "AssetManager/Model.h"
+
 #include "Renderer/RenderSystem.h"
 #include "Renderer/Mesh.h"
-#include "Renderer/Model.h"
 #include "Renderer/Shader.h"
 #include "Renderer/Texture.h"
 

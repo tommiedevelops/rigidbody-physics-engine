@@ -15,7 +15,7 @@ add_library(core
 	Core/Application/App.cpp
 	Core/Application/Window.cpp
 	Core/Renderer/Mesh.cpp
-	Core/Renderer/Model.cpp
+	Core/AssetManager/Model.cpp
 	Core/Renderer/RenderSystem.cpp
 	Core/Renderer/Shader.cpp
 	Core/Renderer/Texture.cpp
@@ -40,6 +40,7 @@ target_include_directories(core
 	Core/Physics
 	Core/Renderer
 	Core/Scene
+	Core/AssetManager
 	Core
 	External
 )
