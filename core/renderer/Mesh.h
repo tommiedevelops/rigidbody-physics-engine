@@ -7,9 +7,9 @@ namespace PhysicsEngine
 {
 	struct Vertex
 	{
-		glm::vec4 position;
-		glm::vec2 uv;
-		glm::vec3 normal;
+		glm::vec4 position{ 0 };
+		glm::vec2 uv{ 0 };
+		glm::vec3 normal{ 0 };
 	};
 
 	class Mesh

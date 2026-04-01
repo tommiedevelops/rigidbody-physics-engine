@@ -7,17 +7,6 @@ namespace PhysicsEngine
 		: m_id{ id }
 		, m_registry{ r }
 	{
+		
 	}
-
-	template <typename T>
-	T& Entity::GetComponent()
-	{
-		m_registry.get<T>(m_id);
-	}
-
-	template <typename T>
-	void Entity::AddComponent(T& t)
-	{
-		m_registry.emplace<T>(m_id);
-	};
 }

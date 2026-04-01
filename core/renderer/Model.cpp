@@ -33,7 +33,7 @@ namespace PhysicsEngine
 		for (unsigned int i{ 0 }; i < node->mNumMeshes; ++i)
 		{
 			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-			meshes.push_back(ConvertToEngineMesh(mesh, scene));
+			m_Meshes.push_back(ConvertToEngineMesh(mesh, scene));
 		}
 
 		// This node may also own multiple children
@@ -52,14 +52,14 @@ namespace PhysicsEngine
 
 		for (unsigned int i{ 0 }; i < mesh->mNumVertices; ++i)
 		{
-			Vertex vertex{ 0 };
+			Vertex vertex{ };
 			vertex.position.x = mesh->mVertices[i].x;
 			vertex.position.y = mesh->mVertices[i].y;
 			vertex.position.z = mesh->mVertices[i].z;
 
 			vertex.normal.x = mesh->mNormals[i].x;
 			vertex.normal.y = mesh->mNormals[i].y;
-			vertex.normal.z = mesh->mNormals[i]z;
+			vertex.normal.z = mesh->mNormals[i].z;
 
 			if (mesh->mTextureCoords[0])
 			{
@@ -83,7 +83,7 @@ namespace PhysicsEngine
 		bool meshHasMaterials = (mesh->mMaterialIndex >= 0);
 		if (meshHasMaterials)
 		{
-			aiMaterial* material = scene->mMaterials[mesh->mMaterialsIndex];
+			aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
 			std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
 			g_Textures.insert(g_Textures.end(), diffuseMaps.begin(), diffuseMaps.end());
@@ -91,6 +91,8 @@ namespace PhysicsEngine
 			std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
 			g_Textures.insert(g_Textures.end(), specularMaps.begin(), specularMaps.end());
 		}
+
+		return Mesh{ vertices, indices };
 	}
 
 	std::vector<Texture> AssimpModel::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
@@ -103,9 +105,9 @@ namespace PhysicsEngine
 			aiString relPathToTex;
 			mat->GetTexture(type, i, &relPathToTex);
 
-			Texture tex{ relPathToTex };
+			Texture tex{ relPathToTex.C_Str()};
 			tex.type = typeName;
-			tex.path = relPathToTex;
+			tex.path = relPathToTex.C_Str();
 
 			textures.push_back(tex);
 		}

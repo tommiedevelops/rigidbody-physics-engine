@@ -1,9 +1,12 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 namespace PhysicsEngine
 {
 	struct TransformComponent
 	{
-		float x, y, z;
+		glm::mat4 modelMatrix;
+
 	};
 }
