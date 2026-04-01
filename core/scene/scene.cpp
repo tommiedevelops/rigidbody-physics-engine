@@ -1,10 +1,15 @@
 #include "scene.h"
 
+#include "TransformComponent.h"
+
 namespace PhysicsEngine
 {
 	Entity Scene::CreateEntity()
 	{
-		return Entity(m_registry.create(), m_registry);
+		auto e{ Entity(m_registry.create(), m_registry) };
+		e.AddComponent<TransformComponent>();
+		return e;
 	}
+
 }
 
