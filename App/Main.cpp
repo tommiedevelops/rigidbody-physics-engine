@@ -1,12 +1,15 @@
-#include "app/app.h"
-// #include "scene1.h"
-// #include "scene2.h"
+#include "PhysicsEngine.h"
 
 int main()
 {
-	PhysicsEngine::Scene initialScene{};
+	using namespace PhysicsEngine;
 
-	PhysicsEngine::App app{ &initialScene };
+	Scene initialScene{};
+
+	auto e{ initialScene.CreateEntity() };
+	auto& component = e.AddComponent<RenderComponent>();
+
+	App app{ &initialScene };
 
 	app.Run();
 

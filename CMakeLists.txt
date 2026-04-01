@@ -12,20 +12,17 @@ add_subdirectory(external/entt)
 add_subdirectory(external/assimp)
 
 add_library(core
-	"core/renderer/Model.h"
-	"core/renderer/renderer.cpp"
-	"core/renderer/renderer.h"
-	"core/constants.h"
-    "core/physics/physics_world.cpp"
-	"core/physics/physics_world.h"
-	"core/scene/Entity.cpp"
-	"core/scene/Entity.h"
-	"core/scene/scene.cpp"
-	"core/scene/scene.h"
-	"core/renderer/shader.h"
-	"core/renderer/shader.cpp"
-	"core/renderer/texture.cpp"
-	"core/renderer/texture.h"
+	Core/Application/App.cpp
+	Core/Application/Window.cpp
+	Core/Renderer/Mesh.cpp
+	Core/Renderer/Model.cpp
+	Core/Renderer/RenderSystem.cpp
+	Core/Renderer/Shader.cpp
+	Core/Renderer/Texture.cpp
+	Core/Scene/Entity.cpp
+	Core/Scene/RenderComponent.cpp
+	Core/Scene/RenderComponent.h
+	Core/Scene/Scene.cpp
 )
 
 find_package(OpenGL REQUIRED)
@@ -36,30 +33,22 @@ target_link_libraries(core PUBLIC glm)
 target_link_libraries(core PUBLIC EnTT::EnTT)
 target_link_libraries(core PUBLIC assimp)
 
+
 target_include_directories(core
-	PUBLIC core external
+	PUBLIC 
+	Core/Application
+	Core/Physics
+	Core/Renderer
+	Core/Scene
+	Core
+	External
 )
 
-add_executable(app
-	"app/Main.cpp"
-	"core/app/app.cpp"
-	"core/app/app.h"
-	"core/app/window.cpp"
-	"core/app/window.h"
-	"core/renderer/renderer.cpp"
-	"core/renderer/renderer.h"
-	"core/constants.h"
-    "core/physics/physics_world.cpp"
-	"core/physics/physics_world.h"
-	"core/scene/Entity.cpp"
-	"core/scene/Entity.h"
-	"core/scene/scene.cpp"
-	"core/scene/scene.h"
-	"core/renderer/shader.h"
-	"core/renderer/shader.cpp"
-	"core/renderer/texture.cpp"
-	"core/renderer/texture.h"
-	"core/renderer/Mesh.h"
+add_executable(app App/Main.cpp)
+
+target_include_directories(app
+	PUBLIC Core/Includes
 )
 
 target_link_libraries(app PRIVATE core)
+
