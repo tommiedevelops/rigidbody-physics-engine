@@ -14,11 +14,15 @@ add_subdirectory(external/assimp)
 add_library(core
 	Core/Application/App.cpp
 	Core/Application/Window.cpp
-	Core/Renderer/Mesh.cpp
+
 	Core/AssetManager/Model.cpp
+	Core/AssetManager/AssetManager.cpp
+
 	Core/Renderer/RenderSystem.cpp
 	Core/Renderer/Shader.cpp
 	Core/Renderer/Texture.cpp
+	Core/Renderer/Mesh.cpp
+
 	Core/Scene/Entity.cpp
 	Core/Scene/RenderComponent.cpp
 	Core/Scene/RenderComponent.h

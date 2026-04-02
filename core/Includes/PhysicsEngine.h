@@ -1,5 +1,6 @@
 #pragma once
 
+#include "AssetManager/AssetManager.h"
 #include "AssetManager/Model.h"
 
 #include "Renderer/RenderSystem.h"

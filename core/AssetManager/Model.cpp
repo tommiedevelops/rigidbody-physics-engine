@@ -2,32 +2,36 @@
 #include "Texture.h"
 
 #include <iostream>
+#include <filesystem>
 
 namespace PhysicsEngine
 {
-	static std::vector<Texture> g_Textures; // global to this file
+	std::vector<Texture> g_texturesLoaded;
 
-	AssimpModel::AssimpModel(std::string path)
+	Model::Model(std::string path)
 	{
-		loadModel(path);
+		LoadModel(path);
 	}
 
-	void AssimpModel::loadModel(std::string path)
+	void 
+	Model::LoadModel(std::string pathToModel)
 	{
 		Assimp::Importer import;
-		const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+		const aiScene* scene = import.ReadFile(pathToModel, aiProcess_Triangulate | aiProcess_FlipUVs);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode);
 		{
 			std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
+			return;
 		}
 
-		m_Directory = path.substr(0, path.find_last_of('/'));
+		m_Directory = std::filesystem::path(pathToModel).parent_path().string();
 
 		ProcessNode(scene->mRootNode, scene);
 	}
 
-	void AssimpModel::ProcessNode(aiNode* node, const aiScene* scene)
+	void 
+	Model::ProcessNode(aiNode* node, const aiScene* scene)
 	{
 		// This node may own multiple meshes 
 		for (unsigned int i{ 0 }; i < node->mNumMeshes; ++i)
@@ -44,8 +48,29 @@ namespace PhysicsEngine
 
 	}
 
-	// BELOW WIP
-	Mesh AssimpModel::ConvertToEngineMesh(aiMesh* mesh, const aiScene* scene)
+	std::vector<Texture> 
+	Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
+	{
+		std::vector<Texture> textures;
+
+		unsigned int numTextures{ mat->GetTextureCount(type) };
+		for (unsigned int i{ 0 }; numTextures; ++i)
+		{
+			aiString relPathToTex;
+			mat->GetTexture(type, i, &relPathToTex);
+
+			Texture tex{ relPathToTex.C_Str()};
+			tex.type = typeName;
+			tex.path = relPathToTex.C_Str();
+
+			textures.push_back(tex);
+		}
+
+		return textures;
+	}
+
+	Mesh 
+	Model::ConvertToEngineMesh(aiMesh* mesh, const aiScene* scene)
 	{
 		std::vector<Vertex> vertices;
 		std::vector<unsigned int> indices;
@@ -68,6 +93,7 @@ namespace PhysicsEngine
 			}
 
 			vertices.push_back(vertex);
+
 		}
 
 		for (unsigned int faceIdx{ 0 }; faceIdx < mesh->mNumFaces; ++faceIdx)
@@ -85,33 +111,14 @@ namespace PhysicsEngine
 		{
 			aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
-			std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-			g_Textures.insert(g_Textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+			std::vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+			m_Textures.insert(m_Textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-			std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-			g_Textures.insert(g_Textures.end(), specularMaps.begin(), specularMaps.end());
+			std::vector<Texture> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+			m_Textures.insert(m_Textures.end(), specularMaps.begin(), specularMaps.end());
 		}
 
 		return Mesh{ vertices, indices };
 	}
 
-	std::vector<Texture> AssimpModel::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
-	{
-		std::vector<Texture> textures;
-
-		unsigned int numTextures{ mat->GetTextureCount(type) };
-		for (unsigned int i{ 0 }; numTextures; ++i)
-		{
-			aiString relPathToTex;
-			mat->GetTexture(type, i, &relPathToTex);
-
-			Texture tex{ relPathToTex.C_Str()};
-			tex.type = typeName;
-			tex.path = relPathToTex.C_Str();
-
-			textures.push_back(tex);
-		}
-
-		return textures;
-	}
 }

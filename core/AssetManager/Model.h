@@ -16,21 +16,22 @@ namespace PhysicsEngine
 	  file types using Assimp
 	*/
 
-	class AssimpModel
+
+	class Model
 	{
 	public:
-		AssimpModel(std::string pathToModel);
-		~AssimpModel() = default;
+		Model(std::string pathToModel);
+		~Model() = default;
 	private:
-		std::vector<Mesh> m_Meshes;
-		std::string       m_Directory;
+		std::vector<Mesh>    m_Meshes;
+		std::vector<Texture> m_Textures;
+		std::string          m_Directory;
 
-		void loadModel(std::string path);
-
+		void LoadModel(std::string pathToModel);
 		void ProcessNode(aiNode* node, const aiScene* scene);
 		Mesh ConvertToEngineMesh(aiMesh* mesh, const aiScene* scene);
 
-		std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typename);
+		std::vector<Texture> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 
 	};
 }
