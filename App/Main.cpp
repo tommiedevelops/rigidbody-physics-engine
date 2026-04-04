@@ -15,7 +15,7 @@ int main()
 
 	auto e{ initialScene.CreateEntity() };
 
-	auto& rComp = e.AddComponent<RenderComponent>();
+	auto& rComp = e.AddComponent<ModelComponent>();
 	rComp.model = assets.GetModel("backpack");
 
 	app.SetCurrentScene(&initialScene);

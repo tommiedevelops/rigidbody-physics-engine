@@ -4,7 +4,7 @@
 
 namespace PhysicsEngine
 { 
-	struct RenderComponent
+	struct ModelComponent
 	{
 		Model* model;
 	};

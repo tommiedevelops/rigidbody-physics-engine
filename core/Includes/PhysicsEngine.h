@@ -7,7 +7,7 @@
 #include "Renderer/Mesh.h"
 #include "Renderer/Shader.h"
 #include "Renderer/Texture.h"
-#include "Renderer/RenderComponent.h"
+#include "Renderer/ModelComponent.h"
 
 #include "Scene/Entity.h"
 #include "Scene/Scene.h"

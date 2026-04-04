@@ -1,4 +1,5 @@
 #include "Entity.h"
+#include "TransformComponent.h"
 #include <iostream>
 
 namespace PhysicsEngine
@@ -7,6 +8,7 @@ namespace PhysicsEngine
 		: m_id{ id }
 		, m_registry{ r }
 	{
-		
+		// All entities should have a transform
+		AddComponent<TransformComponent>();
 	}
 }

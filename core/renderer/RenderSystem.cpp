@@ -5,7 +5,7 @@
 #include "shader.h"
 #include "texture.h"
 
-#include "Mesh.h"
+#include "ModelComponent.h"
 #include "scene/scene.h" // The renderer should know the internals of the Scene structure
 // should it?
 
@@ -15,22 +15,19 @@
 
 namespace PhysicsEngine
 {
-	class TransformComponent
-	{
-		glm::mat4 modelMatrix;
-	};
-
-	class MaterialComponent
-	{
-		glm::vec4 albedo;
-	};
 
 	void Renderer::Render(Scene* scene)
 	{
 		const entt::registry& creg{ scene->GetRegistry() };
 
-		// Retrieve all entities with a Transform, Mesh and Material 
-	//	auto view = creg.view<TransformComponent, MeshComponent>();
+		auto view = creg.view<TransformComponent, ModelComponent>();
+
+		view.each([](const auto entity, const auto& transform, const auto& mesh)
+			{
+				glm::mat4 modelMat{ transform.GetModelMatrix() };
+			});
+		// Retrieve all entities with a Transform and Model Component
+		//	auto view = creg.view<TransformComponent, MeshComponent>();
 
 		//view.each([](const auto entity, const auto& transform, const auto& mesh) {
 		//	std::cout << "noop";
