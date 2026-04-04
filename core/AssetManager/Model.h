@@ -20,12 +20,15 @@ namespace PhysicsEngine
 	class Model
 	{
 	public:
-		Model(std::string pathToModel);
+		Model(std::string modelName, std::string pathToModel);
 		~Model() = default;
+
+		std::string GetName() { return m_Name; }
 	private:
 		std::vector<Mesh>    m_Meshes;
 		std::vector<Texture> m_Textures;
 		std::string          m_Directory;
+		const std::string    m_Name;
 
 		void LoadModel(std::string pathToModel);
 		void ProcessNode(aiNode* node, const aiScene* scene);

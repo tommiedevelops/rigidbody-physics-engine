@@ -1,9 +1,11 @@
 #pragma once
 
+#include "Model.h"
+
 namespace PhysicsEngine
 { 
 	struct RenderComponent
 	{
-		float x;
+		Model* model;
 	};
 }

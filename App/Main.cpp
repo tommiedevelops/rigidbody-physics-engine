@@ -7,13 +7,18 @@ int main()
 
 	App app{};
 
-	app.LoadModel("../Assets/backpack/backpack.obj");
+	Assets assets{};
+	assets.AddModel("backpack", "../Assets/backpack/backpack.obj");
+	app.RegisterAssets(&assets);
 
 	Scene initialScene{};
 
 	auto e{ initialScene.CreateEntity() };
-	auto& component = e.AddComponent<RenderComponent>();
+
+	auto& rComp = e.AddComponent<RenderComponent>();
+	rComp.model = assets.GetModel("backpack");
 
 	app.SetCurrentScene(&initialScene);
+
 	app.Run();
 }

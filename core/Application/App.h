@@ -12,12 +12,12 @@ namespace PhysicsEngine
 	public:
 		App();
 		void Run();
+		void RegisterAssets(Assets* assets);
 		void SetCurrentScene(Scene* newScene);
-		void LoadModel(std::string pathToModel);
 	private:
 		Window         m_Window;
 		Scene*         m_CurrentScene;
 		Renderer       m_Renderer;
-		AssetManager   m_AssetManager;
+		Assets*        m_Assets;
 	};
 }

@@ -24,8 +24,8 @@ add_library(core
 	Core/Renderer/Mesh.cpp
 
 	Core/Scene/Entity.cpp
-	Core/Scene/RenderComponent.cpp
-	Core/Scene/RenderComponent.h
+	"Core/Renderer/RenderComponent.cpp"
+	"Core/Renderer/RenderComponent.h"
 	Core/Scene/Scene.cpp
 )
 

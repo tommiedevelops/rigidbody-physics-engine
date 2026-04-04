@@ -8,12 +8,13 @@ namespace PhysicsEngine
 {
 	std::vector<Texture> g_texturesLoaded;
 
-	Model::Model(std::string path)
+	Model::Model(std::string modelName, std::string path)
+		: m_Name { modelName }
 	{
 		LoadModel(path);
 	}
 
-	void 
+	void
 	Model::LoadModel(std::string pathToModel)
 	{
 		Assimp::Importer import;

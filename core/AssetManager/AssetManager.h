@@ -6,14 +6,15 @@
 
 namespace PhysicsEngine
 {
-	class AssetManager
+	class Assets
 	{
 	private:
 		std::vector<Model> m_Models;
 	public:
-		AssetManager() = default;
-		~AssetManager() = default;
+		Assets() = default;
+		~Assets() = default;
 
-		void LoadModel(std::string path);
+		void AddModel(std::string modelName, std::string path);
+		Model* GetModel(std::string modelName);
 	};
 }

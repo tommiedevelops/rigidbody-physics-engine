@@ -7,7 +7,7 @@ namespace PhysicsEngine
 		: m_Window{ Window(500,500,"Title") }
 		, m_Renderer{ Renderer() }
 		, m_CurrentScene{}
-		, m_AssetManager{}
+		, m_Assets{}
 	{}
 
 	void App::SetCurrentScene(Scene* newScene)
@@ -15,11 +15,11 @@ namespace PhysicsEngine
 		m_CurrentScene = newScene;
 	};
 
-	void App::LoadModel(std::string pathToModel)
+	void App::RegisterAssets(Assets* assets)
 	{
-		m_AssetManager.LoadModel(pathToModel);
+		m_Assets = assets;
 	}
-
+	
 	void App::Run()
 	{
 		while (!m_Window.ShouldClose())
