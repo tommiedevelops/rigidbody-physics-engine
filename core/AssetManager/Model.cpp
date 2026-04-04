@@ -19,10 +19,10 @@ namespace PhysicsEngine
 		Assimp::Importer import;
 		const aiScene* scene = import.ReadFile(pathToModel, aiProcess_Triangulate | aiProcess_FlipUVs);
 
-		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode);
+		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
 			std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
-			return;
+			throw std::logic_error("There was an error loading the model");
 		}
 
 		m_Directory = std::filesystem::path(pathToModel).parent_path().string();
@@ -39,7 +39,8 @@ namespace PhysicsEngine
 			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 			m_Meshes.push_back(ConvertToEngineMesh(mesh, scene));
 		}
-
+//DEL
+std::cout << node->mName.C_Str() << '\n';
 		// This node may also own multiple children
 		for (unsigned int i = 0; i < node->mNumChildren; ++i)
 		{
@@ -54,14 +55,16 @@ namespace PhysicsEngine
 		std::vector<Texture> textures;
 
 		unsigned int numTextures{ mat->GetTextureCount(type) };
-		for (unsigned int i{ 0 }; numTextures; ++i)
+		for (unsigned int i{ 0 }; i < numTextures; ++i)
 		{
-			aiString relPathToTex;
-			mat->GetTexture(type, i, &relPathToTex);
-
-			Texture tex{ relPathToTex.C_Str()};
+			aiString texName;
+			mat->GetTexture(type, i, &texName);
+			
+// DEL
+std::cout << texName.C_Str() << '\n';
+			Texture tex{ m_Directory + '/' + texName.C_Str()};
 			tex.type = typeName;
-			tex.path = relPathToTex.C_Str();
+			tex.path = texName.C_Str();
 
 			textures.push_back(tex);
 		}

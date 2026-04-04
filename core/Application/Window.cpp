@@ -1,3 +1,4 @@
+#include <GLAD/glad.h>
 #include "Window.h"
 
 #include <iostream>
@@ -30,6 +31,10 @@ namespace PhysicsEngine
 		glfwSetFramebufferSizeCallback(m_glfwWindow, framebuffer_size_callback);
 
 		glfwMakeContextCurrent(m_glfwWindow);
+		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+		{
+			throw std::logic_error("Something wrong with glad");
+		}
 
 	}
 

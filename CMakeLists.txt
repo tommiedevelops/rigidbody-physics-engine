@@ -37,23 +37,22 @@ target_link_libraries(core PUBLIC glm)
 target_link_libraries(core PUBLIC EnTT::EnTT)
 target_link_libraries(core PUBLIC assimp)
 
-
 target_include_directories(core
-	PUBLIC 
-	Core/Application
-	Core/Physics
-	Core/Renderer
-	Core/Scene
-	Core/AssetManager
-	Core
-	External
+	PUBLIC
+		Core/Includes
+		Core/Application
+		Core/Physics
+		Core/Renderer
+		Core/Scene
+		Core/AssetManager
+		Core
+		External
 )
 
 add_executable(app App/Main.cpp)
 
-target_include_directories(app
-	PUBLIC Core/Includes
-)
-
 target_link_libraries(app PRIVATE core)
+
+
+
 

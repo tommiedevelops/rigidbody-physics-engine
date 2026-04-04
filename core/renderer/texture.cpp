@@ -14,7 +14,7 @@ namespace PhysicsEngine
 		return m_ID;
 	}
 
-	Texture::Texture(const char* pathToTexture) : m_ID{ 0 }
+	Texture::Texture(std::string pathToTex) : m_ID{ 0 }
 	{
 		glGenTextures(1, &m_ID);
 		glBindTexture(GL_TEXTURE_2D, m_ID);
@@ -29,9 +29,14 @@ namespace PhysicsEngine
 		int width, height, nrChannels;
 
 		stbi_set_flip_vertically_on_load(true);
-		unsigned char* data = stbi_load(pathToTexture, &width, &height, &nrChannels, 0);
+		unsigned char* data = stbi_load(pathToTex.c_str(), &width, &height, &nrChannels, 0);
 
-		std::string ext = std::filesystem::path(pathToTexture).extension().string().substr(1);
+		auto path = std::filesystem::path(pathToTex);
+
+		std::string ext = path.has_extension()
+			? path.extension().string().substr(1)
+			: "";
+
 		GLenum mode = (ext == "png") ? GL_RGBA : GL_RGB;
 
 		if (data)

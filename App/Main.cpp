@@ -5,16 +5,15 @@ int main()
 {
 	using namespace PhysicsEngine;
 
-	AssetManager assets{};
+	App app{};
 
-	assets.LoadModel("../Assets/backpack/backpack.obj");
+	app.LoadModel("../Assets/backpack/backpack.obj");
 
 	Scene initialScene{};
 
 	auto e{ initialScene.CreateEntity() };
 	auto& component = e.AddComponent<RenderComponent>();
 
-	App app{ &initialScene };
-
+	app.SetCurrentScene(&initialScene);
 	app.Run();
 }

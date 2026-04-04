@@ -11,7 +11,7 @@ namespace PhysicsEngine
 		std::string type;
 		std::string path;
 
-		Texture(const char* pathToTexture);
+		Texture(std::string pathToTex);
 		unsigned int getID() const;
 	};
 }

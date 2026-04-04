@@ -3,16 +3,22 @@
 namespace PhysicsEngine
 {
 
-	App::App(Scene* initialScene)
+	App::App()
 		: m_Window{ Window(500,500,"Title") }
 		, m_Renderer{ Renderer() }
-		, m_CurrentScene{ initialScene }
+		, m_CurrentScene{}
+		, m_AssetManager{}
 	{}
 
 	void App::SetCurrentScene(Scene* newScene)
 	{
 		m_CurrentScene = newScene;
 	};
+
+	void App::LoadModel(std::string pathToModel)
+	{
+		m_AssetManager.LoadModel(pathToModel);
+	}
 
 	void App::Run()
 	{
