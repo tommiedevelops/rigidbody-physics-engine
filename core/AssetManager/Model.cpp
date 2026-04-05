@@ -8,10 +8,16 @@ namespace PhysicsEngine
 {
 	std::vector<Texture> g_texturesLoaded;
 
-	Model::Model(std::string modelName, std::string path)
+	Model::Model(
+		std::string modelName,
+		std::string pathToModel,
+		std::string pathToVertexShader,
+		std::string pathToFragmentShader
+	)
 		: m_Name { modelName }
+		, m_Shader(pathToVertexShader.c_str(), pathToFragmentShader.c_str())
 	{
-		LoadModel(path);
+		LoadModel(pathToModel);
 	}
 
 	void

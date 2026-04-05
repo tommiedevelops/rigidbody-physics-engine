@@ -8,7 +8,14 @@ int main()
 	App app{};
 
 	Assets assets{};
-	assets.AddModel("backpack", "../Assets/backpack/backpack.obj");
+
+	assets.AddModel(
+		"backpack",
+		"../Assets/backpack/backpack.obj",
+		"../Assets/shaders/shaders.vert",
+		"../Assets/shaders/shaders.frag"
+	);
+
 	app.RegisterAssets(&assets);
 
 	Scene initialScene{};

@@ -18,21 +18,24 @@ namespace PhysicsEngine
 
 	void Renderer::Render(Scene* scene)
 	{
+		if (!scene)
+		{
+			throw std::logic_error("Provided Scene is null");
+		}
 		const entt::registry& creg{ scene->GetRegistry() };
 
 		auto view = creg.view<TransformComponent, ModelComponent>();
 
 		view.each([](const auto entity, const auto& transform, const auto& mesh)
-			{
-				glm::mat4 modelMat{ transform.GetModelMatrix() };
-			});
-		// Retrieve all entities with a Transform and Model Component
-		//	auto view = creg.view<TransformComponent, MeshComponent>();
+		{
+			glm::mat4 modelMat{ transform.GetModelMatrix() };
 
-		//view.each([](const auto entity, const auto& transform, const auto& mesh) {
-		//	std::cout << "noop";
-		//});
+			// TODO
 
+			//glm::mat4 viewMat{ scene->cam.GetViewMatrix() };
+			//glm::mat4 projMat{ scene->cam.GetProjectionMatrix() };
+		});
+		
 	}
 
 	void configureViewport()

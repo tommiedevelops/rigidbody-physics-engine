@@ -14,7 +14,13 @@ namespace PhysicsEngine
 		Assets() = default;
 		~Assets() = default;
 
-		void AddModel(std::string modelName, std::string path);
+		void AddModel(
+			std::string modelName,
+			std::string pathToModel,
+			std::string pathToVertexShader,
+			std::string pathToFragmentShader
+		);
+
 		Model* GetModel(std::string modelName);
 	};
 }

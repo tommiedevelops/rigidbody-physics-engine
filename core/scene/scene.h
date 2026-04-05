@@ -3,11 +3,17 @@
 #include "TransformComponent.h"
 #include "glm/glm.hpp"
 
+#include "constants.h" // temporary
+
 #include "Entity.h"
 #include <vector>
 
+
 namespace PhysicsEngine
 {
+
+	const float aspect = Constants::SCR_WIDTH / Constants::SCR_HEIGHT;
+
 	class Camera
 	{
 	public:
@@ -24,6 +30,11 @@ namespace PhysicsEngine
 		glm::mat4 GetViewMatrix()
 		{
 			return glm::inverse(transform.GetModelMatrix());
+		}
+
+		glm::mat4 GetProjectionMatrix()
+		{ 
+			return glm::perspective(m_FOVy, aspect, m_Near, m_Far);
 		}
 	};
 

@@ -2,9 +2,14 @@
 
 namespace PhysicsEngine
 {
-	void Assets::AddModel(std::string modelName, std::string pathToModel)
+	void Assets::AddModel(
+		std::string modelName, 
+		std::string pathToModel,
+		std::string pathToVertexShader,
+		std::string pathToFragmentShader
+	)
 	{
-		m_Models.push_back(Model(modelName, pathToModel));
+		m_Models.push_back(Model(modelName, pathToModel, pathToVertexShader, pathToFragmentShader));
 	}
 
 	Model* Assets::GetModel(std::string modelName)

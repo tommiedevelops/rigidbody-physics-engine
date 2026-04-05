@@ -8,7 +8,6 @@ namespace PhysicsEngine
 	private:
 		unsigned int m_ID;
 	public:
-
 		Shader(const char* vertexPath, const char* fragmentPath);
 
 		void use(); // activate the shader
