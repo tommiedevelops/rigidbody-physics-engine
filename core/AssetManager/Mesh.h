@@ -18,7 +18,6 @@ namespace PhysicsEngine
 	public:
 		std::vector<Vertex>    m_Vertices;
 		std::vector<uint32_t>  m_Indices;
-		std::string m_Name;
 
 		Mesh(
 			std::vector<Vertex>    vertices,
@@ -26,7 +25,13 @@ namespace PhysicsEngine
 			std::string			   name
 		);
 
+		std::string& GetName()
+		{
+			return m_Name;
+		}
+
 	private:
+		std::string m_Name;
 		unsigned int VAO, VBO, EBO;
 		void SetUpMesh();
 	};

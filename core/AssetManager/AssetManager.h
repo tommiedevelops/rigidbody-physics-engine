@@ -43,5 +43,8 @@ namespace PhysicsEngine
 			std::string shaderName
 		);
 
+		Mesh*    GetMesh(std::string meshName);
+		Texture* GetTexture(std::string textureName);
+		Shader*  GetShader(std::string shaderName);
 	};
 }

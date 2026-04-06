@@ -50,7 +50,10 @@ namespace PhysicsEngine
 	}
 
 	void
-	Assets::AddMesh(std::string pathToMesh, std::string meshName)
+	Assets::AddMesh(
+		std::string pathToMesh,
+		std::string meshName
+	)
 	{
 		/*
 		This implementation does not support submeshes or indexed materials
@@ -68,7 +71,10 @@ namespace PhysicsEngine
 		m_Meshes.push_back( ConvertToEngineMesh(scene->mMeshes[0], meshName) );
 	}
 
-	void Assets::AddTexture(std::string pathToTexture, std::string textureName)
+	void Assets::AddTexture(
+		std::string pathToTexture,
+		std::string textureName
+	)
 	{
 		m_Textures.push_back(Texture(pathToTexture, textureName));
 	}
@@ -80,6 +86,41 @@ namespace PhysicsEngine
 	)
 	{
 		m_Shaders.push_back(Shader(pathToVertexShader, pathToFragmentShader, shaderName));
+	}
+
+	Mesh* Assets::GetMesh(std::string meshName)
+	{
+		for (unsigned int i{ 0 }; i < m_Meshes.size(); ++i)
+		{ 
+			if (meshName == m_Meshes[i].GetName())
+				return &m_Meshes[i];
+		}
+
+		return nullptr;
+	}
+
+	Texture* Assets::GetTexture(std::string textureName)
+	{
+		for (unsigned int i{ 0 }; i < m_Textures.size(); ++i)
+		{
+			if (textureName == m_Textures[i].GetName())
+				return &m_Textures[i];
+		}
+
+		return nullptr;
+
+	}
+
+	Shader* Assets::GetShader(std::string shaderName)
+	{
+		for (unsigned int i{ 0 }; i < m_Shaders.size(); ++i)
+		{
+			if (shaderName == m_Shaders[i].GetName())
+				return &m_Shaders[i];
+		}
+
+		return nullptr;
+
 	}
 
 

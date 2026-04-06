@@ -21,5 +21,10 @@ namespace PhysicsEngine
 		void setIntUniform(const std::string& name, int value) const;
 		void setFloatUniform(const std::string& name, float value) const;
 
+		std::string& GetName()
+		{
+			return m_Name;
+		}
+
 	};
 }
