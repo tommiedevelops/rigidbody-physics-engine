@@ -123,5 +123,22 @@ namespace PhysicsEngine
 
 	}
 
+	void Assets::CreateMaterial(std::string materialName, Shader* shader, Texture* texture)
+	{
+		m_Materials.push_back(Material(materialName, shader, texture));
+	}
+
+
+	Material* Assets::GetMaterial(std::string materialName)
+	{
+		for (unsigned int i{ 0 }; i < m_Materials.size(); ++i)
+		{
+			if (materialName == m_Shaders[i].GetName())
+				return &m_Materials[i];
+		}
+
+		return nullptr;
+
+	}
 
 }

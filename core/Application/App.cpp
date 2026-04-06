@@ -14,11 +14,6 @@ namespace PhysicsEngine
 	{
 		m_CurrentScene = newScene;
 	};
-
-	void App::RegisterAssets(Assets* assets)
-	{
-		m_Assets = assets;
-	}
 	
 	void App::Run()
 	{

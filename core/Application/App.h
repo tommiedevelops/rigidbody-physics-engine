@@ -12,12 +12,17 @@ namespace PhysicsEngine
 	public:
 		App();
 		void Run();
-		void RegisterAssets(Assets* assets);
 		void SetCurrentScene(Scene* newScene);
+
+		Assets& GetAssetsRef()
+		{
+			return m_Assets;
+		}
+
 	private:
 		Window         m_Window;
 		Scene*         m_CurrentScene;
 		Renderer       m_Renderer;
-		Assets*        m_Assets;
+		Assets         m_Assets;
 	};
 }

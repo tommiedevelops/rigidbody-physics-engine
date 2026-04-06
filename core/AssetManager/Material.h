@@ -7,12 +7,16 @@ namespace PhysicsEngine
 {
 	class Material
 	{
-		float albedo;
-		float diffuse;
-		float specular;
+	private:
+		std::string m_Name{};
+	public:
+		float albedo{};
+		float diffuse{};
+		float specular{};
 
-		Texture* tex;
-		Shader*  shader;
+		Texture* m_Texture{};
+		Shader*  m_Shader{};
 
+		Material(std::string materialName, Shader* shader, Texture* texture);
 	};
 }

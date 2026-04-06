@@ -18,9 +18,9 @@ namespace PhysicsEngine
 		std::vector<Mesh>     m_Meshes;
 		std::vector<Texture>  m_Textures;
 		std::vector<Shader>   m_Shaders;
+		std::vector<Material> m_Materials;
 
 		void ProcessNode(aiNode* node, const aiScene* scene);
-
 		Mesh ConvertToEngineMesh(const aiMesh* mesh, std::string meshName);
 
 	public:
@@ -46,5 +46,9 @@ namespace PhysicsEngine
 		Mesh*    GetMesh(std::string meshName);
 		Texture* GetTexture(std::string textureName);
 		Shader*  GetShader(std::string shaderName);
+
+		void CreateMaterial(std::string materialName, Shader* shader, Texture* texture); 
+		Material* GetMaterial(std::string materialName); 
+
 	};
 }
