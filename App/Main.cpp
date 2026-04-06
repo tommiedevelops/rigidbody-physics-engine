@@ -23,6 +23,10 @@ int main()
 
 	auto& meshComp = e.AddComponent<MeshComponent>();
 	meshComp.mesh = assets.GetMesh("bunny"); 
+	if (!meshComp.mesh)
+	{
+		throw std::logic_error("could not find mesh");
+	}
 	
 	auto& matComp  = e.AddComponent<MaterialComponent>();
 	matComp.material = assets.GetMaterial("default");

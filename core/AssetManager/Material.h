@@ -2,6 +2,7 @@
 
 #include "texture.h"
 #include "shader.h"
+#include <glm/glm.hpp>
 
 namespace PhysicsEngine
 {
@@ -10,7 +11,7 @@ namespace PhysicsEngine
 	private:
 		std::string m_Name{};
 	public:
-		float albedo{};
+		glm::vec4 albedo{};
 		float diffuse{};
 		float specular{};
 

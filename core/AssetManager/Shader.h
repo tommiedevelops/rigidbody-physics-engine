@@ -25,6 +25,6 @@ namespace PhysicsEngine
 		{
 			return m_Name;
 		}
-
+		unsigned int GetID() { return m_ID; }
 	};
 }

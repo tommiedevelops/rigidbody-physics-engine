@@ -19,6 +19,8 @@ namespace PhysicsEngine
 		std::vector<Vertex>    m_Vertices;
 		std::vector<uint32_t>  m_Indices;
 
+		unsigned int VAO, VBO, EBO;
+
 		Mesh(
 			std::vector<Vertex>    vertices,
 			std::vector<uint32_t>  indices,
@@ -32,7 +34,5 @@ namespace PhysicsEngine
 
 	private:
 		std::string m_Name;
-		unsigned int VAO, VBO, EBO;
-		void SetUpMesh();
 	};
 }
