@@ -1,24 +1,86 @@
 #include "AssetManager.h"
 
+#include <iostream>
+#include <string>
+
 namespace PhysicsEngine
 {
-	void Assets::AddModel(
-		std::string modelName, 
-		std::string pathToModel,
-		std::string pathToVertexShader,
-		std::string pathToFragmentShader
-	)
+	Mesh 
+	Assets::ConvertToEngineMesh(const aiMesh* mesh, std::string meshName)
 	{
-		m_Models.push_back(Model(modelName, pathToModel, pathToVertexShader, pathToFragmentShader));
+		if (!mesh) throw std::logic_error("provided mesh was null");
+
+		std::vector<Vertex>       vertices;
+		std::vector<unsigned int> indices;
+
+		for (unsigned int i{ 0 }; i < mesh->mNumVertices; ++i)
+		{
+			Vertex vertex{ };
+			vertex.position.x = mesh->mVertices[i].x;
+			vertex.position.y = mesh->mVertices[i].y;
+			vertex.position.z = mesh->mVertices[i].z;
+
+			if (mesh->mNormals)
+			{
+				vertex.normal.x = mesh->mNormals[i].x;
+				vertex.normal.y = mesh->mNormals[i].y;
+				vertex.normal.z = mesh->mNormals[i].z;
+			}
+
+			if (mesh->mTextureCoords[0])
+			{
+				vertex.uv.x = mesh->mTextureCoords[0][i].x;
+				vertex.uv.y = mesh->mTextureCoords[0][i].y;
+			}
+
+			vertices.push_back(vertex);
+		}
+
+		for (unsigned int faceIdx{ 0 }; faceIdx < mesh->mNumFaces; ++faceIdx)
+		{
+			const auto& face = mesh->mFaces[faceIdx];
+
+			for (unsigned int j = 0; j < face.mNumIndices; ++j)
+			{
+				indices.push_back(face.mIndices[j]);
+			}
+		}
+
+		return Mesh{ vertices, indices, meshName};
 	}
 
-	Model* Assets::GetModel(std::string modelName)
+	void
+	Assets::AddMesh(std::string pathToMesh, std::string meshName)
 	{
-		for (unsigned int i{ 0 }; i < m_Models.size(); ++i)
+		/*
+		This implementation does not support submeshes or indexed materials
+		*/
+
+		Assimp::Importer import;
+		const aiScene* scene = import.ReadFile(pathToMesh, aiProcess_Triangulate | aiProcess_FlipUVs);
+
+		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
-			if (modelName == m_Models[i].GetName())
-				return &m_Models[i];
+			std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
+			throw std::logic_error("There was an error loading the model");
 		}
-		return nullptr;
+
+		m_Meshes.push_back( ConvertToEngineMesh(scene->mMeshes[0], meshName) );
 	}
+
+	void Assets::AddTexture(std::string pathToTexture, std::string textureName)
+	{
+		m_Textures.push_back(Texture(pathToTexture, textureName));
+	}
+
+	void Assets::AddShader(
+		std::string pathToVertexShader,
+		std::string pathToFragmentShader,
+		std::string shaderName
+	)
+	{
+		m_Shaders.push_back(Shader(pathToVertexShader, pathToFragmentShader, shaderName));
+	}
+
+
 }

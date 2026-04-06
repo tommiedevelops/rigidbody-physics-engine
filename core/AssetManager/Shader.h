@@ -7,8 +7,13 @@ namespace PhysicsEngine
 	{
 	private:
 		unsigned int m_ID;
+		std::string  m_Name;
 	public:
-		Shader(const char* vertexPath, const char* fragmentPath);
+		Shader(
+			std::string vertexPath,
+			std::string fragmentPath,
+			std::string shaderName
+		);
 
 		void use(); // activate the shader
 

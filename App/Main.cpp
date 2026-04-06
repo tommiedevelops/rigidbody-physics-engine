@@ -9,21 +9,16 @@ int main()
 
 	Assets assets{};
 
-	assets.AddModel(
-		"backpack",
-		"../Assets/models/bunny/bunny.obj",
-		"../Assets/shaders/shader.vert",
-		"../Assets/shaders/shader.frag"
-	);
-
 	app.RegisterAssets(&assets);
 
 	Scene initialScene{};
 
 	auto e{ initialScene.CreateEntity() };
 
-	auto& rComp = e.AddComponent<ModelComponent>();
-	rComp.model = assets.GetModel("backpack");
+	auto& meshComp = e.AddComponent<MeshComponent>();
+	auto& matComp  = e.AddComponent<MaterialComponent>();
+
+	//meshComp.mesh = assets.GetMesh("bunny"); // change to work with mesh directly (screw model)
 
 	app.SetCurrentScene(&initialScene);
 

@@ -7,11 +7,12 @@ namespace PhysicsEngine
 	{
 	private:
 		unsigned int m_ID;
+		std::string m_Name;
 	public:
 		std::string type;
 		std::string path;
 
-		Texture(std::string pathToTex);
+		Texture(std::string pathToTex, std::string textureName);
 		unsigned int getID() const;
 	};
 }

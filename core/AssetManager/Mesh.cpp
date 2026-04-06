@@ -1,15 +1,19 @@
 #include "Mesh.h"
 #include "glad/glad.h"
 
+#include <string>
+
 namespace PhysicsEngine
 {
     Mesh::Mesh(
         std::vector<Vertex>   vertices,
-        std::vector<uint32_t> indices
+        std::vector<uint32_t> indices,
+        std::string           name
     )
+        : m_Vertices { vertices }
+        , m_Indices  { indices  }
+        , m_Name     { name     }
     {
-        m_Vertices = vertices;
-        m_Indices = indices;
         SetUpMesh();
     }
 

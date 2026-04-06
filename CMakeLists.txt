@@ -15,17 +15,17 @@ add_library(core
 	Core/Application/App.cpp
 	Core/Application/Window.cpp
 
-	Core/AssetManager/Model.cpp
+	
 	Core/AssetManager/AssetManager.cpp
 
 	Core/Renderer/RenderSystem.cpp
-	Core/Renderer/Shader.cpp
-	Core/Renderer/Texture.cpp
-	Core/Renderer/Mesh.cpp
+	"Core/AssetManager/Shader.cpp"
+	"Core/AssetManager/Texture.cpp"
+	"Core/AssetManager/Mesh.cpp"
 
 	Core/Scene/Entity.cpp
 	Core/Scene/Scene.cpp
-)
+ "Core/Renderer/MaterialComponent.h" "Core/AssetManager/Material.h")
 
 find_package(OpenGL REQUIRED)
 target_link_libraries(core PUBLIC OpenGL::GL)
@@ -47,7 +47,7 @@ target_include_directories(core
 		External
 )
 
-add_executable(app App/Main.cpp)
+add_executable(app App/Main.cpp "Core/Renderer/MaterialComponent.h" "Core/AssetManager/Material.h")
 
 target_link_libraries(app PRIVATE core)
 

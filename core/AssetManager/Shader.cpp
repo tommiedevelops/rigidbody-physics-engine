@@ -30,8 +30,13 @@ namespace PhysicsEngine
 	}
 
 	/* Constructor */
-	Shader::Shader(const char* vertexPath, const char* fragmentPath)
-		: m_ID{ glCreateProgram() }
+	Shader::Shader(
+		std::string vertexPath,
+		std::string fragmentPath,
+		std::string shaderName
+	)
+		: m_ID    { glCreateProgram() }
+		, m_Name  { shaderName }
 	{
 		std::string vertexCode;
 		std::string fragmentCode;
@@ -44,8 +49,8 @@ namespace PhysicsEngine
 
 		try
 		{
-			vShaderFile.open(vertexPath);
-			fShaderFile.open(fragmentPath);
+			vShaderFile.open(vertexPath.c_str());
+			fShaderFile.open(fragmentPath.c_str());
 
 			std::stringstream vShaderStream, fShaderStream;
 
