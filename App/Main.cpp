@@ -11,9 +11,9 @@ int main()
 
 	assets.AddModel(
 		"backpack",
-		"../Assets/backpack/backpack.obj",
-		"../Assets/shaders/shaders.vert",
-		"../Assets/shaders/shaders.frag"
+		"../Assets/models/bunny/bunny.obj",
+		"../Assets/shaders/shader.vert",
+		"../Assets/shaders/shader.frag"
 	);
 
 	app.RegisterAssets(&assets);

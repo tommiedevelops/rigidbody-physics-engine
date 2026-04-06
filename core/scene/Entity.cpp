@@ -8,7 +8,5 @@ namespace PhysicsEngine
 		: m_id{ id }
 		, m_registry{ r }
 	{
-		// All entities should have a transform
-		AddComponent<TransformComponent>();
 	}
 }

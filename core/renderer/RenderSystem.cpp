@@ -31,7 +31,6 @@ namespace PhysicsEngine
 			glm::mat4 modelMat{ transform.GetModelMatrix() };
 
 			// TODO
-
 			//glm::mat4 viewMat{ scene->cam.GetViewMatrix() };
 			//glm::mat4 projMat{ scene->cam.GetProjectionMatrix() };
 		});

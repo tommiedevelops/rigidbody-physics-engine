@@ -92,9 +92,12 @@ std::cout << texName.C_Str() << '\n';
 			vertex.position.y = mesh->mVertices[i].y;
 			vertex.position.z = mesh->mVertices[i].z;
 
-			vertex.normal.x = mesh->mNormals[i].x;
-			vertex.normal.y = mesh->mNormals[i].y;
-			vertex.normal.z = mesh->mNormals[i].z;
+			if (mesh->mNormals)
+			{
+				vertex.normal.x = mesh->mNormals[i].x;
+				vertex.normal.y = mesh->mNormals[i].y;
+				vertex.normal.z = mesh->mNormals[i].z;
+			}
 
 			if (mesh->mTextureCoords[0])
 			{
