@@ -96,7 +96,7 @@ namespace PhysicsEngine
 				return &m_Meshes[i];
 		}
 
-		return nullptr;
+		throw std::logic_error("Could not find mesh");
 	}
 
 	Texture* Assets::GetTexture(std::string textureName)

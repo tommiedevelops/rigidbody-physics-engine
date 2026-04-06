@@ -19,9 +19,9 @@ namespace PhysicsEngine
 	public:
 		// member variables
 		TransformComponent transform{};
-		float m_FOVy{ 45.0f };
+		float m_FOVy{ glm::radians(45.0f) };
 		float m_Near{ 0.1f };
-		float m_Far{ 1000.0f };
+		float m_Far{ 100.0f };
 
 		Camera() = default;
 		~Camera() = default;

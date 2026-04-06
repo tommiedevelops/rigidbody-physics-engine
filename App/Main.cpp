@@ -1,7 +1,5 @@
 #include "PhysicsEngine.h"
 
-#include <cstring>
-
 #define MODELS_DIR   "../Assets/models/"
 #define TEXTURES_DIR "../Assets/textures/"
 #define SHADERS_DIR  "../Assets/shaders/"
@@ -14,7 +12,10 @@ int main()
 
 	auto& assets = app.GetAssetsRef();
 	assets.AddMesh(MODELS_DIR "bunny/bunny.obj", "bunny");
+	assets.AddMesh(MODELS_DIR "cube.obj", "cube");
+
 	assets.AddShader(SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag", "default");
+
 	assets.CreateMaterial("default", assets.GetShader("default"), nullptr);
 
 	Scene initialScene{};
@@ -22,14 +23,16 @@ int main()
 	auto e{ initialScene.CreateEntity() };
 
 	auto& meshComp = e.AddComponent<MeshComponent>();
-	meshComp.mesh = assets.GetMesh("bunny"); 
-	if (!meshComp.mesh)
-	{
-		throw std::logic_error("could not find mesh");
-	}
+	meshComp.mesh = assets.GetMesh("cube"); 
 	
 	auto& matComp  = e.AddComponent<MaterialComponent>();
 	matComp.material = assets.GetMaterial("default");
+
+	auto& transformComp = e.GetComponent<TransformComponent>();
+	transformComp.scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	transformComp.position = glm::vec3(0.0f, 0.0f, -10.0f);
+
+	//initialScene.cam.transform.position = glm::vec3(1.0f, 0.0f, 5.0f);
 
 	app.SetCurrentScene(&initialScene);
 

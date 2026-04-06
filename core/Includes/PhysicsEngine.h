@@ -13,6 +13,8 @@
 #include "Scene/Scene.h"
 #include "Scene/TransformComponent.h"
 
+#include "Platform/Window.h"
+#include "Platform/GameTime.h"
+
 #include "Application/App.h"
-#include "Application/Window.h"
 

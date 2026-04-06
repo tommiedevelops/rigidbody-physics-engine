@@ -33,6 +33,7 @@ namespace PhysicsEngine
 		}
 
 	private:
+		void SetUpMesh();
 		std::string m_Name;
 	};
 }
