@@ -28,12 +28,12 @@ int main()
 
 	auto m2 = assets.GetMaterial("m2");
 	m2->albedo = glm::vec4(0.6, 0.1, 0.1, 1.0);
-	m2->ambientStrength = 0.9f;
+	m2->ambientStrength = 0.4f;
 	m2->diffuse = 0.4f;
 	m2->specular = 0.9f;
 
 	Scene initialScene{};
-	initialScene.light.direction = glm::vec3(-1.0f, -1.0f, -1.0f);
+	initialScene.light.position = glm::vec3(1.0f, 3.0f, -20.0f);
 	initialScene.light.color = glm::vec3(0.5f, 0.3f, 0.9f);
 
 	auto e{ initialScene.CreateEntity() };

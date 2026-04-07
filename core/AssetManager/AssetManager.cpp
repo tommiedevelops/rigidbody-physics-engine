@@ -60,7 +60,7 @@ namespace PhysicsEngine
 		*/
 
 		Assimp::Importer import;
-		const aiScene* scene = import.ReadFile(pathToMesh, aiProcess_Triangulate | aiProcess_FlipUVs);
+		const aiScene* scene = import.ReadFile(pathToMesh, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{

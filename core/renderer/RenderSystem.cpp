@@ -31,7 +31,8 @@ namespace PhysicsEngine
 		glViewport(0, 0, Constants::SCR_WIDTH, Constants::SCR_HEIGHT);
 		glClearColor(0.8f, 0.9f, 0.7f, 1.0f);
 
-		glClear(GL_COLOR_BUFFER_BIT);
+		glEnable(GL_DEPTH_TEST);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		const entt::registry& creg{ scene->GetRegistry() };
 
@@ -55,7 +56,7 @@ namespace PhysicsEngine
 			unsigned int shaderID = shader->GetID();
 			shader->Bind();
 
-			shader->SetVec3Uniform("lightDirection", scene->light.direction);
+			shader->SetVec3Uniform("lightPos", scene->light.position);
 			shader->SetVec3Uniform("lightColor", scene->light.color);
 
 			shader->SetVec3Uniform("albedo", material->albedo);
