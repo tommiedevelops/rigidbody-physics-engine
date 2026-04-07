@@ -9,7 +9,7 @@
 
 namespace PhysicsEngine
 {
-	void Shader::use()
+	void Shader::Bind()
 	{
 		glUseProgram(m_ID);
 	}

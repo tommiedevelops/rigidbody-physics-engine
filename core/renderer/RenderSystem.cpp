@@ -51,9 +51,9 @@ namespace PhysicsEngine
 			// Prepare Material data
 			Material* material = materialComp.material;
 
-			Shader* s = material->m_Shader;
-			unsigned int shaderID = s->GetID();
-			s->use(); // bind shader
+			Shader* shader = material->m_Shader;
+			unsigned int shaderID = shader->GetID();
+			shader->Bind();
 
 			int modelLoc = glGetUniformLocation(shaderID, "model");
 			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMat));

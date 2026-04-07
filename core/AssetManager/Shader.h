@@ -15,7 +15,7 @@ namespace PhysicsEngine
 			std::string shaderName
 		);
 
-		void use(); // activate the shader
+		void Bind(); // activate the shader
 
 		void setBoolUniform(const std::string& name, bool value) const;
 		void setIntUniform(const std::string& name, int value) const;
