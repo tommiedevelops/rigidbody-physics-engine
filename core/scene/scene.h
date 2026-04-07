@@ -14,6 +14,12 @@ namespace PhysicsEngine
 
 	const float aspect = Constants::SCR_WIDTH / Constants::SCR_HEIGHT;
 
+	struct Light
+	{
+	public:
+		glm::vec3 direction;
+	};
+
 	class Camera
 	{
 	public:
@@ -43,6 +49,7 @@ namespace PhysicsEngine
 	public:
 		// member variables
 		Camera cam{};
+		Light light{}; // single light source for now
 
 		// member functions
 		Scene() = default;

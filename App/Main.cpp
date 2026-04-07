@@ -19,6 +19,7 @@ int main()
 	assets.CreateMaterial("default", assets.GetShader("default"), nullptr);
 
 	Scene initialScene{};
+	initialScene.light.direction = glm::vec3(-1.0f, -1.0f, -1.0f);
 
 	auto e{ initialScene.CreateEntity() };
 
@@ -30,6 +31,7 @@ int main()
 
 	auto& transformComp = e.GetComponent<TransformComponent>();
 	transformComp.scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	transformComp.rotation = glm::quat(1.0f, 0.3f, 0.2f, 0.1f);
 	transformComp.position = glm::vec3(0.0f, 0.0f, -10.0f);
 
 	//initialScene.cam.transform.position = glm::vec3(1.0f, 0.0f, 5.0f);

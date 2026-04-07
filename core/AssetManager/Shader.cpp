@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <filesystem>
+#include <glm/glm.hpp>
 
 #include <GLAD/glad.h>
 
@@ -14,19 +15,24 @@ namespace PhysicsEngine
 		glUseProgram(m_ID);
 	}
 
-	void Shader::setBoolUniform(const std::string& name, bool value) const
+	void Shader::SetBoolUniform(const std::string& name, bool value) const
 	{
 		glUniform1i(glGetUniformLocation(m_ID, name.c_str()), (int)value);
 	}
 
-	void Shader::setIntUniform(const std::string& name, int value) const
+	void Shader::SetIntUniform(const std::string& name, int value) const
 	{
 		glUniform1i(glGetUniformLocation(m_ID, name.c_str()), value);
 	}
 
-	void Shader::setFloatUniform(const std::string& name, float value) const
+	void Shader::SetFloatUniform(const std::string& name, float value) const
 	{
 		glUniform1f(glGetUniformLocation(m_ID, name.c_str()), value);
+	}
+
+	void Shader::SetVec3Uniform(const std::string& name, glm::vec3 value) const
+	{
+		glUniform3f(glGetUniformLocation(m_ID, name.c_str()), value.x, value.y, value.z);
 	}
 
 	/* Constructor */

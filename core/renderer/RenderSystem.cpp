@@ -55,6 +55,8 @@ namespace PhysicsEngine
 			unsigned int shaderID = shader->GetID();
 			shader->Bind();
 
+			shader->SetVec3Uniform("lightDirection", scene->light.direction);
+
 			int modelLoc = glGetUniformLocation(shaderID, "model");
 			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMat));
 
