@@ -56,6 +56,10 @@ namespace PhysicsEngine
 			shader->Bind();
 
 			shader->SetVec3Uniform("lightDirection", scene->light.direction);
+			shader->SetVec3Uniform("lightColor", scene->light.color);
+
+			shader->SetVec3Uniform("albedo", material->albedo);
+			shader->SetFloatUniform("ambientStrength", material->ambientStrength);
 
 			int modelLoc = glGetUniformLocation(shaderID, "model");
 			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMat));

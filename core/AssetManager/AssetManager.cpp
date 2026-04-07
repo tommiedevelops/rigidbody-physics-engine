@@ -133,11 +133,11 @@ namespace PhysicsEngine
 	{
 		for (unsigned int i{ 0 }; i < m_Materials.size(); ++i)
 		{
-			if (materialName == m_Shaders[i].GetName())
+			if (materialName == m_Materials[i].GetName())
 				return &m_Materials[i];
 		}
 
-		return nullptr;
+		throw std::logic_error("Could not find material");
 
 	}
 

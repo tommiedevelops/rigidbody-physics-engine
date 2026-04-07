@@ -12,6 +12,7 @@ namespace PhysicsEngine
 		std::string m_Name{};
 	public:
 		glm::vec4 albedo{};
+		float ambientStrength{};
 		float diffuse{};
 		float specular{};
 
@@ -19,5 +20,7 @@ namespace PhysicsEngine
 		Shader*  m_Shader{};
 
 		Material(std::string materialName, Shader* shader, Texture* texture);
+
+		std::string& GetName();
 	};
 }

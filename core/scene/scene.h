@@ -18,6 +18,7 @@ namespace PhysicsEngine
 	{
 	public:
 		glm::vec3 direction;
+		glm::vec3 color;
 	};
 
 	class Camera

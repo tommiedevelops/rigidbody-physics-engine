@@ -6,7 +6,10 @@ namespace PhysicsEngine
 		: m_Name    { materialName }
 		, m_Texture { texture      }
 		, m_Shader  { shader       }
-	{
+	{ }
 
+	std::string& Material::GetName()
+	{
+		return m_Name;
 	}
 }
