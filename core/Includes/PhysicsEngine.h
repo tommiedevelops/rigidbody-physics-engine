@@ -12,6 +12,10 @@
 #include "Scene/Entity.h"
 #include "Scene/Scene.h"
 #include "Scene/TransformComponent.h"
+#include "Scene/Camera.h"
+
+#include "Scripting/ScriptableEntity.h"
+#include "Scripting/ScriptComponent.h"
 
 #include "Platform/Window.h"
 #include "Platform/GameTime.h"

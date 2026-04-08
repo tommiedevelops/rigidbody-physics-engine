@@ -1,4 +1,5 @@
 #pragma once
+
 #include <entt/entt.hpp>
 
 namespace PhysicsEngine
@@ -31,6 +32,7 @@ namespace PhysicsEngine
 		{
 			return m_registry.emplace<T>(m_id);
 		};
+
 	};
 }
 

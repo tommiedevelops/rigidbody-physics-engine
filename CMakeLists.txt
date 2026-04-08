@@ -26,9 +26,12 @@ add_library(core
 	Core/Scene/Entity.cpp
 	Core/Scene/Scene.cpp
 
+	Core/Scripting/ScriptableEntity.cpp
+	Core/Scripting/ScriptSystem.cpp
+
 	Core/Platform/Window.cpp
 	Core/Platform/GameTime.cpp
-)
+ )
 
 find_package(OpenGL REQUIRED)
 target_link_libraries(core PUBLIC OpenGL::GL)
@@ -47,11 +50,12 @@ target_include_directories(core
 		Core/Scene
 		Core/AssetManager
 		Core/Platform
+		Core/Scripting
 		Core
 		External
 )
 
-add_executable(app App/Main.cpp)
+add_executable(app App/Main.cpp )
 
 target_link_libraries(app PRIVATE core)
 
