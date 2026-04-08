@@ -1,9 +1,10 @@
 #pragma once
 
+#include <entt/entt.hpp>
+#include "Scene.h"
+
 namespace PhysicsEngine
 {
-	class Scene;
-	class Entity;
 
 	class ScriptableEntity
 	{
@@ -17,14 +18,25 @@ namespace PhysicsEngine
 		ScriptableEntity() = default;
 
 	protected:
-		template <typename T>
-		T& GetComponent() const;
 
 		template <typename T>
-		bool HasComponent() const;
+		T& GetComponent() const
+		{
+			assert(m_Scene);
+			return m_Scene->GetRegistry().get<T>(m_Entity);
+		}
+
+		template <typename T>
+		bool HasComponent() const
+		{
+			assert(m_Scene);
+			return m_Scene->GetRegistry().all_of<T>(m_Entity);
+		}
 
 	private:
-		Scene*  m_Scene { nullptr };
-		Entity* m_Entity{ nullptr };
+		entt::entity m_Entity{ entt::null };
+		Scene* m_Scene{ nullptr };
+
+		friend class ScriptSystem;
 	};
 }

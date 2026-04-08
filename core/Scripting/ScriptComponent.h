@@ -13,6 +13,8 @@ namespace PhysicsEngine
 		std::function<ScriptableEntity* (void)>  InstantiateScript { nullptr };
 		std::function<void (ScriptComponent*)>   DestroyScript     { nullptr };
 
+		bool HasStarted = false;
+
 		template <typename T>
 		void Bind()
 		{

@@ -33,6 +33,12 @@ namespace PhysicsEngine
 			return m_registry.emplace<T>(m_id);
 		};
 
+		template <typename T>
+		bool HasComponent()
+		{
+			return m_registry.all_of<T>(m_id);
+		};
+
 	};
 }
 

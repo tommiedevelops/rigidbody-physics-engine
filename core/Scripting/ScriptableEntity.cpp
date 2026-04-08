@@ -1,10 +1,9 @@
-#include "ScriptableEntity.h""
+#include "ScriptableEntity.h"
+
+#include "Scene.h"
+#include <assert.h>
 
 namespace PhysicsEngine
 {
-	template <typename T>
-	T& ScriptableEntity::GetComponent() const
-	{
 
-	}
 }
