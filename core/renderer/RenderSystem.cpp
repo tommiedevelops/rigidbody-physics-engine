@@ -48,6 +48,7 @@ namespace PhysicsEngine
 			glm::mat4 modelMat { transformComp.GetModelMatrix()   };
 			glm::mat4 viewMat  { scene->cam.GetViewMatrix()       };
 			glm::mat4 projMat  { scene->cam.GetProjectionMatrix() };
+			glm::mat3 normalMat{ glm::transpose(glm::inverse(glm::mat3(modelMat))) };
 
 			// Prepare Material data
 			Material* material = materialComp.material;
@@ -70,6 +71,9 @@ namespace PhysicsEngine
 
 			int projectionLoc = glGetUniformLocation(shaderID, "projection");
 			glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projMat));
+
+			int normalMatLoc = glGetUniformLocation(shaderID, "normalMatrix");
+			glUniformMatrix3fv(normalMatLoc, 1, GL_FALSE, glm::value_ptr(normalMat));
 
 			glBindVertexArray(meshComp.mesh->VAO);
 

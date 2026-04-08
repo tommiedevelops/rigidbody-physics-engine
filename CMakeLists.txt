@@ -55,7 +55,7 @@ target_include_directories(core
 		External
 )
 
-add_executable(app App/Main.cpp )
+add_executable(app App/Main.cpp)
 
 target_link_libraries(app PRIVATE core)
 

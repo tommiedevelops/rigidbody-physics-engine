@@ -22,12 +22,12 @@ class CubeScript : public PhysicsEngine::ScriptableEntity
 		auto& transform = GetComponent<PhysicsEngine::TransformComponent>();
 		std::cout << "Transform position = (" << transform.position.x << ',' << transform.position.y << ',' << transform.position.z << ')' << std::endl;
 
-		theta += 0.5f * dt;
+		theta += 2.0f * dt;
 
-		glm::vec3 yAxis(0.0f, 1.0f, 0.0f);
-		glm::quat q = glm::angleAxis(theta, yAxis);
+		glm::vec3 yAxis(0.0f, 1.0f, 1.0f);
+		glm::quat q = glm::normalize(glm::angleAxis(theta, yAxis));
 
-		transform.rotation *= q;
+		transform.rotation = q;
 	}
 	void OnDestroy() override
 	{
@@ -64,7 +64,7 @@ int main()
 	m2->specular = 0.9f;
 
 	Scene initialScene{};
-	initialScene.light.position = glm::vec3(1.0f, 3.0f, -20.0f);
+	initialScene.light.position = glm::vec3(1.0f, 3.0f, 0.0f);
 	initialScene.light.color = glm::vec3(0.5f, 0.3f, 0.9f);
 
 	auto e{ initialScene.CreateEntity() };
