@@ -18,7 +18,7 @@ namespace PhysicsEngine
 		template <typename T>
 		void Bind()
 		{
-			static_asset(std::is_base_of_v<ScriptableEntity, T>, "T must derive from ScriptableEntity");
+			static_assert(std::is_base_of_v<ScriptableEntity, T>, "T must derive from ScriptableEntity");
 
 			InstantiateScript = []() -> ScriptableEntity*
 			{

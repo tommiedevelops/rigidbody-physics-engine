@@ -4,6 +4,28 @@
 #define TEXTURES_DIR "../Assets/textures/"
 #define SHADERS_DIR  "../Assets/shaders/"
 
+class CubeScript : public PhysicsEngine::ScriptableEntity
+{
+	void OnCreate() override
+	{
+		std::cout << "Created\n";
+	}
+	void OnStart() override
+	{
+		std::cout << "Started\n";
+	}
+	void OnUpdate(float dt) override
+	{
+		std::cout << "Updated\n";
+		auto& transform = GetComponent<PhysicsEngine::TransformComponent>();
+		std::cout << "Transform position = (" << transform.position.x << ',' << transform.position.y << ',' << transform.position.z << ')' << std::endl;
+	}
+	void OnDestroy() override
+	{
+		std::cout << "Destroyed\n";
+	}
+};
+
 int main()
 {
 	using namespace PhysicsEngine;
@@ -37,6 +59,8 @@ int main()
 	initialScene.light.color = glm::vec3(0.5f, 0.3f, 0.9f);
 
 	auto e{ initialScene.CreateEntity() };
+
+	e.AddComponent<ScriptComponent>().Bind<CubeScript>();
 
 	auto& meshComp = e.AddComponent<MeshComponent>();
 	meshComp.mesh = assets.GetMesh("cube"); 

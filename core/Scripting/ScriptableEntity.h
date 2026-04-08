@@ -9,10 +9,10 @@ namespace PhysicsEngine
 	class ScriptableEntity
 	{
 	public:
-		virtual void OnCreate()         {}
-		virtual void OnStart()          {}
-		virtual void OnUpdate(float dt) {}
-		virtual void OnDestroy()        {}
+		virtual void OnCreate() = 0;
+		virtual void OnStart() = 0;
+		virtual void OnUpdate(float dt) = 0;
+		virtual void OnDestroy() = 0;
 
 		virtual ~ScriptableEntity() = default;
 		ScriptableEntity() = default;
