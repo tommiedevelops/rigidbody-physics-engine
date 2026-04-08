@@ -6,6 +6,8 @@
 
 class CubeScript : public PhysicsEngine::ScriptableEntity
 {
+	float theta{ 0.0f };
+
 	void OnCreate() override
 	{
 		std::cout << "Created\n";
@@ -19,6 +21,13 @@ class CubeScript : public PhysicsEngine::ScriptableEntity
 		std::cout << "Updated\n";
 		auto& transform = GetComponent<PhysicsEngine::TransformComponent>();
 		std::cout << "Transform position = (" << transform.position.x << ',' << transform.position.y << ',' << transform.position.z << ')' << std::endl;
+
+		theta += 0.5f * dt;
+
+		glm::vec3 yAxis(0.0f, 1.0f, 0.0f);
+		glm::quat q = glm::angleAxis(theta, yAxis);
+
+		transform.rotation *= q;
 	}
 	void OnDestroy() override
 	{
