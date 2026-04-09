@@ -16,6 +16,6 @@ namespace PhysicsEngine
 		void OnRender() override;
 		void OnEvent(Event& e) override;
 
-		void SwitchScenes(Scene* m_NewScene);
+		void SetActiveScene(Scene* m_NewScene);
 	};
 }

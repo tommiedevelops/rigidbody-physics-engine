@@ -20,7 +20,8 @@ namespace PhysicsEngine
 
 	void App::SetCurrentScene(Scene* newScene)
 	{
-		m_CurrentScene = newScene;
+		SceneLayer* sceneLayer = m_LayerStack.Get<SceneLayer>();
+		sceneLayer->SetActiveScene(newScene);
 	};
 	
 	void App::Run()
@@ -33,9 +34,12 @@ namespace PhysicsEngine
 			m_Window.PollEvents();
 			m_Window.ProcessInput();
 
-			m_CurrentScene->Render();
-			m_CurrentScene->Update(m_GameTime.GetDeltaTime());
-
+			for (Layer* layer : m_LayerStack.m_Layers)
+			{
+				layer->OnRender();
+				layer->OnUpdate(m_GameTime.GetDeltaTime());
+			}
+			
 			m_Window.SwapBuffers();
 		}
 
