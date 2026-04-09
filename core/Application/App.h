@@ -6,6 +6,7 @@
 #include "AssetManager.h"
 #include "ScriptSystem.h"
 #include "GameTime.h"
+#include "LayerStack.h"
 
 namespace PhysicsEngine
 {
@@ -23,7 +24,11 @@ namespace PhysicsEngine
 
 	private:
 		Window         m_Window;
+
+		// replace below with LayerStack
 		Scene*         m_CurrentScene;
+
+		LayerStack     m_LayerStack;
 		Renderer       m_Renderer;
 		Assets         m_Assets;
 		ScriptSystem   m_ScriptSystem;

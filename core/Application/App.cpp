@@ -1,5 +1,8 @@
 #include "app.h"
 
+#include "SceneLayer.h"
+#include "UILayer.h"
+
 namespace PhysicsEngine
 {
 
@@ -10,7 +13,12 @@ namespace PhysicsEngine
 		, m_Assets{}
 		, m_ScriptSystem{}
 		, m_GameTime{}
-	{}
+		, m_LayerStack{}
+	{
+		m_LayerStack.PushLayer(new SceneLayer());
+		m_LayerStack.PushLayer(new UILayer());
+	}
+
 
 	void App::SetCurrentScene(Scene* newScene)
 	{

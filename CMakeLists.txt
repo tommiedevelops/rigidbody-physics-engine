@@ -14,6 +14,10 @@ add_subdirectory(external/assimp)
 add_library(core
 	Core/Application/App.cpp
 	
+	Core/Layers/LayerStack.cpp
+	Core/Layers/SceneLayer.cpp
+	Core/Layers/UILayer.cpp
+
 	Core/Renderer/RenderSystem.cpp
 
 	Core/AssetManager/AssetManager.cpp
@@ -51,6 +55,7 @@ target_include_directories(core
 		Core/AssetManager
 		Core/Platform
 		Core/Scripting
+		Core/Layers
 		Core
 		External
 )
