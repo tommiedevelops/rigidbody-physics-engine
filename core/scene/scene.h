@@ -36,6 +36,9 @@ namespace PhysicsEngine
 		const entt::registry& 
 		GetRegistry() const { return m_registry; }
 
+
+		void Render();
+
 	private:
 		// entities stored here
 		entt::registry m_registry; // can't copy this

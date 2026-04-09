@@ -1,5 +1,4 @@
 #include "Entity.h"
-#include "TransformComponent.h"
 #include <iostream>
 
 namespace PhysicsEngine

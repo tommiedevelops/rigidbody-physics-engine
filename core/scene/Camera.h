@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include "TransformComponent.h"
+#include "Components.h"
 #include "constants.h"
 
 namespace PhysicsEngine

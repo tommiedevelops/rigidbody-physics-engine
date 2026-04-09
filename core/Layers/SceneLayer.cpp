@@ -16,6 +16,7 @@ namespace PhysicsEngine
 
 	void SceneLayer::OnRender()
 	{
+		if (!m_ActiveScene) return;
 	}
 
 	void SceneLayer::OnEvent(Event& e)

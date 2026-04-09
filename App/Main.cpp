@@ -1,5 +1,7 @@
 #include "PhysicsEngine.h"
 
+#include <iostream>
+
 #define MODELS_DIR   "../Assets/models/"
 #define TEXTURES_DIR "../Assets/textures/"
 #define SHADERS_DIR  "../Assets/shaders/"
