@@ -10,7 +10,6 @@ namespace PhysicsEngine
 		: m_Window{ Window(500,500,"Title") }
 		, m_CurrentScene{}
 		, m_Assets{}
-		, m_ScriptSystem{}
 		, m_GameTime{}
 		, m_LayerStack{}
 	{
@@ -34,9 +33,8 @@ namespace PhysicsEngine
 			m_Window.PollEvents();
 			m_Window.ProcessInput();
 
-			m_ScriptSystem.Update(m_CurrentScene, m_GameTime.GetDeltaTime());
-
 			m_CurrentScene->Render();
+			m_CurrentScene->Update(m_GameTime.GetDeltaTime());
 
 			m_Window.SwapBuffers();
 		}

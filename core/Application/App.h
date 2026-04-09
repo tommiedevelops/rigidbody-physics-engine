@@ -3,7 +3,6 @@
 #include "Window.h"
 #include "Scene.h"
 #include "AssetManager.h"
-#include "ScriptSystem.h"
 #include "GameTime.h"
 #include "LayerStack.h"
 
@@ -29,7 +28,6 @@ namespace PhysicsEngine
 
 		LayerStack     m_LayerStack;
 		Assets         m_Assets;
-		ScriptSystem   m_ScriptSystem;
 		GameTime       m_GameTime;
 	};
 }

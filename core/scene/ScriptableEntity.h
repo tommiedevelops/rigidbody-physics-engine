@@ -37,6 +37,6 @@ namespace PhysicsEngine
 		entt::entity m_Entity{ entt::null };
 		Scene* m_Scene{ nullptr };
 
-		friend class ScriptSystem;
+		friend class Scene;
 	};
 }

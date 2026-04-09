@@ -30,8 +30,8 @@ add_library(core
 	Core/Scene/Entity.cpp
 	Core/Scene/Scene.cpp
 
-	Core/Scripting/ScriptableEntity.cpp
-	Core/Scripting/ScriptSystem.cpp
+	
+	
 
 	Core/Platform/Window.cpp
 	Core/Platform/GameTime.cpp

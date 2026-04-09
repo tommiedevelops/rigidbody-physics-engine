@@ -2,6 +2,7 @@
 
 #include "Mesh.h"
 #include "Material.h"
+#include "ScriptableEntity.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -37,5 +38,32 @@ namespace PhysicsEngine
 		Material* material;
 	};
 
-	
+	struct ScriptComponent
+	{
+		ScriptableEntity* Instance = nullptr;
+
+		std::function<ScriptableEntity* (void)>  InstantiateScript { nullptr };
+		std::function<void (ScriptComponent*)>   DestroyScript     { nullptr };
+
+		bool HasStarted = false;
+
+		template <typename T>
+		void Bind()
+		{
+			static_assert(std::is_base_of_v<ScriptableEntity, T>, "T must derive from ScriptableEntity");
+
+			InstantiateScript = []() -> ScriptableEntity*
+			{
+				return new T();
+			};
+
+			DestroyScript = [](ScriptComponent* sc) -> void
+			{
+				delete sc->Instance;
+				sc->Instance = nullptr;
+			};
+
+		}
+	};
+
 }

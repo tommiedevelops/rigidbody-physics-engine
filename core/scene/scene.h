@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Entity.h"
-#include "Camera.h"
-
 #include <glm/glm.hpp>
 #include <vector>
-
+#include <entt/entt.hpp>
 
 namespace PhysicsEngine
 {
+	class Entity;
+	class Camera;
+
 	struct PointLight
 	{
 	public:
@@ -20,12 +20,11 @@ namespace PhysicsEngine
 	{
 	public:
 		// member variables
-		Camera cam{}; // might make it entity in future
+		Camera* cam{nullptr}; // might make it entity in future
 		PointLight light{}; // single light source for now
 
-		// member functions
-		Scene() = default;
-		~Scene() = default;
+		Scene();
+		~Scene();
 
 		Entity 
 		CreateEntity();
@@ -36,11 +35,12 @@ namespace PhysicsEngine
 		const entt::registry& 
 		GetRegistry() const { return m_registry; }
 
-
 		void Render();
+		void Update(float dt);
 
 	private:
 		// entities stored here
 		entt::registry m_registry; // can't copy this
+		void DestroyScripts();
 	};
 }

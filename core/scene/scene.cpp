@@ -1,12 +1,25 @@
 #include "scene.h"
 
+#include "Entity.h"
 #include "Components.h"
+
+#include "Camera.h"
 
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
 namespace PhysicsEngine
 {
+	Scene::Scene()
+	{ // quick fix. make cam entity later
+		cam = new Camera();
+	}
+
+	Scene::~Scene()
+	{
+		delete cam;
+	}
+
 	Entity Scene::CreateEntity()
 	{
 		auto e{ Entity(m_registry.create(), m_registry) };
@@ -35,8 +48,8 @@ namespace PhysicsEngine
 		)
 		{
 			glm::mat4 modelMat { transformComp.GetModelMatrix()   };
-			glm::mat4 viewMat  { cam.GetViewMatrix()       };
-			glm::mat4 projMat  { cam.GetProjectionMatrix() };
+			glm::mat4 viewMat  { cam->GetViewMatrix()       };
+			glm::mat4 projMat  { cam->GetProjectionMatrix() };
 			glm::mat3 normalMat{ glm::transpose(glm::inverse(glm::mat3(modelMat))) };
 
 			// Prepare Material data
@@ -73,5 +86,63 @@ namespace PhysicsEngine
 		});
 		
 	}
+
+	void Scene::Update(float deltaTime)
+	{
+		auto& creg{ GetRegistry() };
+		auto view{ creg.view<ScriptComponent>() };
+		
+		view.each
+		(
+			[this, deltaTime](auto entity, auto& scriptComp)
+			{
+				ScriptableEntity* se = scriptComp.Instance;
+
+				if (!se)
+				{
+					if (!scriptComp.InstantiateScript) throw std::logic_error("No script factory bound");
+
+					se = scriptComp.InstantiateScript();
+
+					if (!se) throw std::logic_error("Error instantiating script");
+
+					se->m_Entity = entity;
+					se->m_Scene = this;
+					scriptComp.Instance = se;
+
+					se->OnCreate();
+				}
+
+				if (!scriptComp.HasStarted)
+				{
+					se->OnStart();
+					scriptComp.HasStarted = true;
+				}
+
+				se->OnUpdate(deltaTime);
+			}
+		);
+
+	}
+
+	void Scene::DestroyScripts()
+	{
+
+		auto& creg{ GetRegistry() };
+		auto view{ creg.view<ScriptComponent>() };
+		
+		view.each
+		(
+			[](auto entity, auto& scriptComp)
+			{
+				if (!scriptComp.Instance) return;
+				ScriptableEntity* se = scriptComp.Instance;
+
+				se->OnDestroy();
+			}
+		);
+
+	}
+
 }
 

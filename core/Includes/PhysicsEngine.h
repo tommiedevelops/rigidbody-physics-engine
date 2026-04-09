@@ -9,9 +9,7 @@
 #include "Scene/Scene.h"
 #include "Scene/Camera.h"
 #include "Scene/Components.h"
-
-#include "Scripting/ScriptableEntity.h"
-#include "Scripting/ScriptComponent.h"
+#include "Scene/ScriptableEntity.h"
 
 #include "Platform/Window.h"
 #include "Platform/GameTime.h"
