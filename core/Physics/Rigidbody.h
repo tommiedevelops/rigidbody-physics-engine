@@ -30,10 +30,6 @@ namespace PhysicsEngine
 		// angular velocity of rigidbody relative to world space axes
 		glm::vec3 angularVelocity;
 
-		// Accumulators reset to zero at the start of each frame
-		float linearForceAccum{ 0.0f };
-		float torqueAccum{ 0.0f };
-
 		// Member Funcs
 		void SetInertiaTensor(glm::mat3& inertiaTensor);
 		void UpdateDerivedData();
@@ -44,10 +40,19 @@ namespace PhysicsEngine
 
 		// Force and Point specified in World Coordinates
 		void AddForceAtPoint(const glm::vec3& force, const glm::vec3& point);
-		
+
+		// Updates the rigidbody depending on the forces it has 
+		// accumulated this frame
+		void Integrate(float deltaTime);
+
 	private:
 		// Translation * Rotation (No scale here)
 		// For going from object space to world space
 		glm::mat4 m_ModelMatrix;
+
+		// Accumulators reset to zero at the start of each frame
+		float m_LinearForceAccumulator{ 0.0f };
+		float m_TorqueAccumulator{ 0.0f };
+
 	};
 }

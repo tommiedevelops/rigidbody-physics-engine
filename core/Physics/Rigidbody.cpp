@@ -13,4 +13,13 @@ namespace PhysicsEngine
 	{
 		inverseInertiaTensor = glm::inverse(inertiaTensor);
 	}
+
+	void Rigidbody::Integrate(float deltaTime)
+	{
+		// Reset accumulators
+		m_LinearForceAccumulator = glm::vec3(0.0f, 0.0f, 0.0f);
+		m_TorqueAccumulator		 = glm::vec3(0.0f, 0.0f, 0.0f);
+
+	}
+
 }
