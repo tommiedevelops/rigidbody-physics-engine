@@ -20,9 +20,9 @@ class CubeScript : public PhysicsEngine::ScriptableEntity
 	}
 	void OnUpdate(float dt) override
 	{
-		std::cout << "Updated\n";
+	//	std::cout << "Updated\n";
 		auto& transform = GetComponent<PhysicsEngine::TransformComponent>();
-		std::cout << "Transform position = (" << transform.position.x << ',' << transform.position.y << ',' << transform.position.z << ')' << std::endl;
+	//	std::cout << "Transform position = (" << transform.position.x << ',' << transform.position.y << ',' << transform.position.z << ')' << std::endl;
 
 		theta += 2.0f * dt;
 
@@ -41,7 +41,8 @@ int main()
 {
 	using namespace PhysicsEngine;
 
-	App app{};
+	WindowProperties props{};
+	App app{props};
 
 	auto& assets = app.GetAssetsRef();
 	assets.AddMesh(MODELS_DIR "bunny/bunny.obj", "bunny");

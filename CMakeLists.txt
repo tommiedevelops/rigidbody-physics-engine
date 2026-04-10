@@ -18,8 +18,6 @@ add_library(core
 	Core/Layers/SceneLayer.cpp
 	Core/Layers/UILayer.cpp
 
-	
-
 	Core/AssetManager/AssetManager.cpp
 	Core/AssetManager/Shader.cpp
 	Core/AssetManager/Texture.cpp
@@ -30,12 +28,9 @@ add_library(core
 	Core/Scene/Entity.cpp
 	Core/Scene/Scene.cpp
 
-	
-	
-
 	Core/Platform/Window.cpp
 	Core/Platform/GameTime.cpp
- )
+)
 
 find_package(OpenGL REQUIRED)
 target_link_libraries(core PUBLIC OpenGL::GL)
@@ -56,6 +51,7 @@ target_include_directories(core
 		Core/Platform
 		Core/Scripting
 		Core/Layers
+		Core/Events
 		Core
 		External
 )

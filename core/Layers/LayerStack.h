@@ -27,6 +27,12 @@ namespace PhysicsEngine
 			return nullptr;
 		}
 
+		std::vector<Layer*>& GetLayers()
+		{
+			return m_Layers;
+		}
+
+	private:
 		std::vector<Layer*> m_Layers;
 	};
 }

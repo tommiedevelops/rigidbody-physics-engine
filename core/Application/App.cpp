@@ -6,17 +6,20 @@
 namespace PhysicsEngine
 {
 
-	App::App()
-		: m_Window{ Window(500,500,"Title") }
+	App::App(WindowProperties& windowProperties)
+		: m_Window{windowProperties}
 		, m_CurrentScene{}
 		, m_Assets{}
 		, m_GameTime{}
 		, m_LayerStack{}
 	{
+		m_Window.SetEventCallback(
+			[this](Event& e) { OnEvent(e); }
+		);
+
 		m_LayerStack.PushLayer(new SceneLayer());
 		m_LayerStack.PushLayer(new UILayer());
 	}
-
 
 	void App::SetCurrentScene(Scene* newScene)
 	{
@@ -24,6 +27,16 @@ namespace PhysicsEngine
 		sceneLayer->SetActiveScene(newScene);
 	};
 	
+	void App::OnEvent(Event& e)
+	{
+		auto& layers{ m_LayerStack.GetLayers() };
+		for (auto it = layers.rbegin(); it != layers.rend(); ++it)
+		{
+			if (e.IsHandled()) break;
+			(*it)->OnEvent(e);
+		}
+	}
+
 	void App::Run()
 	{
 		
@@ -31,13 +44,14 @@ namespace PhysicsEngine
 		{
 			m_GameTime.Update();
 
+			// Poll Events here, create Event objects
 			m_Window.PollEvents();
 			m_Window.ProcessInput();
 
-			for (Layer* layer : m_LayerStack.m_Layers)
+			for (Layer* layer : m_LayerStack.GetLayers())
 			{
-				layer->OnRender();
 				layer->OnUpdate(m_GameTime.GetDeltaTime());
+				layer->OnRender();
 			}
 			
 			m_Window.SwapBuffers();

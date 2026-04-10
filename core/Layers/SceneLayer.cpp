@@ -1,7 +1,18 @@
+#include "Event.h"
+#include "MouseEvent.h"
+
 #include "SceneLayer.h"
+
+#include <iostream>
 
 namespace PhysicsEngine
 {
+	bool OnMouseButtonPressed(Event& e)
+	{
+		std::cout << "Pressed\n";
+		return true;
+	}
+
 	void SceneLayer::OnAttach()
 	{
 	}
@@ -24,6 +35,11 @@ namespace PhysicsEngine
 
 	void SceneLayer::OnEvent(Event& e)
 	{
+		EventDispatcher dispatcher(e);
+
+		dispatcher.Dispatch<MouseButtonPressedEvent>(
+			[this](MouseButtonPressedEvent& e) {return OnMouseButtonPressed(e); }
+		);
 	}
 
 	void SceneLayer::SetActiveScene(Scene* newScene)

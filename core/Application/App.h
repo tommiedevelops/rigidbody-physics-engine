@@ -11,9 +11,10 @@ namespace PhysicsEngine
 	class App
 	{
 	public:
-		App();
+		App(WindowProperties& windowProperties);
 		void Run();
 		void SetCurrentScene(Scene* newScene);
+		void OnEvent(Event& e);
 
 		Assets& GetAssetsRef()
 		{
