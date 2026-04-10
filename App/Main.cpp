@@ -8,6 +8,21 @@
 
 class PlayerMoveScript : public PhysicsEngine::ScriptableEntity
 {
+
+	glm::vec2 moveDir{ 0.0f };
+
+	glm::vec3 getForward(const glm::quat& q) {
+		return q * glm::vec3(0.0f, 0.0f, -1.0f);
+	}
+
+	glm::vec3 getRight(const glm::quat& q) {
+		return q * glm::vec3(1.0f, 0.0f, 0.0f);
+	}
+
+	glm::vec3 getUp(const glm::quat& q) {
+		return q * glm::vec3(0.0f, 1.0f, 0.0f);
+	}
+
 	void OnCreate() override
 	{
 	}
@@ -16,28 +31,31 @@ class PlayerMoveScript : public PhysicsEngine::ScriptableEntity
 	}
 	void OnUpdate(float dt) override
 	{
+		using namespace PhysicsEngine;
+		auto& tr{ GetComponent<TransformComponent>() };
+
+		auto forward{ getForward(tr.rotation) };
+		auto right{ getRight(tr.rotation) };
+
+		glm::vec3 moveDir(0.0f);
+		if (Input::IsKeyDown(GLFW_KEY_W)) moveDir.z -= 1.0f;
+		if (Input::IsKeyDown(GLFW_KEY_S)) moveDir.z += 1.0f;
+		if (Input::IsKeyDown(GLFW_KEY_A)) moveDir.x -= 1.0f;
+		if (Input::IsKeyDown(GLFW_KEY_D)) moveDir.x += 1.0f;
+
+		float speed = 2.0f;
+		tr.position += moveDir;
+
+		moveDir = glm::vec3(0.0f);
 	}
+
 	void OnDestroy() override
 	{
 	}
 
 	void OnEvent(PhysicsEngine::Event& e)
 	{
-		auto& tr{ GetComponent<PhysicsEngine::TransformComponent>() };
 
-		PhysicsEngine::EventDispatcher dispatcher(e);
-
-		dispatcher.Dispatch<PhysicsEngine::KeyPressedEvent>(
-			[this, &tr](PhysicsEngine::KeyPressedEvent& e) -> bool
-			{
-				if (GLFW_KEY_W == e.GetKeyCode())
-				{
-					tr.position.y += 1.0f;
-				}
-
-				return true;
-			} 
-		);
 
 	}
 };
@@ -46,7 +64,6 @@ class CubeScript : public PhysicsEngine::ScriptableEntity
 {
 
 	float theta{ 0.0f };
-	glm::vec2 moveDir{ 0.0f };
 
 	void OnCreate() override
 	{

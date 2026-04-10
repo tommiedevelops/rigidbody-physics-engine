@@ -8,6 +8,7 @@
 #include "Events/KeyEvent.h"
 #include "Events/MouseEvent.h"
 #include "Events/WindowEvent.h"
+#include "Events/Input.h"
 
 #include "Scene/Entity.h"
 #include "Scene/Scene.h"

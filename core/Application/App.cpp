@@ -3,6 +3,7 @@
 #include "SceneLayer.h"
 #include "UILayer.h"
 #include "Event.h"
+#include "Input.h"
 
 namespace PhysicsEngine
 {
@@ -17,6 +18,8 @@ namespace PhysicsEngine
 		m_Window.SetEventCallback(
 			[this](Event& e) { OnEvent(e); }
 		);
+
+		Input::Init(m_Window.GetNativeWindow());
 
 		m_LayerStack.PushLayer(new SceneLayer());
 		m_LayerStack.PushLayer(new UILayer());
@@ -45,10 +48,9 @@ namespace PhysicsEngine
 		while (!m_Window.ShouldClose())
 		{
 			m_GameTime.Update();
-
-			// Poll Events here, create Event objects
-			m_Window.PollEvents();
 			m_Window.ProcessInput();
+
+			m_Window.PollEvents();
 
 			for (Layer* layer : m_LayerStack.GetLayers())
 			{

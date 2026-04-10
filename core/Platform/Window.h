@@ -37,6 +37,8 @@ namespace PhysicsEngine
 		void Start();
 		void ProcessInput();
 
+		GLFWwindow* GetNativeWindow() { return m_Window;  }
+
 		void SetEventCallback(const EventCallbackFn& callback)
 		{
 			m_Data.EventCallback = callback;
