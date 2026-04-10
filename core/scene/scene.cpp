@@ -27,7 +27,7 @@ namespace PhysicsEngine
 		return e;
 	}
 
-void Scene::Render()
+	void Scene::Render()
 	{
 		glClearColor(0.8f, 0.9f, 0.7f, 1.0f);
 
@@ -140,6 +140,14 @@ void Scene::Render()
 			}
 		);
 
+	}
+
+	void Scene::SetCameraAspect(float aspect) 
+	{
+		// Fix when I make camera entities
+		if(!cam) return;
+
+		cam->m_Aspect = aspect;
 	}
 
 }

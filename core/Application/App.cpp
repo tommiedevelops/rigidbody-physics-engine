@@ -57,6 +57,5 @@ namespace PhysicsEngine
 			m_Window.SwapBuffers();
 		}
 
-		//m_ScriptSystem.CallOnDestroys(m_CurrentScene);
 	};
 }

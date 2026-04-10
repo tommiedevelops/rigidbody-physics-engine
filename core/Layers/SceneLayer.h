@@ -9,6 +9,7 @@ namespace PhysicsEngine
 	{
 	private:
 		Scene* m_ActiveScene{ nullptr };
+
 	public:
 		void OnAttach() override;
 		void OnDetach() override;
@@ -17,5 +18,6 @@ namespace PhysicsEngine
 		void OnEvent(Event& e) override;
 
 		void SetActiveScene(Scene* m_NewScene);
+		void SetCameraAspect(float aspect);
 	};
 }

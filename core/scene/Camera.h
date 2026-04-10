@@ -7,9 +7,6 @@
 namespace PhysicsEngine
 {
 
-	// fix this shit
-	const float aspect = Constants::SCR_WIDTH / Constants::SCR_HEIGHT;
-
 	class Camera
 	{
 	public:
@@ -18,6 +15,7 @@ namespace PhysicsEngine
 		float m_FOVy{ glm::radians(45.0f) };
 		float m_Near{ 0.1f };
 		float m_Far{ 100.0f };
+		float m_Aspect{ 1.0f };
 
 		Camera() = default;
 		~Camera() = default;
@@ -30,7 +28,7 @@ namespace PhysicsEngine
 
 		glm::mat4 GetProjectionMatrix()
 		{ 
-			return glm::perspective(m_FOVy, aspect, m_Near, m_Far);
+			return glm::perspective(m_FOVy, m_Aspect, m_Near, m_Far);
 		}
 	};
 

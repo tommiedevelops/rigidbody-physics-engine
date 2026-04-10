@@ -1,5 +1,6 @@
 #include "Event.h"
 #include "MouseEvent.h"
+#include "WindowEvent.h"
 
 #include "SceneLayer.h"
 
@@ -38,13 +39,29 @@ namespace PhysicsEngine
 		EventDispatcher dispatcher(e);
 
 		dispatcher.Dispatch<MouseButtonPressedEvent>(
-			[this](MouseButtonPressedEvent& e) {return OnMouseButtonPressed(e); }
+			[this](MouseButtonPressedEvent& e) -> bool
+			{
+				return OnMouseButtonPressed(e); 
+			}
+		);
+
+		dispatcher.Dispatch<WindowResizedEvent>(
+			[this](WindowResizedEvent& e) -> bool
+			{
+				m_ActiveScene->SetCameraAspect((float)e.GetWidth() / e.GetHeight());
+				return true;
+			}
 		);
 	}
 
 	void SceneLayer::SetActiveScene(Scene* newScene)
 	{
-		// probably have to do some queueing or something
+		if (!newScene)
+		{
+			throw std::logic_error("Provided sceen is null");
+			return;
+		}
+
 		m_ActiveScene = newScene;
 	}
 

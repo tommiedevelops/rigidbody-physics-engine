@@ -38,6 +38,7 @@ namespace PhysicsEngine
 		void Render();
 		void Update(float dt);
 
+		void SetCameraAspect(float aspect);
 	private:
 		// entities stored here
 		entt::registry m_registry; // can't copy this

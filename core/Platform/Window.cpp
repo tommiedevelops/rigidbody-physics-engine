@@ -1,7 +1,7 @@
 #include <GLAD/glad.h>
 
 #include "Window.h"
-
+#include "WindowEvent.h"
 #include "MouseEvent.h"
 
 #include <iostream>
@@ -51,11 +51,16 @@ namespace PhysicsEngine
 			}
 		);
 		
-		// Window reize
+		// Window resize
 		glfwSetFramebufferSizeCallback(m_Window,
 			[](GLFWwindow* window, int width, int height)
 			{
-				glViewport(0, 0, width, height);
+				auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+				WindowResizedEvent e(width, height);
+
+				data.Width = width;
+				data.Height = height;
+				data.EventCallback(e);
 			}
 		);
 

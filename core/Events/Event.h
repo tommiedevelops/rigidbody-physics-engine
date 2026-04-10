@@ -20,7 +20,7 @@ namespace PhysicsEngine
 	enum EventCategory
 	{
 		EventCategoryNone        = 0,
-		EvenetCategoryWindow     = BIT(0),
+		EventCategoryWindow     = BIT(0),
 		EventCategoryInput       = BIT(1),
 		EventCategoryKeyboard    = BIT(2),
 		EventCategoryMouse       = BIT(3),
