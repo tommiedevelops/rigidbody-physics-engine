@@ -59,7 +59,7 @@ namespace PhysicsEngine
 		);
 	}
 
-	void SceneLayer::SetActiveScene(Scene* newScene)
+	void SceneLayer::SetActiveScene(Scene* newScene, float screenAspectRatio)
 	{
 		if (!newScene)
 		{
@@ -67,6 +67,7 @@ namespace PhysicsEngine
 			return;
 		}
 
+		newScene->SetCameraAspect(screenAspectRatio);
 		m_ActiveScene = newScene;
 	}
 

@@ -22,13 +22,10 @@ namespace PhysicsEngine
 		}
 
 	private:
-		Window         m_Window;
-
-		// replace below with LayerStack
-		Scene*         m_CurrentScene;
-
-		LayerStack     m_LayerStack;
-		Assets         m_Assets;
-		GameTime       m_GameTime;
+		Window            m_Window;
+		WindowProperties& m_WindowProperties;
+		LayerStack        m_LayerStack;
+		Assets            m_Assets;
+		GameTime          m_GameTime;
 	};
 }

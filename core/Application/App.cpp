@@ -8,10 +8,10 @@ namespace PhysicsEngine
 
 	App::App(WindowProperties& windowProperties)
 		: m_Window{windowProperties}
-		, m_CurrentScene{}
 		, m_Assets{}
 		, m_GameTime{}
 		, m_LayerStack{}
+		, m_WindowProperties{windowProperties}
 	{
 		m_Window.SetEventCallback(
 			[this](Event& e) { OnEvent(e); }
@@ -24,7 +24,8 @@ namespace PhysicsEngine
 	void App::SetCurrentScene(Scene* newScene)
 	{
 		SceneLayer* sceneLayer = m_LayerStack.Get<SceneLayer>();
-		sceneLayer->SetActiveScene(newScene);
+		float aspectRatio = (float)m_WindowProperties.Width / m_WindowProperties.Height;
+		sceneLayer->SetActiveScene(newScene, aspectRatio);
 	};
 	
 	void App::OnEvent(Event& e)

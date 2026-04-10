@@ -17,7 +17,7 @@ namespace PhysicsEngine
 		void OnRender() override;
 		void OnEvent(Event& e) override;
 
-		void SetActiveScene(Scene* m_NewScene);
+		void SetActiveScene(Scene* m_NewScene, float screenAspectRatio);
 		void SetCameraAspect(float aspect);
 	};
 }
