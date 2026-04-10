@@ -33,6 +33,18 @@ namespace PhysicsEngine
 
 	void Rigidbody::Integrate(float deltaTime)
 	{
+		// Calculate linear acceleration
+		glm::vec3 linearAcceleration = inverseMass * m_LinearForceAccumulator;
+
+		// Calculate angular acceleration
+		glm::vec3 angularAcceleration = inverseInertiaTensor * m_TorqueAccumulator;
+
+		// Update angular & linear values (Euler integration)
+		linearVelocity += linearAcceleration * deltaTime;
+		linearPosition += linearVelocity * deltaTime;
+
+		// TODO: Angular updates (Quaternion)
+
 		// Reset accumulators
 		m_LinearForceAccumulator = glm::vec3(0.0f, 0.0f, 0.0f);
 		m_TorqueAccumulator		 = glm::vec3(0.0f, 0.0f, 0.0f);

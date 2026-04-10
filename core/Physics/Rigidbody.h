@@ -30,7 +30,6 @@ namespace PhysicsEngine
 		// angular velocity of rigidbody relative to world space axes
 		glm::vec3 angularVelocity;
 
-		// Member Funcs
 		void SetInertiaTensor(glm::mat3& inertiaTensor);
 		void UpdateDerivedData();
 
@@ -42,8 +41,9 @@ namespace PhysicsEngine
 		// Application point provided in Object Coordinates
 		void AddForceAtPoint(const glm::vec3& force, const glm::vec3& point);
 
-		// Updates the rigidbody depending on the forces it has 
-		// accumulated this frame
+		// Updates the rigidbody's angular & linear velocities as well as
+		// position and orientation according the the accumulated forces
+		// and torques
 		void Integrate(float deltaTime);
 
 	private:
