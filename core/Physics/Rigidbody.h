@@ -9,6 +9,7 @@ namespace PhysicsEngine
 {
 	class Rigidbody
 	{
+	public:
 		float inverseMass;
 
 		// linear position of center of mass in world space
@@ -23,9 +24,13 @@ namespace PhysicsEngine
 		// angular velocity of rigidbody relative to world space axes
 		glm::vec3 angularVelocity;
 
+		
+	private:
+
+		static inline void m_CalculateModelMatrix();
+		}
 		// Translation * Rotation (No scale here)
 		// For going from object space to world space
-		glm::mat4 modelMatrix;
-
+		glm::mat4 m_ModelMatrix;
 	};
 }
