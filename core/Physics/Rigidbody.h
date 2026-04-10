@@ -51,8 +51,8 @@ namespace PhysicsEngine
 		glm::mat4 m_ModelMatrix;
 
 		// Accumulators reset to zero at the start of each frame
-		float m_LinearForceAccumulator{ 0.0f };
-		float m_TorqueAccumulator{ 0.0f };
+		glm::vec3 m_LinearForceAccumulator{ 0.0f };
+		glm::vec3 m_TorqueAccumulator{ 0.0f };
 
 	};
 }

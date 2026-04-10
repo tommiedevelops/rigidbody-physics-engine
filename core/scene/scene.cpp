@@ -29,8 +29,6 @@ namespace PhysicsEngine
 
 	void Scene::Render()
 	{
-		
-		glViewport(0, 0, Constants::SCR_WIDTH, Constants::SCR_HEIGHT);
 		glClearColor(0.8f, 0.9f, 0.7f, 1.0f);
 
 		glEnable(GL_DEPTH_TEST);

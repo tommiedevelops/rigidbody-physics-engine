@@ -8,15 +8,6 @@
 
 namespace PhysicsEngine
 {
-	void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-	{
-		glViewport(0, 0, width, height);
-	}
-
-	void processInput(GLFWwindow* window)
-	{
-	}
-
 	Window::Window(const WindowProperties& properties)
 	{
 		/* ---- Window Init ---- */
@@ -43,8 +34,7 @@ namespace PhysicsEngine
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 
 		// Mouse Button 
-		glfwSetMouseButtonCallback(
-			m_Window, 
+		glfwSetMouseButtonCallback(m_Window, 
 			[](GLFWwindow* window, int button, int action, int mods) 
 			{
 				auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
@@ -60,8 +50,14 @@ namespace PhysicsEngine
 				}
 			}
 		);
-		glfwSetFramebufferSizeCallback(m_Window, framebuffer_size_callback);
-
+		
+		// Window reize
+		glfwSetFramebufferSizeCallback(m_Window,
+			[](GLFWwindow* window, int width, int height)
+			{
+				glViewport(0, 0, width, height);
+			}
+		);
 
 	}
 
