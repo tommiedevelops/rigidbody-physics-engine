@@ -6,6 +6,42 @@
 #define TEXTURES_DIR "../Assets/textures/"
 #define SHADERS_DIR  "../Assets/shaders/"
 
+class PlayerMoveScript : public PhysicsEngine::ScriptableEntity
+{
+	void OnCreate() override
+	{
+	}
+	void OnStart() override
+	{
+	}
+	void OnUpdate(float dt) override
+	{
+	}
+	void OnDestroy() override
+	{
+	}
+
+	void OnEvent(PhysicsEngine::Event& e)
+	{
+		auto& tr{ GetComponent<PhysicsEngine::TransformComponent>() };
+
+		PhysicsEngine::EventDispatcher dispatcher(e);
+
+		dispatcher.Dispatch<PhysicsEngine::KeyPressedEvent>(
+			[this, &tr](PhysicsEngine::KeyPressedEvent& e) -> bool
+			{
+				if (GLFW_KEY_W == e.GetKeyCode())
+				{
+					tr.position.y += 1.0f;
+				}
+
+				return true;
+			} 
+		);
+
+	}
+};
+
 class CubeScript : public PhysicsEngine::ScriptableEntity
 {
 
@@ -23,16 +59,7 @@ class CubeScript : public PhysicsEngine::ScriptableEntity
 
 	void OnEvent(PhysicsEngine::Event& e)
 	{
-		PhysicsEngine::EventDispatcher dispatcher(e);
-
-		dispatcher.Dispatch<PhysicsEngine::KeyPressedEvent>(
-			[this](PhysicsEngine::KeyPressedEvent& e) -> bool
-			{
-				if (GLFW_KEY_W == e.GetKeyCode()) std::cout << "Pressed W\n";
-				return true;
-			} 
-		);
-
+		
 	}
 
 	void OnUpdate(float dt) override
@@ -84,6 +111,12 @@ int main()
 	Scene initialScene{};
 	initialScene.light.position = glm::vec3(1.0f, 3.0f, 0.0f);
 	initialScene.light.color = glm::vec3(0.5f, 0.3f, 0.9f);
+
+	auto player{ initialScene.CreateEntity()};
+	player.AddComponent<CameraComponent>();
+	player.AddComponent<ScriptComponent>().Bind<PlayerMoveScript>();
+	initialScene.SetMainCamera(player);
+
 
 	auto e{ initialScene.CreateEntity() };
 

@@ -5,6 +5,8 @@
 namespace PhysicsEngine
 {
 	class Event;
+	class Scene;
+
 	class ScriptableEntity
 	{
 	public:

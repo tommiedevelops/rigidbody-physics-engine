@@ -11,7 +11,6 @@
 
 #include "Scene/Entity.h"
 #include "Scene/Scene.h"
-#include "Scene/Camera.h"
 #include "Scene/Components.h"
 #include "Scene/ScriptableEntity.h"
 

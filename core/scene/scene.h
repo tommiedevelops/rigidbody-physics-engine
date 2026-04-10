@@ -9,6 +9,8 @@ namespace PhysicsEngine
 	class Entity;
 	class Camera;
 	class Event;
+	struct CameraComponent;
+	struct TransformComponent;
 
 	struct PointLight
 	{
@@ -21,11 +23,7 @@ namespace PhysicsEngine
 	{
 	public:
 		// member variables
-		Camera* cam{nullptr}; // might make it entity in future
 		PointLight light{}; // single light source for now
-
-		Scene();
-		~Scene();
 
 		Entity 
 		CreateEntity();
@@ -41,9 +39,14 @@ namespace PhysicsEngine
 		void OnEvent(Event& e);
 
 		void SetCameraAspect(float aspect);
+		void SetMainCamera(Entity& e);
 	private:
 		// entities stored here
 		entt::registry m_registry; // can't copy this
+
+		CameraComponent* m_MainCamera{ nullptr }; 
+		TransformComponent* m_MainCameraTransform{ nullptr };
+
 		void DestroyScripts();
 	};
 }

@@ -27,10 +27,10 @@ namespace PhysicsEngine
 			return m_registry.get<T>(m_id);
 		}
 
-		template <typename T>
-		T& AddComponent()
+		template <typename T, typename... Args>
+		T& AddComponent(Args&&... args)
 		{
-			return m_registry.emplace<T>(m_id);
+			return m_registry.emplace<T>(m_id, std::forward<Args>(args)...);
 		};
 
 		template <typename T>

@@ -3,23 +3,12 @@
 #include "Entity.h"
 #include "Components.h"
 
-#include "Camera.h"
-
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
 namespace PhysicsEngine
 {
-	Scene::Scene()
-	{ // quick fix. make cam entity later
-		cam = new Camera();
-	}
-
-	Scene::~Scene()
-	{
-		delete cam;
-	}
-
+	
 	Entity Scene::CreateEntity()
 	{
 		auto e{ Entity(m_registry.create(), m_registry) };
@@ -29,13 +18,16 @@ namespace PhysicsEngine
 
 	void Scene::Render()
 	{
+
+		if (!m_MainCamera)
+			throw std::logic_error("No main camera was set");
+
 		glClearColor(0.8f, 0.9f, 0.7f, 1.0f);
 
 		glEnable(GL_DEPTH_TEST);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		const entt::registry& creg{ GetRegistry() };
-
 		auto view = creg.view<TransformComponent, MeshComponent, MaterialComponent>();
 
 		view.each([this](
@@ -46,8 +38,8 @@ namespace PhysicsEngine
 		)
 		{
 			glm::mat4 modelMat { transformComp.GetModelMatrix()   };
-			glm::mat4 viewMat  { cam->GetViewMatrix()       };
-			glm::mat4 projMat  { cam->GetProjectionMatrix() };
+			glm::mat4 viewMat  { glm::inverse(m_MainCameraTransform->GetModelMatrix())};
+			glm::mat4 projMat  { m_MainCamera->GetProjectionMatrix() };
 			glm::mat3 normalMat{ glm::transpose(glm::inverse(glm::mat3(modelMat))) };
 
 			// Prepare Material data
@@ -162,13 +154,18 @@ namespace PhysicsEngine
 
 	}
 
-	void Scene::SetCameraAspect(float aspect) 
+	void Scene::SetCameraAspect(float aspectRatio)
 	{
-		// Fix when I make camera entities
-		if(!cam) return;
-
-		cam->m_Aspect = aspect;
+		m_MainCamera->m_Aspect = aspectRatio;
 	}
 
+	void Scene::SetMainCamera(Entity& e)
+	{
+		if (!e.HasComponent<CameraComponent>())
+			std::logic_error("Entity does not have a Camera component");
+		
+		m_MainCamera = &e.GetComponent<CameraComponent>();
+		m_MainCameraTransform = &e.GetComponent<TransformComponent>();
+	}
 }
 
