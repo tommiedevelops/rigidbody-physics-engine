@@ -5,6 +5,10 @@
 #include "AssetManager/Shader.h"
 #include "AssetManager/Texture.h"
 
+#include "Events/KeyEvent.h"
+#include "Events/MouseEvent.h"
+#include "Events/WindowEvent.h"
+
 #include "Scene/Entity.h"
 #include "Scene/Scene.h"
 #include "Scene/Camera.h"

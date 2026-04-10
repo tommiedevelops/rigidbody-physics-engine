@@ -3,6 +3,7 @@
 #include "Window.h"
 #include "WindowEvent.h"
 #include "MouseEvent.h"
+#include "KeyEvent.h"
 
 #include <iostream>
 
@@ -64,6 +65,34 @@ namespace PhysicsEngine
 			}
 		);
 
+		glfwSetKeyCallback(m_Window,
+			[](GLFWwindow* window, int key, int scancode, int action, int mods) 
+			{
+				auto& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+
+				switch (action) 
+				{
+					case GLFW_PRESS: 
+					{
+						KeyPressedEvent e(key, 0);
+						data.EventCallback(e);
+						break;
+					}
+					case GLFW_REPEAT: 
+					{
+						KeyPressedEvent e(key, 1);
+						data.EventCallback(e);
+						break;
+					}
+					case GLFW_RELEASE:
+					{
+						KeyReleasedEvent e(key);
+						data.EventCallback(e);
+						break;
+					}
+				}
+			}
+		);
 	}
 
 	Window::~Window()

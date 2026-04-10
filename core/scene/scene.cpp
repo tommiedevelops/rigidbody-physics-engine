@@ -123,6 +123,26 @@ namespace PhysicsEngine
 
 	}
 
+	void Scene::OnEvent(Event& e)
+	{
+		auto& creg{ GetRegistry() };
+		auto view{ creg.view<ScriptComponent>() };
+		
+		view.each
+		(
+			[&e](auto entity, auto& scriptComp)
+			{
+				ScriptableEntity* se = scriptComp.Instance;
+
+				if (!se) return;
+
+				se->OnEvent(e);
+			}
+		);
+
+
+	}
+
 	void Scene::DestroyScripts()
 	{
 

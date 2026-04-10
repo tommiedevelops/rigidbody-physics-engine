@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Event.h"
-
 #include <glfw/glfw3.h>
 #include <functional>
 #include <string>
@@ -9,6 +7,8 @@
 
 namespace PhysicsEngine
 {
+	class Event;
+
 	struct WindowProperties
 	{
 		uint32_t Width; // pixels

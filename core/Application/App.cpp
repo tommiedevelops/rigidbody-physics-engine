@@ -2,6 +2,7 @@
 
 #include "SceneLayer.h"
 #include "UILayer.h"
+#include "Event.h"
 
 namespace PhysicsEngine
 {

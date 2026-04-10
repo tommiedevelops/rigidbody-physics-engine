@@ -1,11 +1,10 @@
 #pragma once
 
 #include <entt/entt.hpp>
-#include "Scene.h"
 
 namespace PhysicsEngine
 {
-
+	class Event;
 	class ScriptableEntity
 	{
 	public:
@@ -13,6 +12,7 @@ namespace PhysicsEngine
 		virtual void OnStart() = 0;
 		virtual void OnUpdate(float dt) = 0;
 		virtual void OnDestroy() = 0;
+		virtual void OnEvent(Event& e) {};
 
 		virtual ~ScriptableEntity() = default;
 		ScriptableEntity() = default;

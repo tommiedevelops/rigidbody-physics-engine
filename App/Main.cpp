@@ -8,7 +8,9 @@
 
 class CubeScript : public PhysicsEngine::ScriptableEntity
 {
+
 	float theta{ 0.0f };
+	glm::vec2 moveDir{ 0.0f };
 
 	void OnCreate() override
 	{
@@ -18,11 +20,24 @@ class CubeScript : public PhysicsEngine::ScriptableEntity
 	{
 		std::cout << "Started\n";
 	}
+
+	void OnEvent(PhysicsEngine::Event& e)
+	{
+		PhysicsEngine::EventDispatcher dispatcher(e);
+
+		dispatcher.Dispatch<PhysicsEngine::KeyPressedEvent>(
+			[this](PhysicsEngine::KeyPressedEvent& e) -> bool
+			{
+				if (GLFW_KEY_W == e.GetKeyCode()) std::cout << "Pressed W\n";
+				return true;
+			} 
+		);
+
+	}
+
 	void OnUpdate(float dt) override
 	{
-	//	std::cout << "Updated\n";
 		auto& transform = GetComponent<PhysicsEngine::TransformComponent>();
-	//	std::cout << "Transform position = (" << transform.position.x << ',' << transform.position.y << ',' << transform.position.z << ')' << std::endl;
 
 		theta += 2.0f * dt;
 

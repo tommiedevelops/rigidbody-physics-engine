@@ -8,6 +8,7 @@ namespace PhysicsEngine
 {
 	class Entity;
 	class Camera;
+	class Event;
 
 	struct PointLight
 	{
@@ -37,6 +38,7 @@ namespace PhysicsEngine
 
 		void Render();
 		void Update(float dt);
+		void OnEvent(Event& e);
 
 		void SetCameraAspect(float aspect);
 	private:

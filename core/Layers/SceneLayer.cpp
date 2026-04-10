@@ -1,6 +1,7 @@
 #include "Event.h"
 #include "MouseEvent.h"
 #include "WindowEvent.h"
+#include "KeyEvent.h"
 
 #include "SceneLayer.h"
 
@@ -39,13 +40,6 @@ namespace PhysicsEngine
 	{
 		EventDispatcher dispatcher(e);
 
-		dispatcher.Dispatch<MouseButtonPressedEvent>(
-			[this](MouseButtonPressedEvent& e) -> bool
-			{
-				return OnMouseButtonPressed(e); 
-			}
-		);
-
 		dispatcher.Dispatch<WindowResizedEvent>(
 			[this](WindowResizedEvent& e) -> bool
 			{
@@ -57,6 +51,8 @@ namespace PhysicsEngine
 				return true;
 			}
 		);
+
+		m_ActiveScene->OnEvent(e);
 	}
 
 	void SceneLayer::SetActiveScene(Scene* newScene, float screenAspectRatio)
