@@ -37,7 +37,7 @@ namespace PhysicsEngine
 	{
 		for (int i{ 0 }; i < m_Registrations.size(); ++i)
 		{
-
+			m_Registrations[i].fg->UpdateForce(m_Registrations[i].rigidbody, deltaTime);
 		}
 	}
 
