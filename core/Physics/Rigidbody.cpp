@@ -8,4 +8,9 @@ namespace PhysicsEngine
 		glm::mat4 R = glm::toMat4(orientation);
 		m_ModelMatrix = T * R;
 	}
+
+	void Rigidbody::SetInertiaTensor(glm::mat3& inertiaTensor)
+	{
+		inverseInertiaTensor = glm::inverse(inertiaTensor);
+	}
 }

@@ -10,10 +10,16 @@ namespace PhysicsEngine
 	class Rigidbody
 	{
 	public:
+
 		float inverseMass;
 
-		// linear position of center of mass in world space
-		glm::vec3 linearPosition; 
+		// The inverse of the 3x3 Inertia Tensor which encodes the 
+		// rigidbody's mass distribution
+		glm::mat3 inverseInertiaTensor;
+
+		// For simplicity, the object's local space origin coincides with
+		// the center of mass, so I don't need to track c.o.m separately
+		glm::vec3 linearPosition; // (c.o.m)
 
 		// orientation of quaternion relative to world space bases
 		glm::quat orientation;
@@ -24,11 +30,22 @@ namespace PhysicsEngine
 		// angular velocity of rigidbody relative to world space axes
 		glm::vec3 angularVelocity;
 
+		// Accumulators reset to zero at the start of each frame
+		float linearForceAccum{ 0.0f };
+		float torqueAccum{ 0.0f };
+
+		// Member Funcs
+		void SetInertiaTensor(glm::mat3& inertiaTensor);
+		void UpdateDerivedData();
+
+		// Acts directly on C.O.M (no Torque produced)
+		// Force specifed in World Coordinates
+		void AddLinearForce(const glm::vec3& force);
+
+		// Force and Point specified in World Coordinates
+		void AddForceAtPoint(const glm::vec3& force, const glm::vec3& point);
 		
 	private:
-
-		static inline void m_CalculateModelMatrix();
-		}
 		// Translation * Rotation (No scale here)
 		// For going from object space to world space
 		glm::mat4 m_ModelMatrix;
