@@ -27,7 +27,7 @@ namespace PhysicsEngine
 		return e;
 	}
 
-	void Scene::Render()
+void Scene::Render()
 	{
 		glClearColor(0.8f, 0.9f, 0.7f, 1.0f);
 

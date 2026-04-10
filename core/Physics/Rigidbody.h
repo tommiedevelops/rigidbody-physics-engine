@@ -38,7 +38,8 @@ namespace PhysicsEngine
 		// Force specifed in World Coordinates
 		void AddLinearForce(const glm::vec3& force);
 
-		// Force and Point specified in World Coordinates
+		// Force provided in World Coordinates
+		// Application point provided in Object Coordinates
 		void AddForceAtPoint(const glm::vec3& force, const glm::vec3& point);
 
 		// Updates the rigidbody depending on the forces it has 
