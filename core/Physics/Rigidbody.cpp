@@ -44,6 +44,7 @@ namespace PhysicsEngine
 		linearPosition += linearVelocity * deltaTime;
 
 		// TODO: Angular updates (Quaternion)
+		glm::quat angularAccQuat{ 0.0f, angularAcceleration };
 
 		// Reset accumulators
 		m_LinearForceAccumulator = glm::vec3(0.0f, 0.0f, 0.0f);

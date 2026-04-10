@@ -4,6 +4,7 @@
 
 #include "SceneLayer.h"
 
+#include <glad/glad.h>
 #include <iostream>
 
 namespace PhysicsEngine
@@ -48,7 +49,11 @@ namespace PhysicsEngine
 		dispatcher.Dispatch<WindowResizedEvent>(
 			[this](WindowResizedEvent& e) -> bool
 			{
-				m_ActiveScene->SetCameraAspect((float)e.GetWidth() / e.GetHeight());
+				glViewport(0, 0, e.GetWidth(), e.GetHeight());
+
+				if(m_ActiveScene)
+					m_ActiveScene->SetCameraAspect((float)e.GetWidth() / e.GetHeight());
+
 				return true;
 			}
 		);
