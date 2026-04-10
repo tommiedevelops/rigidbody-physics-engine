@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+
 #define MODELS_DIR   "../Assets/models/"
 #define TEXTURES_DIR "../Assets/textures/"
 #define SHADERS_DIR  "../Assets/shaders/"
@@ -10,6 +13,11 @@ class PlayerMoveScript : public PhysicsEngine::ScriptableEntity
 {
 
 	glm::vec2 moveDir{ 0.0f };
+	glm::vec2 m_LastMousePos{ 0.0f };
+	float m_Sensitivity{ 5.0f };
+
+	float m_Yaw{ 0.0f };
+	float m_Pitch{ 0.0f };
 
 	glm::vec3 getForward(const glm::quat& q) {
 		return q * glm::vec3(0.0f, 0.0f, -1.0f);
@@ -28,25 +36,60 @@ class PlayerMoveScript : public PhysicsEngine::ScriptableEntity
 	}
 	void OnStart() override
 	{
+		using namespace PhysicsEngine;
+
+		Input::SetCursorEnabled(false);
 	}
 	void OnUpdate(float dt) override
 	{
 		using namespace PhysicsEngine;
-		auto& tr{ GetComponent<TransformComponent>() };
+		auto& transform{ GetComponent<TransformComponent>() };
 
-		auto forward{ getForward(tr.rotation) };
-		auto right{ getRight(tr.rotation) };
 
-		glm::vec3 moveDir(0.0f);
-		if (Input::IsKeyDown(GLFW_KEY_W)) moveDir.z -= 1.0f;
-		if (Input::IsKeyDown(GLFW_KEY_S)) moveDir.z += 1.0f;
+		// Handle Mouse
+
+		glm::vec2 mousePos = Input::GetMousePosition();
+		glm::vec2 deltaMousePos = (mousePos - m_LastMousePos) * m_Sensitivity * dt;
+		m_LastMousePos = mousePos;
+
+		m_Yaw += deltaMousePos.x;
+		m_Pitch += deltaMousePos.y;
+
+		// clamp pitch to avoid flipping
+		m_Pitch = glm::clamp(m_Pitch, -89.0f, 89.0f);
+
+		glm::quat yawQ = glm::angleAxis(glm::radians(-deltaMousePos.x * m_Sensitivity),
+			transform.rotation * glm::vec3(0, 1, 0)); // local up
+
+		glm::quat pitchQ = glm::angleAxis(glm::radians(-deltaMousePos.y * m_Sensitivity),
+			transform.rotation * glm::vec3(1, 0, 0)); // local right
+
+		transform.rotation = yawQ * pitchQ * transform.rotation;
+
+		// Handle movement
+		glm::vec2 moveDir(0.0f);
+		if (Input::IsKeyDown(GLFW_KEY_W)) moveDir.y += 1.0f;
+		if (Input::IsKeyDown(GLFW_KEY_S)) moveDir.y -= 1.0f;
 		if (Input::IsKeyDown(GLFW_KEY_A)) moveDir.x -= 1.0f;
 		if (Input::IsKeyDown(GLFW_KEY_D)) moveDir.x += 1.0f;
 
-		float speed = 2.0f;
-		tr.position += moveDir;
+		float flight = 0.0f;
+		if (Input::IsKeyDown(GLFW_KEY_SPACE))
+			flight += 1.0f;
+		if (Input::IsKeyDown(GLFW_KEY_LEFT_SHIFT))
+			flight -= 1.0f;
 
-		moveDir = glm::vec3(0.0f);
+		float flightSpeed = 5.0f;
+		auto up{ getUp(transform.rotation) };
+		glm::vec3 deltaHeight = flight*flightSpeed * up * dt;
+
+		float speed = 10.0f;
+		auto forward{ getForward(transform.rotation) };
+		auto right{ getRight(transform.rotation) };
+
+		glm::vec3 deltaPos = (moveDir.y * forward + moveDir.x * right) * speed * dt;
+
+		transform.position += (deltaPos + deltaHeight);
 	}
 
 	void OnDestroy() override

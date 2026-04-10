@@ -1,5 +1,6 @@
 #pragma once
 
+#include <glm/glm.hpp>
 #include <glfw/glfw3.h>
 
 namespace PhysicsEngine
@@ -18,6 +19,17 @@ namespace PhysicsEngine
 		static bool IsMouseButtonDown(int button)
 		{
 			return glfwGetMouseButton(s_Window, button) == GLFW_PRESS;
+		}
+
+		static glm::vec2 GetMousePosition() {
+			double x, y;
+			glfwGetCursorPos(s_Window, &x, &y);
+			return { (float)x, (float)y };
+		}
+
+		static void SetCursorEnabled(bool enabled) {
+			glfwSetInputMode(s_Window, GLFW_CURSOR,
+				enabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 		}
 
 	private:
