@@ -19,6 +19,8 @@
 #include "Physics/Rigidbody.h"
 #include "Physics/RigidbodyForceRegistry.h"
 
+#include "Collisions/Collider.h"
+
 #include "Platform/Window.h"
 #include "Platform/GameTime.h"
 
