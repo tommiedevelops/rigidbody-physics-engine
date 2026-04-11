@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <entt/entt.hpp>
+#include "RigidbodyForceRegistry.h"
 
 namespace PhysicsEngine
 {
@@ -25,6 +26,8 @@ namespace PhysicsEngine
 		// member variables
 		PointLight light{}; // single light source for now
 
+		Scene();
+
 		Entity 
 		CreateEntity();
 
@@ -36,8 +39,6 @@ namespace PhysicsEngine
 
 		void Render();
 		void Update(float dt);
-		void UpdatePhysics(float deltaTime);
-		void UpdateScripts(float deltaTime);
 		void OnEvent(Event& e);
 
 		void SetCameraAspect(float aspect);
@@ -48,6 +49,10 @@ namespace PhysicsEngine
 
 		CameraComponent* m_MainCamera{ nullptr }; 
 		TransformComponent* m_MainCameraTransform{ nullptr };
+		void UpdatePhysics(float deltaTime);
+		void UpdateScripts(float deltaTime);
+		void UpdateForces(float deltaTime);
+		void SyncRigidbodyWithTransformComponentCallback(entt::registry& reg, entt::entity e);
 
 		void DestroyScripts();
 	};

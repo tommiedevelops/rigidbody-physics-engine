@@ -15,6 +15,10 @@
 #include "Scene/Components.h"
 #include "Scene/ScriptableEntity.h"
 
+#include "Physics/IForceGenerator.h"
+#include "Physics/Rigidbody.h"
+#include "Physics/RigidbodyForceRegistry.h"
+
 #include "Platform/Window.h"
 #include "Platform/GameTime.h"
 

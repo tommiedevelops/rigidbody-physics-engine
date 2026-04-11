@@ -1,11 +1,12 @@
 #pragma once
 
 #include <entt/entt.hpp>
+#include "Scene.h"
 
 namespace PhysicsEngine
 {
 	class Event;
-	class Scene;
+	class TransformComponent;
 
 	class ScriptableEntity
 	{
@@ -35,6 +36,12 @@ namespace PhysicsEngine
 			return m_Scene->GetRegistry().all_of<T>(m_Entity);
 		}
 
+		template <typename T, typename... Args>
+		T& AddComponent(Args&&... args)
+		{
+			return m_Scene->GetRegistry().emplace<T>(m_Entity, std::forward<Args>(args)...);
+		};
+		
 	private:
 		entt::entity m_Entity{ entt::null };
 		Scene* m_Scene{ nullptr };

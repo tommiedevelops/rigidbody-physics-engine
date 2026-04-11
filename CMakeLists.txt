@@ -27,9 +27,11 @@ add_library(core
 
 	Core/Physics/Rigidbody.cpp
 	Core/Physics/RigidbodyForceRegistry.cpp
+	Core/Physics/GravityForceGenerator.cpp
 
 	Core/Scene/Entity.cpp
 	Core/Scene/Scene.cpp
+	
 
 	Core/Platform/Window.cpp
 	Core/Platform/GameTime.cpp

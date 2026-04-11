@@ -11,24 +11,24 @@ namespace PhysicsEngine
 	{
 	public:
 
-		float inverseMass;
+		float m_InverseMass;
 
 		// The inverse of the 3x3 Inertia Tensor which encodes the 
 		// rigidbody's mass distribution
-		glm::mat3 inverseInertiaTensor;
+		glm::mat3 m_InverseInertiaTensor;
 
 		// For simplicity, the object's local space origin coincides with
 		// the center of mass, so I don't need to track c.o.m separately
-		glm::vec3 linearPosition; // (c.o.m)
+		glm::vec3 m_LinearPosition; // (c.o.m)
 
 		// orientation of quaternion relative to world space bases
-		glm::quat orientation;
+		glm::quat m_Orientation;
 
 		// linear velocity of center of mass in world space
-		glm::vec3 linearVelocity;
+		glm::vec3 m_LinearVelocity;
 
 		// angular velocity of rigidbody relative to world space axes
-		glm::vec3 angularVelocity;
+		glm::vec3 m_AngularVelocity;
 
 		void SetInertiaTensor(glm::mat3& inertiaTensor);
 		void UpdateDerivedData();
@@ -46,6 +46,9 @@ namespace PhysicsEngine
 		// and torques
 		void Integrate(float deltaTime);
 
+		bool HasFiniteMass();
+		float GetMass();
+		void SetMass(float mass);
 	private:
 		// Translation * Rotation (No scale here)
 		// For going from object space to world space

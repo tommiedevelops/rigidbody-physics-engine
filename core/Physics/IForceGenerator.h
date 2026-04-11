@@ -4,10 +4,11 @@ namespace PhysicsEngine
 {
 	class RigidbodyComponent;
 
-	class IForceGenerator
+	class ForceGenerator
 	{
 	public:
 		virtual void UpdateForce(RigidbodyComponent* rb, float deltaTime) = 0;
-		virtual ~IForceGenerator() = default;
+		virtual ~ForceGenerator() = default;
+		ForceGenerator() = default;
 	};
 }

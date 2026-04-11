@@ -7,9 +7,31 @@
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <iostream>
+
 namespace PhysicsEngine
 {
 	
+	void Scene::SyncRigidbodyWithTransformComponentCallback(entt::registry& reg, entt::entity e) 
+	{
+		auto tr = reg.try_get<TransformComponent>(e);
+		auto rb = reg.try_get<RigidbodyComponent>(e);
+
+		if (!tr || !rb) return;
+
+		rb->m_LinearPosition = tr->m_Position;
+		rb->m_Orientation = tr->m_Rotation;
+
+		std::cout << "Constructed rigidbody\n";
+	}
+
+	Scene::Scene()
+	{
+		// When a rigidbody is constructed sync RB data to Transform
+		// NOTE: DO NOT MODIFY TRANSFORM DIRECTLY. USE RIGIDBODY
+		m_Registry.on_construct<RigidbodyComponent>().connect<&Scene::SyncRigidbodyWithTransformComponentCallback>(this);
+	}
+
 	Entity Scene::CreateEntity()
 	{
 		auto e{ Entity(m_Registry.create(), m_Registry) };
@@ -17,6 +39,12 @@ namespace PhysicsEngine
 		return e;
 	}
 
+	glm::mat4 GetViewMatrix(glm::quat camRotation, glm::vec3 camPosition) {
+		glm::vec3 forward = camRotation * glm::vec3(0, 0, -1);
+		glm::vec3 up = camRotation * glm::vec3(0, 1, 0);
+		return glm::lookAt(camPosition, camPosition + forward, up);
+	}
+		
 	void Scene::Render()
 	{
 
@@ -39,7 +67,7 @@ namespace PhysicsEngine
 		)
 		{
 			glm::mat4 modelMat { transformComp.GetModelMatrix()   };
-			glm::mat4 viewMat  { glm::inverse(m_MainCameraTransform->GetModelMatrix())};
+			glm::mat4 viewMat  { GetViewMatrix(m_MainCameraTransform->m_Rotation, m_MainCameraTransform->m_Position) };
 			glm::mat4 projMat  { m_MainCamera->GetProjectionMatrix() };
 			glm::mat3 normalMat{ glm::transpose(glm::inverse(glm::mat3(modelMat))) };
 
@@ -81,22 +109,50 @@ namespace PhysicsEngine
 	void Scene::Update(float deltaTime)
 	{
 		UpdateScripts(deltaTime);
+		UpdateForces(deltaTime);
 		UpdatePhysics(deltaTime);
 	}
+
 	void Scene::UpdatePhysics(float deltaTime)
 	{
 		auto view{ m_Registry.view<TransformComponent, RigidbodyComponent>() };
 
 		view.each(
-			[deltaTime](TransformComponent& tr, RigidbodyComponent& rb)
+			[deltaTime](auto entity, TransformComponent& tr, RigidbodyComponent& rb)
 			{
 				rb.Integrate(deltaTime);
 
-				tr.position = rb.linearPosition;
-				tr.rotation = rb.orientation;
+				tr.m_Position = rb.m_LinearPosition;
+				tr.m_Rotation = rb.m_Orientation;
 			}
 		);
 	}
+	
+	void Scene::UpdateForces(float deltaTime)
+	{
+		auto view{ m_Registry.view<RigidbodyComponent, ForceGeneratorComponent>() };
+
+		view.each
+		(
+			[this, deltaTime](auto entity, auto& rigidbodyComp, auto& forceGenComp)
+			{
+				ForceGenerator* forceGenerator = forceGenComp.Instance;
+
+				if (!forceGenerator)
+				{
+					if (!forceGenComp.InstantiateForce) throw std::logic_error("No force generator factory bound");
+
+					forceGenerator = forceGenComp.InstantiateForce();
+
+					if (!forceGenerator) throw std::logic_error("Error instantiating script");
+
+				}
+
+				forceGenerator->UpdateForce(&rigidbodyComp, deltaTime);
+			}
+		);
+	}
+
 	void Scene::UpdateScripts(float deltaTime)
 	{
 		auto view{ m_Registry.view<ScriptComponent>() };
@@ -180,7 +236,7 @@ namespace PhysicsEngine
 	void Scene::SetMainCamera(Entity& e)
 	{
 		if (!e.HasComponent<CameraComponent>())
-			std::logic_error("Entity does not have a Camera component");
+			throw std::logic_error("Entity does not have a Camera component");
 		
 		m_MainCamera = &e.GetComponent<CameraComponent>();
 		m_MainCameraTransform = &e.GetComponent<TransformComponent>();
