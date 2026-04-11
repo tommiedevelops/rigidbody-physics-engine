@@ -11,6 +11,13 @@
 #define TEXTURES_DIR "../Assets/textures/"
 #define SHADERS_DIR  "../Assets/shaders/"
 
+class TestScene : public PhysicsEngine::Scene
+{
+	void SetUp() override
+	{
+	}
+};
+
 class Cube2Script : public PhysicsEngine::ScriptableEntity 
 {
 	void OnCreate() override
@@ -193,7 +200,7 @@ int main()
 	m2->diffuse = 0.4f;
 	m2->specular = 0.9f;
 
-	Scene initialScene{};
+	TestScene initialScene{};
 	initialScene.light.position = glm::vec3(1.0f, 3.0f, 0.0f);
 	initialScene.light.color = glm::vec3(0.5f, 0.3f, 0.9f);
 

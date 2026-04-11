@@ -16,9 +16,30 @@ namespace PhysicsEngine
 		//TODO
 	}
 
-	void SphereVsPlane(const SphereCollider& first, const PlaneCollider& second, CollisionData* data)
+	unsigned int SphereVsPlane(const SphereCollider& first, const PlaneCollider& second, CollisionData* data)
 	{
-		//TODO
+		if (data->contactsLeft <= 0) return 0; //contact budget spent, exit out
+
+		// signed distance of sphere origin to plane
+		glm::vec3 sphereOrigin = first.localPosition;
+		glm::vec3 planeNormal = glm::normalize(second.normal);
+		float planeOffset = second.planeOffset;
+		float radius = first.radius;
+
+		float signedDistance = glm::dot(sphereOrigin, planeNormal) - planeOffset;
+
+		if (signedDistance >= 0) return 0; // there is no collision
+
+		Contact* contact = data->contacts;
+
+		contact->normal = planeNormal;
+		contact->point = sphereOrigin - planeNormal * (signedDistance + radius);
+		contact->penetration = radius - fabsf(signedDistance);
+
+		data->contactsLeft--;
+		data->contacts++;  // advance pointer to next slot
+
+		return 1; // 1 contact point
 	}
 
 	void BoxVsBox(const BoxCollider& first, const BoxCollider& second, CollisionData* data)
@@ -28,7 +49,36 @@ namespace PhysicsEngine
 
 	void BoxVsPlane(const BoxCollider& first, const PlaneCollider& second, CollisionData* data)
 	{
-		// TODO
+		glm::vec3 halfExtents{ first.halfExtents };
+
+		glm::vec3 vertices[8]
+		{
+			glm::vec3(-halfExtents.x, -halfExtents.y, -halfExtents.z),
+			glm::vec3(-halfExtents.x, -halfExtents.y, +halfExtents.z),
+			glm::vec3(-halfExtents.x, +halfExtents.y, -halfExtents.z),
+			glm::vec3(-halfExtents.x, +halfExtents.y, +halfExtents.z),
+			glm::vec3(+halfExtents.x, -halfExtents.y, -halfExtents.z),
+			glm::vec3(+halfExtents.x, -halfExtents.y, +halfExtents.z),
+			glm::vec3(+halfExtents.x, +halfExtents.y, -halfExtents.z),
+			glm::vec3(+halfExtents.x, +halfExtents.y, +halfExtents.z),
+		};
+
+		for (unsigned int i{ 0 }; i < 8; ++i)
+		{
+			// transform vertices by local offset transform
+			vertices[i] = glm::vec3(first.GetOffset() * glm::vec4(vertices[i], 1.0f));
+		}
+
+		for (auto vertex : vertices)
+		{
+			float distanceToPlane{ glm::dot(vertex, second.normal) };
+			
+			if (distanceToPlane <= second.planeOffset)
+			{
+				// There's a contact
+
+			}
+		}
 	}
 
 	void PlaneVsPlane(const PlaneCollider& first, const PlaneCollider& second, CollisionData* data)

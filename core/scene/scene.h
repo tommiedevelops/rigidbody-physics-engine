@@ -37,6 +37,7 @@ namespace PhysicsEngine
 		const entt::registry& 
 		GetRegistry() const { return m_Registry; }
 
+		virtual void SetUp() = 0;
 		void Render();
 		void Update(float dt);
 		void OnEvent(Event& e);
