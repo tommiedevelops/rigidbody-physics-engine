@@ -29,20 +29,22 @@ namespace PhysicsEngine
 		CreateEntity();
 
 		entt::registry& 
-		GetRegistry() { return m_registry; }
+		GetRegistry() { return m_Registry; }
 
 		const entt::registry& 
-		GetRegistry() const { return m_registry; }
+		GetRegistry() const { return m_Registry; }
 
 		void Render();
 		void Update(float dt);
+		void UpdatePhysics(float deltaTime);
+		void UpdateScripts(float deltaTime);
 		void OnEvent(Event& e);
 
 		void SetCameraAspect(float aspect);
 		void SetMainCamera(Entity& e);
 	private:
 		// entities stored here
-		entt::registry m_registry; // can't copy this
+		entt::registry m_Registry; // can't copy this
 
 		CameraComponent* m_MainCamera{ nullptr }; 
 		TransformComponent* m_MainCameraTransform{ nullptr };

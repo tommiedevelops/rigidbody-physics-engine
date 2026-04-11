@@ -5,14 +5,14 @@
 
 namespace PhysicsEngine
 {
-	void RigidbodyForceRegistry::Register(Rigidbody* rb, IForceGenerator* fg)
+	void RigidbodyForceRegistry::Register(RigidbodyComponent* rb, IForceGenerator* fg)
 	{
 		if (!rb || !fg) throw std::logic_error("Null rigidbody or force provided");
 
 		m_Registrations.push_back( RigidbodyForceRegistration{rb, fg} );
 	}
 
-	void RigidbodyForceRegistry::Deregister(Rigidbody* rb, IForceGenerator* fg)
+	void RigidbodyForceRegistry::Deregister(RigidbodyComponent* rb, IForceGenerator* fg)
 	{
 		if (!rb || !fg) throw std::logic_error("Null rigidbody or force provided");
 

@@ -25,6 +25,9 @@ add_library(core
 	Core/AssetManager/Material.h
 	Core/AssetManager/Material.cpp
 
+	Core/Physics/Rigidbody.cpp
+	Core/Physics/RigidbodyForceRegistry.cpp
+
 	Core/Scene/Entity.cpp
 	Core/Scene/Scene.cpp
 

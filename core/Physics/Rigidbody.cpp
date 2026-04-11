@@ -2,24 +2,24 @@
 
 namespace PhysicsEngine
 {
-	void Rigidbody::UpdateDerivedData()
+	void RigidbodyComponent::UpdateDerivedData()
 	{
 		glm::mat4 T = glm::translate(glm::mat4(1.0f), linearPosition);
 		glm::mat4 R = glm::toMat4(orientation);
 		m_ModelMatrix = T * R;
 	}
 
-	void Rigidbody::SetInertiaTensor(glm::mat3& inertiaTensor)
+	void RigidbodyComponent::SetInertiaTensor(glm::mat3& inertiaTensor)
 	{
 		inverseInertiaTensor = glm::inverse(inertiaTensor);
 	}
 
-	void Rigidbody::AddLinearForce(const glm::vec3& force)
+	void RigidbodyComponent::AddLinearForce(const glm::vec3& force)
 	{
 		m_LinearForceAccumulator += force;
 	}
 
-	void Rigidbody::AddForceAtPoint(const glm::vec3& force, const glm::vec3& point)
+	void RigidbodyComponent::AddForceAtPoint(const glm::vec3& force, const glm::vec3& point)
 	{
 		m_LinearForceAccumulator += force;
 
@@ -31,7 +31,7 @@ namespace PhysicsEngine
 
 	}
 
-	void Rigidbody::Integrate(float deltaTime)
+	void RigidbodyComponent::Integrate(float deltaTime)
 	{
 		// Calculate linear acceleration
 		glm::vec3 linearAcceleration = inverseMass * m_LinearForceAccumulator;
@@ -43,9 +43,12 @@ namespace PhysicsEngine
 		linearVelocity += linearAcceleration * deltaTime;
 		linearPosition += linearVelocity * deltaTime;
 
-		// TODO: Angular updates (Quaternion)
-		glm::quat angularAccQuat{ 0.0f, angularAcceleration };
+		glm::vec3 angularVelocity = angularAcceleration * deltaTime;
+		glm::quat angularVelocityQuat{ 0.0f, angularVelocity };
 
+		orientation += 0.5f * angularVelocityQuat * orientation * deltaTime;
+
+		UpdateDerivedData();
 		// Reset accumulators
 		m_LinearForceAccumulator = glm::vec3(0.0f, 0.0f, 0.0f);
 		m_TorqueAccumulator		 = glm::vec3(0.0f, 0.0f, 0.0f);

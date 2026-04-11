@@ -12,6 +12,7 @@
 
 namespace PhysicsEngine
 {
+
 	struct CameraComponent
 	{
 		float m_FOVy{ glm::radians(45.0f) };

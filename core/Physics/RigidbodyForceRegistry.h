@@ -4,7 +4,7 @@
 
 namespace PhysicsEngine
 {
-	class Rigidbody;
+	class RigidbodyComponent;
 	class IForceGenerator;
 
 	// Global Registry (relative to Scene) which specifies which
@@ -12,14 +12,14 @@ namespace PhysicsEngine
 	class RigidbodyForceRegistry
 	{
 	public:
-		void Register(Rigidbody* rb, IForceGenerator* fg);
-		void Deregister(Rigidbody* rb, IForceGenerator* fg);
+		void Register(RigidbodyComponent* rb, IForceGenerator* fg);
+		void Deregister(RigidbodyComponent* rb, IForceGenerator* fg);
 		void ClearAllRegistrations();
 		void UpdateForces(float deltaTime);
 	private:
 		struct RigidbodyForceRegistration
 		{
-			Rigidbody* rigidbody;
+			RigidbodyComponent* rigidbody;
 			IForceGenerator*  fg;
 		};
 

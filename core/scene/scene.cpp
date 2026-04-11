@@ -2,6 +2,7 @@
 
 #include "Entity.h"
 #include "Components.h"
+#include "Rigidbody.h"
 
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -11,7 +12,7 @@ namespace PhysicsEngine
 	
 	Entity Scene::CreateEntity()
 	{
-		auto e{ Entity(m_registry.create(), m_registry) };
+		auto e{ Entity(m_Registry.create(), m_Registry) };
 		e.AddComponent<TransformComponent>();
 		return e;
 	}
@@ -79,9 +80,27 @@ namespace PhysicsEngine
 
 	void Scene::Update(float deltaTime)
 	{
-		auto& creg{ GetRegistry() };
-		auto view{ creg.view<ScriptComponent>() };
-		
+		UpdateScripts(deltaTime);
+		UpdatePhysics(deltaTime);
+	}
+	void Scene::UpdatePhysics(float deltaTime)
+	{
+		auto view{ m_Registry.view<TransformComponent, RigidbodyComponent>() };
+
+		view.each(
+			[deltaTime](TransformComponent& tr, RigidbodyComponent& rb)
+			{
+				rb.Integrate(deltaTime);
+
+				tr.position = rb.linearPosition;
+				tr.rotation = rb.orientation;
+			}
+		);
+	}
+	void Scene::UpdateScripts(float deltaTime)
+	{
+		auto view{ m_Registry.view<ScriptComponent>() };
+
 		view.each
 		(
 			[this, deltaTime](auto entity, auto& scriptComp)
@@ -112,7 +131,6 @@ namespace PhysicsEngine
 				se->OnUpdate(deltaTime);
 			}
 		);
-
 	}
 
 	void Scene::OnEvent(Event& e)

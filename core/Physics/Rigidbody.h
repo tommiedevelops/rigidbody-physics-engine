@@ -7,7 +7,7 @@
 
 namespace PhysicsEngine
 {
-	class Rigidbody
+	class RigidbodyComponent
 	{
 	public:
 

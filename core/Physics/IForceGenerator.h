@@ -2,12 +2,12 @@
 
 namespace PhysicsEngine
 {
-	class Rigidbody;
+	class RigidbodyComponent;
 
 	class IForceGenerator
 	{
 	public:
-		virtual void UpdateForce(Rigidbody* rb, float deltaTime) = 0;
+		virtual void UpdateForce(RigidbodyComponent* rb, float deltaTime) = 0;
 		virtual ~IForceGenerator() = default;
 	};
 }
