@@ -13,7 +13,6 @@
 
 class Cube2Script : public PhysicsEngine::ScriptableEntity 
 {
-	// Inherited via ScriptableEntity
 	void OnCreate() override
 	{
 	}
@@ -26,7 +25,6 @@ class Cube2Script : public PhysicsEngine::ScriptableEntity
 		auto& rb{ AddComponent<RigidbodyComponent>() };
 		rb.SetMass(1.0f);
 		AddComponent<ForceGeneratorComponent>().Bind<GravityForceGenerator>();
-
 	}
 
 	void OnUpdate(float dt) override
