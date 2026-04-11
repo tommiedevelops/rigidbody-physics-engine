@@ -20,6 +20,7 @@
 #include "Physics/RigidbodyForceRegistry.h"
 
 #include "Collisions/Collider.h"
+#include "Collisions/ContactGenerator.h"
 
 #include "Platform/Window.h"
 #include "Platform/GameTime.h"

@@ -17,7 +17,7 @@ namespace PhysicsEngine
 
 		if (!m_Window)
 		{
-			std::logic_error("Failed to create Window");
+			throw std::logic_error("Failed to create Window");
 			glfwTerminate();
 		}
 

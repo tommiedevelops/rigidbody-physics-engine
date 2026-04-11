@@ -7,9 +7,10 @@
 #include <memory>
 
 #define PRIMITIVE_TYPE(type) PrimitiveType GetType() const override { return PrimitiveType::##type; }
+
 namespace PhysicsEngine
 {
-	class IPrimitiveCollider
+	class PrimitiveCollider
 	{
 	public:
 		glm::vec3 localPosition{};
@@ -18,24 +19,24 @@ namespace PhysicsEngine
 		enum class PrimitiveType { BOX, SPHERE, CAPSULE, PLANE };
 
 		virtual PrimitiveType GetType() const = 0;
-		virtual ~IPrimitiveCollider() = default;
+		virtual ~PrimitiveCollider() = default;
 	};
 
-	class SphereCollider : public IPrimitiveCollider
+	class SphereCollider : public PrimitiveCollider
 	{
 	public:
 		float radius;
 		PRIMITIVE_TYPE(SPHERE)
 	};
 
-	class BoxCollider : public IPrimitiveCollider
+	class BoxCollider : public PrimitiveCollider
 	{
 	public:
 		glm::vec3 halfExtents; // half width/height/depth
 		PRIMITIVE_TYPE(BOX)
 	};
 
-	class CapsuleCollider : public IPrimitiveCollider
+	class CapsuleCollider : public PrimitiveCollider
 	{
 	public:
 		float radius;
@@ -43,7 +44,7 @@ namespace PhysicsEngine
 		PRIMITIVE_TYPE(CAPSULE)
 	};
 
-	class PlaneCollider : public IPrimitiveCollider
+	class PlaneCollider : public PrimitiveCollider
 	{
 	public:
 		glm::vec3 normal;
@@ -54,7 +55,7 @@ namespace PhysicsEngine
 	class Collider
 	{
 		// Supports composite shape made up of multiple primitives
-		std::vector<std::shared_ptr<IPrimitiveCollider>> m_Primitives;
+		std::vector<std::shared_ptr<PrimitiveCollider>> m_Primitives;
 
 		template<typename T, typename... Args>
 		T& AddPrimitive(Args&&... args) {

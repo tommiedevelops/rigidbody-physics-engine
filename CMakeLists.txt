@@ -29,6 +29,8 @@ add_library(core
 	Core/Physics/RigidbodyForceRegistry.cpp
 	Core/Physics/GravityForceGenerator.cpp
 
+	Core/Collisions/ContactGenerator.cpp
+
 	Core/Scene/Entity.cpp
 	Core/Scene/Scene.cpp
 	
@@ -57,6 +59,7 @@ target_include_directories(core
 		Core/Scripting
 		Core/Layers
 		Core/Events
+		Core/Collisions
 		Core
 		External
 )
