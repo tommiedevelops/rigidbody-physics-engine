@@ -1,22 +1,73 @@
 #include "Mesh.h"
 #include "glad/glad.h"
 
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 #include <string>
+#include <iostream>
 
 namespace PhysicsEngine
 {
-    Mesh::Mesh(
-        std::vector<Vertex>   vertices,
-        std::vector<uint32_t> indices,
-        std::string           name
-    )
-        : m_Vertices { vertices }
-        , m_Indices  { indices  }
-        , m_Name     { name     }
+    Mesh::Mesh(const std::string& path)
     {
-        SetUpMesh();
+		Assimp::Importer import;
+		constexpr auto flags = aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals;
+
+		const auto scene = import.ReadFile(path, flags);
+
+		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode || !scene->HasMeshes())
+		{
+			std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
+			throw std::logic_error("There was an error loading the model");
+		}
+
+		const auto mesh{ scene->mMeshes[0] };
+
+		std::vector<Vertex>       vertices;
+		std::vector<unsigned int> indices;
+
+		for (unsigned int i{ 0 }; i < mesh->mNumVertices; ++i)
+		{
+			Vertex vertex{ };
+			vertex.position.x = mesh->mVertices[i].x;
+			vertex.position.y = mesh->mVertices[i].y;
+			vertex.position.z = mesh->mVertices[i].z;
+
+			if (mesh->mNormals)
+			{
+				vertex.normal.x = mesh->mNormals[i].x;
+				vertex.normal.y = mesh->mNormals[i].y;
+				vertex.normal.z = mesh->mNormals[i].z;
+			}
+
+			if (mesh->mTextureCoords[0])
+			{
+				vertex.uv.x = mesh->mTextureCoords[0][i].x;
+				vertex.uv.y = mesh->mTextureCoords[0][i].y;
+			}
+
+			vertices.push_back(vertex);
+		}
+
+		for (unsigned int faceIdx{ 0 }; faceIdx < mesh->mNumFaces; ++faceIdx)
+		{
+			const auto& face = mesh->mFaces[faceIdx];
+
+			for (unsigned int j = 0; j < face.mNumIndices; ++j)
+			{
+				indices.push_back(face.mIndices[j]);
+			}
+		}
+
+		m_Vertices = vertices;
+		m_Indices = indices;
+
+		SetUpMeshRenderBuffers();
     }
-    void Mesh::SetUpMesh()
+
+    void Mesh::SetUpMeshRenderBuffers()
     {
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);

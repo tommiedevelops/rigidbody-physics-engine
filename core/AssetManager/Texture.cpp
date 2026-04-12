@@ -14,9 +14,8 @@ namespace PhysicsEngine
 		return m_ID;
 	}
 
-	Texture::Texture(std::string pathToTex, std::string textureName) 
+	Texture::Texture(const std::string pathToTex) 
 		: m_ID   { 0 }
-		, m_Name { textureName }
 	{
 		glGenTextures(1, &m_ID);
 		glBindTexture(GL_TEXTURE_2D, m_ID);

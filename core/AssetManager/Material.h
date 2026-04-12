@@ -6,11 +6,8 @@
 
 namespace PhysicsEngine
 {
-	class Material
+	struct Material
 	{
-	private:
-		std::string m_Name{};
-	public:
 		glm::vec4 albedo{};
 		float ambientStrength{};
 		float diffuse{};
@@ -19,8 +16,6 @@ namespace PhysicsEngine
 		Texture* m_Texture{};
 		Shader*  m_Shader{};
 
-		Material(std::string materialName, Shader* shader, Texture* texture);
-
-		std::string& GetName();
+		Material(Shader* shader, Texture* texture) : m_Shader{ shader }, m_Texture{ texture } {}
 	};
 }

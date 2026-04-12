@@ -1,54 +1,29 @@
 #pragma once
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-
-#include "Mesh.h"
-#include "Material.h"
-
 #include <vector>
 #include <string>
+#include <memory>
+#include <unordered_map>
 
 namespace PhysicsEngine
 {
-	class Assets
+	class Mesh;
+	class Shader;
+	class Texture;
+	class Material;
+
+	class AssetManager
 	{
 	private:
-		std::vector<Mesh>     m_Meshes;
-		std::vector<Texture>  m_Textures;
-		std::vector<Shader>   m_Shaders;
-		std::vector<Material> m_Materials;
-
-		void ProcessNode(aiNode* node, const aiScene* scene);
-		Mesh ConvertToEngineMesh(const aiMesh* mesh, std::string meshName);
-
+		std::unordered_map<std::string, std::shared_ptr<Mesh>>     m_Meshes;
+		std::unordered_map<std::string, std::shared_ptr<Shader>>   m_Shaders;
+		std::unordered_map<std::string, std::shared_ptr<Texture>>  m_Textures;
+		std::unordered_map<std::string, std::shared_ptr<Material>> m_Materials;
 	public:
-		Assets() = default;
-		~Assets() = default;
-
-		void AddMesh(
-			std::string pathToModel,
-			std::string meshName
-		);
-
-		void AddTexture(
-			std::string pathToTexture,
-			std::string textureName
-		);
-
-		void AddShader(
-			std::string pathToVertexShader,
-			std::string pathToFragmentShader,
-			std::string shaderName
-		);
-
-		Mesh*    GetMesh(std::string meshName);
-		Texture* GetTexture(std::string textureName);
-		Shader*  GetShader(std::string shaderName);
-
-		void CreateMaterial(std::string materialName, Shader* shader, Texture* texture); 
-		Material* GetMaterial(std::string materialName); 
-
+		std::shared_ptr<Mesh>     LoadMesh(const std::string& path);
+		std::shared_ptr<Shader>   LoadShader(const std::string& vertexPath, const std::string& fragmentPath);
+		std::shared_ptr<Texture>  LoadTexture(const std::string& path);
+		std::shared_ptr<Material> CreateMaterial(const std::string& name, Shader* shader, Texture* texture);
+		std::shared_ptr<Material> GetMaterial(const std::string& name);
 	};
 }

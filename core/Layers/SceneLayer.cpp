@@ -27,13 +27,13 @@ namespace PhysicsEngine
 	void SceneLayer::OnUpdate(float dt)
 	{
 		if (!m_ActiveScene) throw std::logic_error("Scene was null");
-		m_ActiveScene->Update(dt);
+		m_ActiveScene->OnUpdate(dt);
 	}
 
 	void SceneLayer::OnRender()
 	{
 		if (!m_ActiveScene) throw std::logic_error("Scene was null");
-		m_ActiveScene->Render();
+		m_ActiveScene->OnRender();
 	}
 
 	void SceneLayer::OnEvent(Event& e)

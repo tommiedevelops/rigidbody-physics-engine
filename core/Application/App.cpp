@@ -27,8 +27,18 @@ namespace PhysicsEngine
 
 	void App::SetCurrentScene(Scene* newScene)
 	{
-		SceneLayer* sceneLayer = m_LayerStack.Get<SceneLayer>();
+		if (!newScene)
+			throw std::logic_error("Provided scene was null\n");
+
+		newScene->SetAssetsRef(&m_Assets);
+		newScene->SetUp();
+
+		if(!newScene->GetMainCamera())
+			throw std::logic_error("No camera found");
+
 		float aspectRatio = (float)m_WindowProperties.Width / m_WindowProperties.Height;
+
+		SceneLayer* sceneLayer = m_LayerStack.Get<SceneLayer>();
 		sceneLayer->SetActiveScene(newScene, aspectRatio);
 	};
 	

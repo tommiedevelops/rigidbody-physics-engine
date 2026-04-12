@@ -18,22 +18,10 @@ namespace PhysicsEngine
 	public:
 		std::vector<Vertex>    m_Vertices;
 		std::vector<uint32_t>  m_Indices;
-
 		unsigned int VAO, VBO, EBO;
 
-		Mesh(
-			std::vector<Vertex>    vertices,
-			std::vector<uint32_t>  indices,
-			std::string			   name
-		);
-
-		std::string& GetName()
-		{
-			return m_Name;
-		}
-
+		Mesh(const std::string& path);
 	private:
-		void SetUpMesh();
-		std::string m_Name;
+		void SetUpMeshRenderBuffers();
 	};
 }

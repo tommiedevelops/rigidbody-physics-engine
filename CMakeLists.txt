@@ -23,7 +23,7 @@ add_library(core
 	Core/AssetManager/Texture.cpp
 	Core/AssetManager/Mesh.cpp
 	Core/AssetManager/Material.h
-	Core/AssetManager/Material.cpp
+	
 
 	Core/Physics/Rigidbody.cpp
 	Core/Physics/RigidbodyForceRegistry.cpp

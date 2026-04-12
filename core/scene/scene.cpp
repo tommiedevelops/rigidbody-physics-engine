@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "Components.h"
 #include "Rigidbody.h"
+#include "AssetManager.h"
 
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -45,7 +46,7 @@ namespace PhysicsEngine
 		return glm::lookAt(camPosition, camPosition + forward, up);
 	}
 		
-	void Scene::Render()
+	void Scene::OnRender()
 	{
 
 		if (!m_MainCamera)
@@ -72,7 +73,7 @@ namespace PhysicsEngine
 			glm::mat3 normalMat{ glm::transpose(glm::inverse(glm::mat3(modelMat))) };
 
 			// Prepare Material data
-			Material* material = materialComp.material;
+			Material* material = materialComp.m_Material;
 
 			Shader* shader = material->m_Shader;
 			unsigned int shaderID = shader->GetID();
@@ -96,9 +97,9 @@ namespace PhysicsEngine
 			int normalMatLoc = glGetUniformLocation(shaderID, "normalMatrix");
 			glUniformMatrix3fv(normalMatLoc, 1, GL_FALSE, glm::value_ptr(normalMat));
 
-			glBindVertexArray(meshComp.mesh->VAO);
+			glBindVertexArray(meshComp.m_Mesh->VAO);
 
-			GLsizei numIndices = static_cast<GLsizei>(meshComp.mesh->m_Indices.size());
+			GLsizei numIndices = static_cast<GLsizei>(meshComp.m_Mesh->m_Indices.size());
 			glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, (void*)0);
 
 			glBindVertexArray(0);
@@ -106,7 +107,7 @@ namespace PhysicsEngine
 		
 	}
 
-	void Scene::Update(float deltaTime)
+	void Scene::OnUpdate(float deltaTime)
 	{
 		UpdateScripts(deltaTime);
 		UpdateForces(deltaTime);
@@ -240,6 +241,11 @@ namespace PhysicsEngine
 		
 		m_MainCamera = &e.GetComponent<CameraComponent>();
 		m_MainCameraTransform = &e.GetComponent<TransformComponent>();
+	}
+
+	void Scene::SetAssetsRef(AssetManager* assetsRef)
+	{
+		m_AssetsRef = assetsRef;
 	}
 }
 

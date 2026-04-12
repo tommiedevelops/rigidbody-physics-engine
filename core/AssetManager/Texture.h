@@ -12,13 +12,8 @@ namespace PhysicsEngine
 		std::string type;
 		std::string path;
 
-		Texture(std::string pathToTex, std::string textureName);
+		Texture(const std::string pathToTex);
 		unsigned int getID() const;
-
-		std::string& GetName()
-		{
-			return m_Name;
-		}
 
 	};
 }

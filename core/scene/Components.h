@@ -4,6 +4,7 @@
 #include "Material.h"
 #include "ScriptableEntity.h"
 #include "IForceGenerator.h"
+#include "AssetManager.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -45,12 +46,14 @@ namespace PhysicsEngine
 
 	struct MeshComponent 
 	{
-		Mesh* mesh;
+		Mesh* m_Mesh;
+		MeshComponent(Mesh* mesh) : m_Mesh{ mesh } {}
 	};
 
 	struct MaterialComponent
 	{
-		Material* material;
+		Material* m_Material;
+		MaterialComponent(Material* material) : m_Material{ material } {}
 	};
 
 	struct ForceGeneratorComponent

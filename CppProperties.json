@@ -5,6 +5,7 @@
         "msvc_x86"
       ],
       "name": "x86-Debug",
+      "cppStandard": "cpp20",
       "includePath": [
         "${env.INCLUDE}",
         "${workspaceRoot}\\**"

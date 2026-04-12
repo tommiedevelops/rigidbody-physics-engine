@@ -16,16 +16,16 @@ namespace PhysicsEngine
 		void SetCurrentScene(Scene* newScene);
 		void OnEvent(Event& e);
 
-		Assets& GetAssetsRef()
+		AssetManager& GetAssetsRef()
 		{
 			return m_Assets;
 		}
 
 	private:
-		Window            m_Window;
-		WindowProperties& m_WindowProperties;
-		LayerStack        m_LayerStack;
-		Assets            m_Assets;
-		GameTime          m_GameTime;
+		Window               m_Window;
+		WindowProperties&    m_WindowProperties;
+		LayerStack           m_LayerStack;
+		AssetManager         m_Assets;
+		GameTime             m_GameTime;
 	};
 }
