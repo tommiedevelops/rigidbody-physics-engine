@@ -192,7 +192,7 @@ class SpherePlaneCollideScene : public Scene
 
 		// --- PHYSICS TEST ---
 		auto physicsTestEntity{ CreateEntity() };
-		Mesh* m{ m_AssetsRef->LoadMesh(MODELS_DIR "sphere.obj").get() };
+		auto m{ m_AssetsRef->LoadMesh(MODELS_DIR "sphere.obj")};
 		auto localSize = m->GetBounds().size();
 		auto worldSize = localSize * physicsTestEntity.GetComponent<TransformComponent>().m_Scale;
 
@@ -209,15 +209,16 @@ class SpherePlaneCollideScene : public Scene
 	
 		auto s { m_AssetsRef->LoadShader( SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag" ) };
 
-		Material* mat{ m_AssetsRef->CreateMaterial("default", s, nullptr).get() };
+		auto mat{ m_AssetsRef->CreateMaterial("default", s, nullptr) };
 
 		physicsTestEntity.AddComponent<MaterialComponent>(mat);
 
 		// --- FLOOR ---
 		auto floorEntity{ CreateEntity() };
-		floorEntity.AddComponent<MeshComponent>(m_AssetsRef->LoadMesh(MODELS_DIR "quad.obj").get());
+		auto mesh{ m_AssetsRef->LoadMesh(MODELS_DIR "quad.obj") };
+		floorEntity.AddComponent<MeshComponent>(mesh);
 
-		Material* floorMat{ m_AssetsRef->CreateMaterial("floor", s, nullptr).get()};
+		auto floorMat{ m_AssetsRef->CreateMaterial("floor", s, nullptr)};
 		floorMat->albedo = glm::vec4(0.5, 0.0, 0.5, 1.0);
 		floorEntity.AddComponent<MaterialComponent>(floorMat);
 
@@ -249,7 +250,7 @@ class SphereSphereCollideScene : public Scene
 
 		// --- PHYSICS TEST ---
 		auto sphere1{ CreateEntity() };
-		Mesh* m{ m_AssetsRef->LoadMesh(MODELS_DIR "sphere.obj").get() };
+		auto m{ m_AssetsRef->LoadMesh(MODELS_DIR "sphere.obj")};
 		auto localSize = m->GetBounds().size();
 		auto worldSize = localSize * sphere1.GetComponent<TransformComponent>().m_Scale;
 
@@ -266,15 +267,16 @@ class SphereSphereCollideScene : public Scene
 
 		auto s { m_AssetsRef->LoadShader(SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag") };
 
-		Material* mat{ m_AssetsRef->CreateMaterial("default", s, nullptr).get() };
+		auto mat{ m_AssetsRef->CreateMaterial("default", s, nullptr)};
 
 		sphere1.AddComponent<MaterialComponent>(mat);
 
 		// --- FLOOR ---
 		auto sphere2{ CreateEntity() };
-		sphere2.AddComponent<MeshComponent>(m_AssetsRef->LoadMesh(MODELS_DIR "sphere.obj").get());
+		auto mesh{m_AssetsRef->LoadMesh(MODELS_DIR "sphere.obj")};
+		sphere2.AddComponent<MeshComponent>(mesh);
 
-		Material* floorMat{ m_AssetsRef->CreateMaterial("floor", s, nullptr).get() };
+		auto floorMat{ m_AssetsRef->CreateMaterial("floor", s, nullptr)};
 		floorMat->albedo = glm::vec4(0.5, 0.0, 0.5, 1.0);
 		sphere2.AddComponent<MaterialComponent>(floorMat);
 
@@ -304,7 +306,7 @@ class BoxPlaneCollideScene : public Scene
 
 		// --- PHYSICS TEST ---
 		auto physicsTestEntity{ CreateEntity() };
-		Mesh* m{ m_AssetsRef->LoadMesh(MODELS_DIR "cube.obj").get() };
+		auto m{ m_AssetsRef->LoadMesh(MODELS_DIR "cube.obj")};
 		auto localSize = m->GetBounds().size();
 		auto worldSize = localSize * physicsTestEntity.GetComponent<TransformComponent>().m_Scale;
 
@@ -323,15 +325,16 @@ class BoxPlaneCollideScene : public Scene
 	
 		auto s { m_AssetsRef->LoadShader( SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag" ) };
 
-		Material* mat{ m_AssetsRef->CreateMaterial("default", s, nullptr).get() };
+		auto mat{ m_AssetsRef->CreateMaterial("default", s, nullptr)};
 
 		physicsTestEntity.AddComponent<MaterialComponent>(mat);
 
 		// --- FLOOR ---
 		auto floorEntity{ CreateEntity() };
-		floorEntity.AddComponent<MeshComponent>(m_AssetsRef->LoadMesh(MODELS_DIR "quad.obj").get());
+		auto mesh{ m_AssetsRef->LoadMesh(MODELS_DIR "quad.obj")};
+		floorEntity.AddComponent<MeshComponent>(mesh);
 
-		Material* floorMat{ m_AssetsRef->CreateMaterial("floor", s, nullptr).get()};
+		auto floorMat{ m_AssetsRef->CreateMaterial("floor", s, nullptr)};
 		floorMat->albedo = glm::vec4(0.5, 0.0, 0.5, 1.0);
 		floorEntity.AddComponent<MaterialComponent>(floorMat);
 
@@ -380,7 +383,7 @@ class SphereBoxCollideScene : public Scene
 
 		// --- PHYSICS TEST ---
 		auto physicsTestEntity{ CreateEntity() };
-		Mesh* sphereMesh{ m_AssetsRef->LoadMesh(MODELS_DIR "sphere.obj").get() };
+		auto sphereMesh{ m_AssetsRef->LoadMesh(MODELS_DIR "sphere.obj")};
 		auto sphereLocalSize = sphereMesh->GetBounds().size();
 		auto sphereWorldSize = sphereLocalSize * physicsTestEntity.GetComponent<TransformComponent>().m_Scale;
 
@@ -398,7 +401,7 @@ class SphereBoxCollideScene : public Scene
 	
 		auto s { m_AssetsRef->LoadShader( SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag" ) };
 
-		Material* mat{ m_AssetsRef->CreateMaterial("default", s, nullptr).get() };
+		auto mat{ m_AssetsRef->CreateMaterial("default", s, nullptr)};
 
 		physicsTestEntity.AddComponent<MaterialComponent>(mat);
 
@@ -411,7 +414,7 @@ class SphereBoxCollideScene : public Scene
 		boxEntityTransform.m_Position = glm::vec3(0, 10, 0);
 		boxEntityTransform.m_Rotation = glm::angleAxis(3.14f / 4.0f, glm::vec3(1, 0, 0));
 
-		Mesh* boxMesh{ m_AssetsRef->LoadMesh(MODELS_DIR "cube.obj").get() };
+		auto boxMesh{ m_AssetsRef->LoadMesh(MODELS_DIR "cube.obj")};
 		auto boxLocalSize{ boxMesh->GetBounds().size() };
 
 		boxEntity.AddComponent<MeshComponent>(boxMesh);
@@ -419,7 +422,7 @@ class SphereBoxCollideScene : public Scene
 		boxEntity.AddComponent<RigidbodyComponent>().SetMass(1.0f);
 		boxEntity.AddComponent<ForceGeneratorComponent>().Bind<GravityForceGenerator>(glm::vec3(0,-1,0));
 
-		Material* boxMat{ m_AssetsRef->CreateMaterial("floor", s, nullptr).get()};
+		auto boxMat{ m_AssetsRef->CreateMaterial("floor", s, nullptr) };
 		boxMat->albedo = glm::vec4(0.5, 0.0, 0.5, 1.0);
 		boxEntity.AddComponent<MaterialComponent>(boxMat);
 		
@@ -449,7 +452,7 @@ class BoxBoxCollideScene : public Scene
 		box1EntityTransform.m_Position = glm::vec3(0, 20, 0);
 		box1EntityTransform.m_Rotation = glm::angleAxis(3.14f / 4.0f, glm::vec3(0, 0, -1));
 
-		Mesh* boxMesh{ m_AssetsRef->LoadMesh(MODELS_DIR "cube.obj").get() };
+		auto boxMesh{ m_AssetsRef->LoadMesh(MODELS_DIR "cube.obj") };
 		auto box1LocalSize{ boxMesh->GetBounds().size() };
 
 		box1Entity.AddComponent<MeshComponent>(boxMesh);
@@ -459,7 +462,7 @@ class BoxBoxCollideScene : public Scene
 
 		auto s { m_AssetsRef->LoadShader( SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag" ) };
 
-		Material* box1Mat{ m_AssetsRef->CreateMaterial("floor", s, nullptr).get() };
+		auto box1Mat{ m_AssetsRef->CreateMaterial("floor", s, nullptr)};
 		box1Mat->albedo = glm::vec4(0.5, 0.0, 0.5, 1.0);
 		box1Entity.AddComponent<MaterialComponent>(box1Mat);
 
@@ -481,7 +484,7 @@ class BoxBoxCollideScene : public Scene
 
 		boxEntity.AddComponent<RigidbodyComponent>().SetMass(1.0f);
 
-		Material* boxMat{ m_AssetsRef->CreateMaterial("floor", s, nullptr).get()};
+		auto boxMat{ m_AssetsRef->CreateMaterial("floor", s, nullptr) };
 		boxMat->albedo = glm::vec4(0.0, 0.5, 0.5, 1.0);
 		boxEntity.AddComponent<MaterialComponent>(boxMat);
 		
@@ -550,7 +553,7 @@ class TennisRacketScene : public Scene {
 	void SetUp() override {
 		auto e = CreateEntity();
 
-		Mesh* boxMesh{ m_AssetsRef->LoadMesh(MODELS_DIR "cube.obj").get() };
+		auto boxMesh{ m_AssetsRef->LoadMesh(MODELS_DIR "cube.obj")};
 		e.AddComponent<MeshComponent>(boxMesh);
 
 		auto& rb = e.AddComponent<RigidbodyComponent>();
@@ -570,7 +573,7 @@ class TennisRacketScene : public Scene {
 
 		auto s { m_AssetsRef->LoadShader(SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag") };
 
-		Material* boxMat{ m_AssetsRef->CreateMaterial("floor", s, nullptr).get() };
+		auto boxMat{ m_AssetsRef->CreateMaterial("floor", s, nullptr)};
 		boxMat->albedo = glm::vec4(0.5, 0.0, 0.5, 1.0);
 
 		e.AddComponent<ScriptComponent>().Bind<RacketScript>();

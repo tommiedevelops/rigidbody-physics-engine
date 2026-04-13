@@ -68,14 +68,14 @@ namespace PhysicsEngine
 
 	struct MeshComponent 
 	{
-		Mesh* m_Mesh;
-		MeshComponent(Mesh* mesh) : m_Mesh{ mesh } {}
+		std::shared_ptr<Mesh> m_Mesh;
+		MeshComponent(std::shared_ptr<Mesh>& mesh) : m_Mesh{ mesh } {}
 	};
 
 	struct MaterialComponent
 	{
-		Material* m_Material;
-		MaterialComponent(Material* material) : m_Material{ material } {}
+		std::shared_ptr<Material> m_Material;
+		MaterialComponent(std::shared_ptr<Material>& material) : m_Material{ material } {}
 	};
 
 	struct ForceGeneratorComponent

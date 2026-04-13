@@ -76,7 +76,7 @@ namespace PhysicsEngine
 			glm::mat3 normalMat{ glm::transpose(glm::inverse(glm::mat3(modelMat))) };
 
 			// Prepare Material data
-			Material* material = materialComp.m_Material;
+			auto material = materialComp.m_Material;
 
 			auto& shader{ material->m_Shader };
 			unsigned int shaderID = shader->GetID();
