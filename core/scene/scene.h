@@ -54,8 +54,7 @@ namespace PhysicsEngine
 		CameraComponent* m_MainCamera{ nullptr }; 
 		TransformComponent* m_MainCameraTransform{ nullptr };
 
-		void UpdateCollisions();
-		// entities stored here
+		void UpdateCollisions(float deltaTime);
 		void UpdatePhysics(float deltaTime);
 		void UpdateScripts(float deltaTime);
 		void UpdateForces(float deltaTime);

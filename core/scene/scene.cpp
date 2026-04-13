@@ -5,6 +5,7 @@
 #include "Rigidbody.h"
 #include "AssetManager.h"
 #include "ContactGenerator.h"
+#include "ContactResolver.h"
 #include "debug.h"
 
 #include <glad/glad.h>
@@ -114,10 +115,10 @@ namespace PhysicsEngine
 		UpdateScripts(deltaTime);
 		UpdateForces(deltaTime);
 		UpdatePhysics(deltaTime);
-		UpdateCollisions();
+		UpdateCollisions(deltaTime);
 	}
 
-	void Scene::UpdateCollisions()
+	void Scene::UpdateCollisions(float deltaTime)
 	{
 		// maximum amount of contacts system willing to process
 		const int MAX_CONTACTS = 256;
@@ -127,6 +128,7 @@ namespace PhysicsEngine
 		data.contacts = contactArray;
 		data.contactsLeft = MAX_CONTACTS;
 		
+		// Broad phase collision detection here (Not implemented yet)
 		std::vector<entt::entity> entities;
 		auto view = m_Registry.view<ColliderComponent, TransformComponent>();
 
@@ -134,6 +136,7 @@ namespace PhysicsEngine
 			entities.push_back(entity);
 			});
 
+		// Narrow phase collision detection (handle pairs of colliders)
 		for (int i = 0; i < entities.size(); i++) {
 			for (int j = i + 1; j < entities.size(); j++) {
 				const auto& colliderA = m_Registry.get<ColliderComponent>(entities[i]);
@@ -150,14 +153,12 @@ namespace PhysicsEngine
 			}
 		}
 
-		if (data.contactsLeft != MAX_CONTACTS)
-		{
-			for (auto contact : contactArray)
-			{
-				std::cout << contact.normal << '\n';
-			}
-		}
+		if (data.contactsLeft -= MAX_CONTACTS)
+			return; // no work to do
 
+		unsigned int numContacts{ MAX_CONTACTS - data.contactsLeft };
+		ContactResolver::PrepareContactData(contactArray, numContacts, deltaTime);
+		ContactResolver::ResolveContacts(contactArray, numContacts, deltaTime);
 	}
 
 	void Scene::UpdatePhysics(float deltaTime)

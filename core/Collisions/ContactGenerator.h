@@ -19,10 +19,9 @@ namespace PhysicsEngine
 		unsigned int contactsLeft; // max amount of contacts the array can take
 	};
 
-	class ContactGenerator
+	namespace ContactGenerator
 	{
-	public:
-		static void DetectContacts(
+		void DetectContacts(
 			const PrimitiveCollider& first,
 			const PrimitiveCollider& second,
 			TransformComponent& firstTransform,

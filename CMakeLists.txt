@@ -30,6 +30,7 @@ add_library(core
 	Core/Physics/GravityForceGenerator.cpp
 
 	Core/Collisions/ContactGenerator.cpp
+	Core/Collisions/ContactResolver.cpp
 
 	Core/Scene/Entity.cpp
 	Core/Scene/Scene.cpp
