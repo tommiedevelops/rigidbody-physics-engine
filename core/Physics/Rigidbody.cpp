@@ -6,6 +6,7 @@ namespace PhysicsEngine
 	{
 		glm::mat4 T = glm::translate(glm::mat4(1.0f), m_LinearPosition);
 		glm::mat4 R = glm::toMat4(m_Orientation);
+		m_InverseInertiaTensorWorldSpace = glm::mat3(R) * m_InverseInertiaTensor * glm::mat3(glm::transpose(R));
 		m_ModelMatrix = T * R;
 	}
 
@@ -37,16 +38,17 @@ namespace PhysicsEngine
 		glm::vec3 linearAcceleration = m_InverseMass * m_LinearForceAccumulator;
 
 		// Calculate angular acceleration
-		glm::vec3 angularAcceleration = m_InverseInertiaTensor * m_TorqueAccumulator;
+		glm::vec3 angularAcceleration = m_InverseInertiaTensorWorldSpace * m_TorqueAccumulator;
 
 		// Update angular & linear values (Euler integration)
 		m_LinearVelocity += linearAcceleration * deltaTime;
 		m_LinearPosition += m_LinearVelocity * deltaTime;
 
-		glm::vec3 angularVelocity = angularAcceleration * deltaTime;
-		glm::quat angularVelocityQuat{ 0.0f, angularVelocity.x, angularVelocity.y, angularVelocity.z };
+		m_AngularVelocity += angularAcceleration * deltaTime;
+		glm::quat angularVelocityQuat{ 0.0f, m_AngularVelocity.x, m_AngularVelocity.y, m_AngularVelocity.z };
 
 		m_Orientation += 0.5f * angularVelocityQuat * m_Orientation * deltaTime;
+		m_Orientation = glm::normalize(m_Orientation);
 
 		UpdateDerivedData();
 		// Reset accumulators

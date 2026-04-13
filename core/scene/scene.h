@@ -16,8 +16,8 @@ namespace PhysicsEngine
 	struct PointLight
 	{
 	public:
-		glm::vec3 position;
-		glm::vec3 color;
+		glm::vec3 position{ 10, 100, 10 };
+		glm::vec3 color{ 1,1,1 };
 	};
 
 	class Scene

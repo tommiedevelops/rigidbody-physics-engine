@@ -512,5 +512,96 @@ class BoxBoxCollideScene : public Scene
 		player.AddComponent<ScriptComponent>().Bind<PlayerMoveScript>();
 		SetMainCamera(player);
 	}
+
 };
 
+class TennisRacketScene : public Scene {
+
+	class RacketScript : public ScriptableEntity
+	{
+		void OnCreate() override {}
+		void OnStart() override
+		{
+			auto& rb = GetComponent<RigidbodyComponent>();
+			rb.m_AngularVelocity = glm::vec3(0.0f, 5.0f, 0.0);
+		}
+
+		void OnUpdate(float dt) override
+		{
+
+		}
+
+		void OnDestroy() override {}
+
+		void OnEvent(Event& e) override
+		{
+			EventDispatcher dispatcher(e);
+
+			auto& rb = GetComponent<RigidbodyComponent>();
+
+			dispatcher.Dispatch<KeyPressedEvent>([&rb](KeyPressedEvent& e)  -> bool
+			{
+
+				float p = 0.4f;
+				if (e.GetKeyCode() == GLFW_KEY_Z)
+				{
+					std::cout << "perturbed on z axis\n";
+					rb.m_AngularVelocity += glm::vec3(0, 0, p);
+				}
+				else if (e.GetKeyCode() == GLFW_KEY_Y)
+				{
+					std::cout << "perturbed on y axis\n";
+					rb.m_AngularVelocity += glm::vec3(0, p, 0);
+				}
+				else if (e.GetKeyCode() == GLFW_KEY_X)
+				{
+					std::cout << "perturbed on x axis\n";
+					rb.m_AngularVelocity += glm::vec3(p, 0, 0);
+				}
+
+				return true;
+			});
+
+		}
+	};
+
+	void SetUp() override {
+		auto e = CreateEntity();
+
+		Mesh* boxMesh{ m_AssetsRef->LoadMesh(MODELS_DIR "cube.obj").get() };
+		e.AddComponent<MeshComponent>(boxMesh);
+
+		auto& rb = e.AddComponent<RigidbodyComponent>();
+		float w = 1.0f, h = 10.0f, d = 30.0f;
+
+		e.GetComponent<TransformComponent>().m_Scale = glm::vec3(w, h, d);
+		float mass = 1.0f;
+
+		glm::mat3 inertiaTensor(0.0f);
+
+		inertiaTensor[0][0] = 1.0f / 12.0f * mass * (h * h + d * d);  // = 1/12 * (4+9) = 1.083
+		inertiaTensor[1][1] = 1.0f / 12.0f * mass * (w * w + d * d);  // = 1/12 * (1+9) = 0.833
+		inertiaTensor[2][2] = 1.0f / 12.0f * mass * (w * w + h * h);  // = 1/12 * (1+4) = 0.416
+
+		rb.SetInertiaTensor(inertiaTensor);
+		rb.SetMass(1.0f);
+
+		Shader* s
+		{
+			m_AssetsRef->LoadShader(SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag").get(),
+		};
+
+		Material* boxMat{ m_AssetsRef->CreateMaterial("floor", s, nullptr).get() };
+		boxMat->albedo = glm::vec4(0.5, 0.0, 0.5, 1.0);
+
+		e.AddComponent<ScriptComponent>().Bind<RacketScript>();
+		e.AddComponent<MaterialComponent>(boxMat);
+		e.AddComponent<NameComponent>("target");
+
+		// --- PLAYER ---
+		auto player{ CreateEntity() };
+		player.AddComponent<CameraComponent>();
+		player.AddComponent<ScriptComponent>().Bind<PlayerMoveScript>();
+		SetMainCamera(player);
+	}
+};

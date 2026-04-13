@@ -1,4 +1,5 @@
 #include "Scenes.h"
+#include <memory>
 
 int main()
 {
@@ -15,8 +16,9 @@ int main()
 	sceneLayer->RegisterScene("BoxSphere", []() { return std::make_unique<SphereBoxCollideScene>(); });
 	sceneLayer->RegisterScene("BoxBox", []() { return std::make_unique<BoxBoxCollideScene>(); });
 	sceneLayer->RegisterScene("SphereSphere", []() { return std::make_unique<SphereSphereCollideScene>(); });
+	sceneLayer->RegisterScene("TennisRacketScene", []() { return std::make_unique<TennisRacketScene>(); });
 
-	sceneLayer->SetActiveScene("SphereSphere");
+	sceneLayer->SetActiveScene("TennisRacketScene");
 
 	app.PushLayer(sceneLayer);
 
