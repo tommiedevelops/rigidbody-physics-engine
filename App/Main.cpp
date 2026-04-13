@@ -17,6 +17,9 @@ using namespace PhysicsEngine;
 std::ostream& operator<<(std::ostream& os, const glm::vec3& v) {
 	return os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
 }
+std::ostream& operator<<(std::ostream& os, const glm::quat& q) {
+	return os << "(" << q.w << ", " << q.x << ", " << q.y << ", " << q.z << ")";
+}
 
 // outputs: (1, 2, 3)
 class Cube2Script : public PhysicsEngine::ScriptableEntity 
@@ -47,6 +50,42 @@ class Cube2Script : public PhysicsEngine::ScriptableEntity
 
 class PlayerMoveScript : public ScriptableEntity
 {
+
+	// ai gen
+	void LookAt(TransformComponent& tr, glm::vec3 worldSpaceTarget)
+	{
+		auto direction = glm::normalize(worldSpaceTarget - tr.m_Position);
+		glm::vec3 forward = glm::normalize(tr.m_Rotation * glm::vec3(0, 0, -1));
+
+		glm::vec3 axis = glm::cross(forward, direction);
+
+		float dot = glm::dot(forward, direction);
+		// already facing target
+		if (dot >= 0.9999f) return;
+
+		// opposite direction — rotate 180 around world up
+		if (dot <= -0.9999f) {
+			tr.m_Rotation = glm::angleAxis(glm::pi<float>(), glm::vec3(0, 1, 0)) * tr.m_Rotation;
+			return;
+		}
+		// angle between the two vectors
+		float angle = glm::acos(dot);
+		
+		glm::quat rotation = glm::angleAxis(angle, glm::normalize(axis)); 
+
+		tr.m_Rotation = glm::normalize(rotation * tr.m_Rotation);
+	}
+
+	// ai gen
+	void SyncYawPitch(const glm::quat& rotation) 
+	{
+		// Extract world space yaw from the forward vector
+		glm::vec3 forward = rotation * glm::vec3(0, 0, -1);
+		m_Yaw = glm::degrees(atan2(forward.x, -forward.z));
+
+		// Extract local pitch from the forward vector
+		m_Pitch = glm::degrees(asin(-forward.y));
+	}
 
 	glm::vec2 moveDir{ 0.0f };
 	glm::vec2 m_LastMousePos{ 0.0f };
@@ -80,15 +119,18 @@ class PlayerMoveScript : public ScriptableEntity
 		Input::SetCursorEnabled(false);
 
 		Entity targetEntity = m_Scene->GetEntity("target");
+		if (targetEntity.IsNull()) throw std::logic_error("couldnt find target");
 
-		if(!targetEntity.IsNull())
-			std::cout << targetEntity.GetComponent<TransformComponent>().m_Position;
+		auto targetPos{ targetEntity.GetComponent<TransformComponent>().m_Position };
+
+		LookAt(transform, targetPos);
+		SyncYawPitch(transform.m_Rotation);
+
 	}
 	void OnUpdate(float dt) override
 	{
 		using namespace PhysicsEngine;
 		auto& transform{ GetComponent<TransformComponent>() };
-
 
 		// Handle Mouse
 		m_Sensitivity = 1.0f;
@@ -184,6 +226,7 @@ class TestScene : public Scene
 		auto e{ CreateEntity() };
 		Mesh* m{ m_AssetsRef->LoadMesh(MODELS_DIR "sphere.obj").get() };
 		e.AddComponent<MeshComponent>(m);
+		e.AddComponent<NameComponent>("target");
 
 		Shader* s
 		{
@@ -194,10 +237,6 @@ class TestScene : public Scene
 
 		e.AddComponent<MaterialComponent>(mat);
 
-		auto target{ CreateEntity()};
-		target.AddComponent<NameComponent>("target");
-		auto& tr = target.GetComponent<TransformComponent>();
-		tr.m_Position = glm::vec3(6, 7, 9);
 
 		auto player{ CreateEntity() };
 		player.AddComponent<CameraComponent>();
