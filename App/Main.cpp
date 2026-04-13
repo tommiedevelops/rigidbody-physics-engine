@@ -14,8 +14,9 @@ int main()
 	sceneLayer->RegisterScene("BoxPlane", []() { return std::make_unique<BoxPlaneCollideScene>(); });
 	sceneLayer->RegisterScene("BoxSphere", []() { return std::make_unique<SphereBoxCollideScene>(); });
 	sceneLayer->RegisterScene("BoxBox", []() { return std::make_unique<BoxBoxCollideScene>(); });
+	sceneLayer->RegisterScene("SphereSphere", []() { return std::make_unique<SphereSphereCollideScene>(); });
 
-	sceneLayer->SetActiveScene("BoxBox");
+	sceneLayer->SetActiveScene("SphereSphere");
 
 	app.PushLayer(sceneLayer);
 

@@ -242,6 +242,65 @@ class SpherePlaneCollideScene : public Scene
 	}
 };
 
+
+class SphereSphereCollideScene : public Scene
+{
+	void SetUp() override
+	{
+		light.position = glm::vec3(0.0f, 100.0f, 10.0f); // fix lights?
+		light.color = glm::vec3(1.0f, 1.0f, 1.0f);
+
+		// --- PHYSICS TEST ---
+		auto sphere1{ CreateEntity() };
+		Mesh* m{ m_AssetsRef->LoadMesh(MODELS_DIR "sphere.obj").get() };
+		auto localSize = m->GetBounds().size();
+		auto worldSize = localSize * sphere1.GetComponent<TransformComponent>().m_Scale;
+
+		sphere1.AddComponent<MeshComponent>(m);
+		sphere1.AddComponent<NameComponent>("target");
+		sphere1.GetComponent<TransformComponent>().m_Position = glm::vec3(0.0, 10.0f, 0.0f);
+		auto& rb = sphere1.AddComponent<RigidbodyComponent>();
+		sphere1.AddComponent<ForceGeneratorComponent>().Bind<GravityForceGenerator>(glm::vec3(0, -1, 0));
+
+		float sphereRadius = worldSize.x / 2.0f;
+		sphere1.AddComponent<ColliderComponent>().AddPrimitive<SphereCollider>(sphereRadius);
+
+		rb.m_InverseMass = 1.0f;
+
+		Shader* s
+		{
+			m_AssetsRef->LoadShader(SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag").get(),
+		};
+
+		Material* mat{ m_AssetsRef->CreateMaterial("default", s, nullptr).get() };
+
+		sphere1.AddComponent<MaterialComponent>(mat);
+
+		// --- FLOOR ---
+		auto sphere2{ CreateEntity() };
+		sphere2.AddComponent<MeshComponent>(m_AssetsRef->LoadMesh(MODELS_DIR "sphere.obj").get());
+
+		Material* floorMat{ m_AssetsRef->CreateMaterial("floor", s, nullptr).get() };
+		floorMat->albedo = glm::vec4(0.5, 0.0, 0.5, 1.0);
+		sphere2.AddComponent<MaterialComponent>(floorMat);
+
+		sphere2.GetComponent<TransformComponent>().m_Position = glm::vec3(0);
+
+		float sphere2Radius{ 2.0f };
+		sphere2.GetComponent<TransformComponent>().m_Scale = glm::vec3(sphere2Radius, sphere2Radius, sphere2Radius);
+		sphere2.GetComponent<TransformComponent>().m_Position = glm::vec3(0, 0, 0);
+
+		sphere2.AddComponent<ColliderComponent>().AddPrimitive<SphereCollider>(sphere2Radius);
+
+
+		// --- PLAYER ---
+		auto player{ CreateEntity() };
+		player.AddComponent<CameraComponent>();
+		player.AddComponent<ScriptComponent>().Bind<PlayerMoveScript>();
+		SetMainCamera(player);
+	}
+};
+
 class BoxPlaneCollideScene : public Scene
 {
 	void SetUp() override

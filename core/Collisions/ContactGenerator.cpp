@@ -15,9 +15,32 @@
 namespace PhysicsEngine
 {
 
-	void SphereVsSphere(const SphereCollider& first, const SphereCollider& second, CollisionData* data) 
+	unsigned int SphereVsSphere(
+		const SphereCollider& first,
+		const SphereCollider& second,
+		TransformComponent& firstTransform,
+		TransformComponent& secondTransform,
+		CollisionData* data)
 	{
-		//TODO
+		if (data->contactsLeft <= 0) return 0;
+
+		glm::vec3 centerA = firstTransform.m_Position;
+		glm::vec3 centerB = secondTransform.m_Position;
+
+		glm::vec3 delta = centerA - centerB;
+		float     distance = glm::length(delta);
+		float     radiiSum = first.m_Radius + second.m_Radius;
+
+		if (distance >= radiiSum) return 0;  // no collision
+
+		Contact* contact = data->contacts;
+		contact->normal = glm::normalize(delta);
+		contact->point = centerB + contact->normal * second.m_Radius;
+		contact->penetration = radiiSum - distance;
+
+		data->contactsLeft--;
+		data->contacts++;
+		return 1;
 	}
 
 	unsigned int SphereVsBox(
@@ -269,6 +292,8 @@ namespace PhysicsEngine
 				SphereVsSphere(
 					static_cast<const SphereCollider&>(first),
 					static_cast<const SphereCollider&>(second),
+					firstTransform,
+					secondTransform,
 					data
 				);
 				break;
