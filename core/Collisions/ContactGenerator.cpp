@@ -95,9 +95,98 @@ namespace PhysicsEngine
 		return 1; // 1 contact point
 	}
 
-	void BoxVsBox(const BoxCollider& first, const BoxCollider& second, CollisionData* data)
+	float ProjectOBB(const glm::vec3& axis, const glm::vec3& center,
+		const glm::vec3 axes[3], const glm::vec3& halfExtents) {
+		// Project half extents onto axis
+		return halfExtents.x * glm::abs(glm::dot(axis, axes[0])) +
+			halfExtents.y * glm::abs(glm::dot(axis, axes[1])) +
+			halfExtents.z * glm::abs(glm::dot(axis, axes[2]));
+	}
+
+	float PenetrationOnAxis(
+		const glm::vec3& axis,
+		const glm::vec3& centerA, const glm::vec3 axesA[3], const glm::vec3& halfExtentsA,
+		const glm::vec3& centerB, const glm::vec3 axesB[3], const glm::vec3& halfExtentsB)
 	{
-		// TODO
+		float projA = ProjectOBB(axis, centerA, axesA, halfExtentsA);
+		float projB = ProjectOBB(axis, centerB, axesB, halfExtentsB);
+
+		float distance = glm::abs(glm::dot(centerB - centerA, axis));
+
+		return projA + projB - distance;  // positive = overlap, negative = gap
+	}
+
+	unsigned int BoxVsBox(
+		const BoxCollider& boxA, const BoxCollider& boxB,
+		TransformComponent& transformA, TransformComponent& transformB,
+		CollisionData* data)
+	{
+		if (data->contactsLeft <= 0) return 0;
+
+		// Get world space axes for each box
+		glm::vec3 axesA[3] = {
+			glm::normalize(transformA.m_Rotation * glm::vec3(1, 0, 0)),
+			glm::normalize(transformA.m_Rotation * glm::vec3(0, 1, 0)),
+			glm::normalize(transformA.m_Rotation * glm::vec3(0, 0, 1))
+		};
+		glm::vec3 axesB[3] = {
+			glm::normalize(transformB.m_Rotation * glm::vec3(1, 0, 0)),
+			glm::normalize(transformB.m_Rotation * glm::vec3(0, 1, 0)),
+			glm::normalize(transformB.m_Rotation * glm::vec3(0, 0, 1))
+		};
+
+		glm::vec3 centerA = transformA.m_Position;
+		glm::vec3 centerB = transformB.m_Position;
+		glm::vec3 halfA = boxA.m_HalfExtents * transformA.m_Scale;
+		glm::vec3 halfB = boxB.m_HalfExtents * transformB.m_Scale;
+
+		// Track best axis (smallest penetration)
+		float     bestPenetration = FLT_MAX;
+		glm::vec3 bestAxis;
+
+		// Test all 15 axes
+		glm::vec3 axes[15] = {
+			axesA[0], axesA[1], axesA[2],  // face normals of A
+			axesB[0], axesB[1], axesB[2],  // face normals of B
+			// edge cross products
+			glm::cross(axesA[0], axesB[0]),
+			glm::cross(axesA[0], axesB[1]),
+			glm::cross(axesA[0], axesB[2]),
+			glm::cross(axesA[1], axesB[0]),
+			glm::cross(axesA[1], axesB[1]),
+			glm::cross(axesA[1], axesB[2]),
+			glm::cross(axesA[2], axesB[0]),
+			glm::cross(axesA[2], axesB[1]),
+			glm::cross(axesA[2], axesB[2])
+		};
+
+		for (auto& axis : axes) {
+			// Skip near-zero axes (degenerate cross products)
+			if (glm::length(axis) < 0.001f) continue;
+			axis = glm::normalize(axis);
+
+			float penetration = PenetrationOnAxis(
+				axis, centerA, axesA, halfA, centerB, axesB, halfB);
+
+			if (penetration < 0) return 0;  // gap found — no collision
+
+			if (penetration < bestPenetration) {
+				bestPenetration = penetration;
+				bestAxis = axis;
+			}
+		}
+
+		// Make sure normal points from B to A
+		if (glm::dot(bestAxis, centerA - centerB) < 0)
+			bestAxis = -bestAxis;
+
+		Contact* contact = data->contacts;
+		contact->normal = bestAxis;
+		contact->penetration = bestPenetration;
+		contact->point = centerA - bestAxis * bestPenetration;  // approximate
+		data->contactsLeft--;
+		data->contacts++;
+		return 1;
 	}
 
 	int BoxVsPlane(
@@ -222,6 +311,8 @@ namespace PhysicsEngine
 				BoxVsBox(
 					static_cast<const BoxCollider&>(first),
 					static_cast<const BoxCollider&>(second),
+					firstTransform,
+					secondTransform,
 					data
 				);
 				break;
