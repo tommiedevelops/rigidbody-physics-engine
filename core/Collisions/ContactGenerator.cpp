@@ -5,6 +5,13 @@
 #include <stdexcept>
 #include <iostream> // del
 
+#include "debug.h"
+
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+
+
 namespace PhysicsEngine
 {
 
@@ -13,9 +20,46 @@ namespace PhysicsEngine
 		//TODO
 	}
 
-	void SphereVsBox(const SphereCollider& first, const BoxCollider& second, CollisionData* data) 
+	unsigned int SphereVsBox(
+		const SphereCollider& sphere,
+		const BoxCollider& box,
+		TransformComponent& sphereTransform,
+		TransformComponent& boxTransform,
+		CollisionData* data
+	) 
 	{
-		//TODO
+		if (data->contactsLeft <= 0) return 0;
+		// IGNORING LOCAL POSITION - ASSUMING SPHERE AT OBJECT ORIGIN'
+		//world space
+		const glm::vec3 sphereOriginWS = sphereTransform.m_Position;
+
+		// box space
+		const glm::vec3 sphereOriginBS{ boxTransform.InverseTransform(sphereOriginWS)};
+
+		const glm::vec3 min{ -box.m_HalfExtents.x, -box.m_HalfExtents.y, -box.m_HalfExtents.z };
+		const glm::vec3 max{box.m_HalfExtents.x, box.m_HalfExtents.y, box.m_HalfExtents.z };
+
+		const glm::vec3 closestPointOnBox = glm::clamp(sphereOriginBS, min, max);
+		auto closestPointOnBoxWS = boxTransform.Transform(closestPointOnBox);
+
+		auto difference{sphereOriginWS - closestPointOnBoxWS};
+		auto differenceLength = glm::length(difference);
+
+		if (static_cast<float>(differenceLength) > sphere.m_Radius) 
+			return 0; // no collision
+
+		Contact* contact = data->contacts;
+
+		contact->normal = glm::normalize(difference);
+		contact->point = closestPointOnBoxWS;
+		contact->penetration = sphere.m_Radius - differenceLength;
+
+		data->contactsLeft--;
+		data->contacts++;  // advance pointer to next slot
+
+		return 1; // 1 contact point
+
+
 	}
 
 	unsigned int SphereVsPlane(const SphereCollider& sphere, const PlaneCollider& plane, TransformComponent& sphereTransform,
@@ -143,6 +187,8 @@ namespace PhysicsEngine
 				SphereVsBox(
 					static_cast<const SphereCollider&>(first),
 					static_cast<const BoxCollider&>(second),
+					firstTransform,
+					secondTransform,
 					data
 				);
 				break;
@@ -167,6 +213,8 @@ namespace PhysicsEngine
 				SphereVsBox(
 					static_cast<const SphereCollider&>(second),
 					static_cast<const BoxCollider&>(first),
+					secondTransform,
+					firstTransform,
 					data
 				);
 				break;

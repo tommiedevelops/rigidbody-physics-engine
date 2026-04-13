@@ -302,6 +302,89 @@ class BoxPlaneCollideScene : public Scene
 };
 
 
+class PrintDataScript : public ScriptableEntity
+{
+	// Inherited via ScriptableEntity
+	void OnCreate() override
+	{
+	}
+	void OnStart() override
+	{
+	}
+	void OnUpdate(float dt) override
+	{
+		std::cout << "Printing Sphere Data\n";
+		std::cout << GetComponent<TransformComponent>().m_Position << std::endl;
+	}
+	void OnDestroy() override
+	{
+	}
+};
+
+class SphereBoxCollideScene : public Scene
+{
+	void SetUp() override
+	{
+		light.position = glm::vec3(0.0f, 100.0f, 10.0f); // fix lights?
+		light.color = glm::vec3(1.0f, 1.0f, 1.0f);
+
+		// --- PHYSICS TEST ---
+		auto physicsTestEntity{ CreateEntity() };
+		Mesh* sphereMesh{ m_AssetsRef->LoadMesh(MODELS_DIR "sphere.obj").get() };
+		auto sphereLocalSize = sphereMesh->GetBounds().size();
+		auto sphereWorldSize = sphereLocalSize * physicsTestEntity.GetComponent<TransformComponent>().m_Scale;
+
+		physicsTestEntity.AddComponent<MeshComponent>(sphereMesh);
+		physicsTestEntity.AddComponent<NameComponent>("target");
+		physicsTestEntity.GetComponent<TransformComponent>().m_Position = glm::vec3(0.0, 15.0f, 0.0f);
+		auto& rb = physicsTestEntity.AddComponent<RigidbodyComponent>();
+		physicsTestEntity.AddComponent<ForceGeneratorComponent>().Bind<GravityForceGenerator>(glm::vec3(0,-1,0));
+
+		physicsTestEntity.AddComponent<ScriptComponent>().Bind<PrintDataScript>();
+
+		float sphereRadius = sphereWorldSize.x / 2.0f;
+		physicsTestEntity.AddComponent<ColliderComponent>().AddPrimitive<SphereCollider>(sphereRadius);
+
+		rb.m_InverseMass = 1.0f;
+	
+		Shader* s
+		{
+			m_AssetsRef->LoadShader( SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag" ).get(),
+		};
+
+		Material* mat{ m_AssetsRef->CreateMaterial("default", s, nullptr).get() };
+
+		physicsTestEntity.AddComponent<MaterialComponent>(mat);
+
+		// --- BOX ---
+		auto boxEntity{ CreateEntity() };
+
+		float cubeLength{ 5.0f };
+		auto& boxEntityTransform = boxEntity.GetComponent<TransformComponent>();
+		boxEntityTransform.m_Scale = glm::vec3(cubeLength, cubeLength, cubeLength);
+		boxEntityTransform.m_Position = glm::vec3(0, 0, 0);
+
+		Mesh* boxMesh{ m_AssetsRef->LoadMesh(MODELS_DIR "cube.obj").get() };
+		auto boxLocalSize{ boxMesh->GetBounds().size() };
+
+		boxEntity.AddComponent<MeshComponent>(boxMesh);
+
+		Material* boxMat{ m_AssetsRef->CreateMaterial("floor", s, nullptr).get()};
+		boxMat->albedo = glm::vec4(0.5, 0.0, 0.5, 1.0);
+		boxEntity.AddComponent<MaterialComponent>(boxMat);
+		
+		glm::vec3 boxHalfExtents{ boxLocalSize / 2.0f };
+		boxEntity.AddComponent<ColliderComponent>().AddPrimitive<BoxCollider>(boxHalfExtents);
+
+		// --- PLAYER ---
+		auto player{ CreateEntity() };
+		player.AddComponent<CameraComponent>();
+		player.AddComponent<ScriptComponent>().Bind<PlayerMoveScript>();
+		SetMainCamera(player);
+	}
+};
+
+
 int main()
 {
 	using namespace PhysicsEngine;
@@ -314,8 +397,9 @@ int main()
 
 	sceneLayer->RegisterScene("SpherePlane", []() { return std::make_unique<SpherePlaneCollideScene>(); });
 	sceneLayer->RegisterScene("BoxPlane", []() { return std::make_unique<BoxPlaneCollideScene>(); });
+	sceneLayer->RegisterScene("BoxSphere", []() { return std::make_unique<SphereBoxCollideScene>(); });
 
-	sceneLayer->SetActiveScene("BoxPlane");
+	sceneLayer->SetActiveScene("BoxSphere");
 
 	app.PushLayer(sceneLayer);
 

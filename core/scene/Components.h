@@ -48,6 +48,14 @@ namespace PhysicsEngine
 			return glm::vec3(GetModelMatrix() * glm::vec4(position, 1.0));
 		}
 
+		glm::vec3 InverseTransform(const glm::vec3& position)
+		{
+			glm::vec3 localPos = position - m_Position;           // undo translation
+			localPos = glm::inverse(glm::toMat3(m_Rotation)) * localPos;  // undo rotation
+			localPos /= m_Scale;                                   // undo scale
+			return localPos;
+		}
+
 		glm::mat4 GetModelMatrix() const
 		{
 			glm::mat4 T = glm::translate(glm::mat4(1.0f), m_Position);

@@ -4,6 +4,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+#define DEBUG
+
 namespace PhysicsEngine
 {
 	inline std::ostream& operator<<(std::ostream& os, const glm::vec3& v) {
