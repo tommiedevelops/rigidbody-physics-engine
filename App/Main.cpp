@@ -192,6 +192,34 @@ class TestScene : public PhysicsEngine::Scene
 	}
 };
 
+class Test2Scene : public PhysicsEngine::Scene
+{
+	void SetUp() override
+	{
+		light.position = glm::vec3(1.0f, 3.0f, 0.0f); // fix lights?
+		light.color = glm::vec3(1.0f);
+
+		auto e{ CreateEntity() };
+		Mesh* m{ m_AssetsRef->LoadMesh(MODELS_DIR "cube.obj").get() };
+		e.AddComponent<MeshComponent>(m);
+
+		Shader* s
+		{
+			m_AssetsRef->LoadShader( SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag" ).get(),
+		};
+
+		Material* mat{ m_AssetsRef->CreateMaterial("default", s, nullptr).get() };
+		mat->albedo = glm::vec4(0, 1, 0, 1);
+
+		e.AddComponent<MaterialComponent>(mat);
+
+		auto player{ CreateEntity() };
+		player.AddComponent<CameraComponent>();
+		player.AddComponent<ScriptComponent>().Bind<PlayerMoveScript>();
+		SetMainCamera(player);
+	}
+};
+
 int main()
 {
 	using namespace PhysicsEngine;
@@ -203,8 +231,9 @@ int main()
 	sceneLayer->SetAssetsRef(app.GetAssetsRef());
 
 	sceneLayer->RegisterScene("Test", []() { return std::make_unique<TestScene>(); });
+	sceneLayer->RegisterScene("Test2", []() { return std::make_unique<Test2Scene>(); });
 
-	sceneLayer->SetActiveScene("Test");
+	sceneLayer->SetActiveScene("Test2");
 
 	app.PushLayer(sceneLayer);
 

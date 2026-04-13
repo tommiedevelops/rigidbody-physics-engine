@@ -8,10 +8,10 @@ namespace PhysicsEngine
 {
 	struct Material
 	{
-		glm::vec4 albedo{};
-		float ambientStrength{};
-		float diffuse{};
-		float specular{};
+		glm::vec4 albedo{1.0f};
+		float ambientStrength{0.1f};
+		float diffuse{0.8f};
+		float specular{0.5f};
 
 		Texture* m_Texture{};
 		Shader*  m_Shader{};
