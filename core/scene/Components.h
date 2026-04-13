@@ -15,6 +15,14 @@
 namespace PhysicsEngine
 {
 
+	struct NameComponent
+	{
+		std::string m_Name;
+
+		NameComponent(std::string name) : m_Name{ name } {};
+		NameComponent(const char* name) : m_Name{ static_cast<std::string>(name) } {};
+	};
+
 	struct CameraComponent
 	{
 		float m_FOVy{ glm::radians(45.0f) };

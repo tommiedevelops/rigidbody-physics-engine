@@ -32,11 +32,10 @@ namespace PhysicsEngine
 		Entity 
 		CreateEntity();
 
-		entt::registry& 
-		GetRegistry() { return m_Registry; }
+		entt::registry*
+		GetRegistry() { return &m_Registry; }
 
-		const entt::registry& 
-		GetRegistry() const { return m_Registry; }
+		Entity GetEntity(const std::string& name);
 
 		virtual void SetUp() {};
 		void OnRender();

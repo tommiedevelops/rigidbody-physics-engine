@@ -7,13 +7,11 @@ namespace PhysicsEngine
 	class Entity
 	{
 	private:
-		const entt::entity m_id;
-		entt::registry& m_registry;
+		entt::entity m_id;
+		entt::registry* m_registry;
 
-		// only Scene can create an Entity
-		Entity(entt::entity id, entt::registry& r); 
+		Entity(entt::entity id, entt::registry* r); 
 		friend class Scene;
-
 	public:
 
 		Entity(const Entity&) = default; // you can copy an entity
@@ -24,19 +22,24 @@ namespace PhysicsEngine
 		template <typename T>
 		T& GetComponent()
 		{
-			return m_registry.get<T>(m_id);
+			if (!m_registry) throw std::logic_error("Registry was null");
+			return m_registry->get<T>(m_id);
 		}
 
 		template <typename T, typename... Args>
 		T& AddComponent(Args&&... args)
 		{
-			return m_registry.emplace<T>(m_id, std::forward<Args>(args)...);
+			if (!m_registry) throw std::logic_error("Registry was null");
+			return m_registry->emplace<T>(m_id, std::forward<Args>(args)...);
 		};
+
+		bool IsNull() { return m_id == entt::null || !m_registry; }
 
 		template <typename T>
 		bool HasComponent()
 		{
-			return m_registry.all_of<T>(m_id);
+			if (!m_registry) throw std::logic_error("Registry was null");
+			return m_registry->all_of<T>(m_id);
 		};
 
 	};

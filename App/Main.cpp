@@ -13,6 +13,12 @@
 
 using namespace PhysicsEngine;
 
+//temp
+std::ostream& operator<<(std::ostream& os, const glm::vec3& v) {
+	return os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+}
+
+// outputs: (1, 2, 3)
 class Cube2Script : public PhysicsEngine::ScriptableEntity 
 {
 	void OnCreate() override
@@ -39,7 +45,7 @@ class Cube2Script : public PhysicsEngine::ScriptableEntity
 	}
 };
 
-class PlayerMoveScript : public PhysicsEngine::ScriptableEntity
+class PlayerMoveScript : public ScriptableEntity
 {
 
 	glm::vec2 moveDir{ 0.0f };
@@ -66,14 +72,17 @@ class PlayerMoveScript : public PhysicsEngine::ScriptableEntity
 	}
 	void OnStart() override
 	{
-		using namespace PhysicsEngine;
-
 		m_LastMousePos = Input::GetMousePosition();
 
 		auto& transform{ GetComponent<TransformComponent>() };
 		transform.m_Position = glm::vec3(0.0f, 10.0f, -20.0f);
 
 		Input::SetCursorEnabled(false);
+
+		Entity targetEntity = m_Scene->GetEntity("target");
+
+		if(!targetEntity.IsNull())
+			std::cout << targetEntity.GetComponent<TransformComponent>().m_Position;
 	}
 	void OnUpdate(float dt) override
 	{
@@ -165,15 +174,15 @@ class CubeScript : public PhysicsEngine::ScriptableEntity
 	}
 };
 
-class TestScene : public PhysicsEngine::Scene
+class TestScene : public Scene
 {
 	void SetUp() override
 	{
-		light.position = glm::vec3(1.0f, 3.0f, 0.0f); // fix lights?
+		light.position = glm::vec3(1.0f, 3.0f, -5.0f); // fix lights?
 		light.color = glm::vec3(0.5f, 0.3f, 0.9f);
 
 		auto e{ CreateEntity() };
-		Mesh* m{ m_AssetsRef->LoadMesh(MODELS_DIR "cube.obj").get() };
+		Mesh* m{ m_AssetsRef->LoadMesh(MODELS_DIR "sphere.obj").get() };
 		e.AddComponent<MeshComponent>(m);
 
 		Shader* s
@@ -185,33 +194,10 @@ class TestScene : public PhysicsEngine::Scene
 
 		e.AddComponent<MaterialComponent>(mat);
 
-		auto player{ CreateEntity() };
-		player.AddComponent<CameraComponent>();
-		player.AddComponent<ScriptComponent>().Bind<PlayerMoveScript>();
-		SetMainCamera(player);
-	}
-};
-
-class Test2Scene : public PhysicsEngine::Scene
-{
-	void SetUp() override
-	{
-		light.position = glm::vec3(1.0f, 3.0f, 0.0f); // fix lights?
-		light.color = glm::vec3(1.0f);
-
-		auto e{ CreateEntity() };
-		Mesh* m{ m_AssetsRef->LoadMesh(MODELS_DIR "cube.obj").get() };
-		e.AddComponent<MeshComponent>(m);
-
-		Shader* s
-		{
-			m_AssetsRef->LoadShader( SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag" ).get(),
-		};
-
-		Material* mat{ m_AssetsRef->CreateMaterial("default", s, nullptr).get() };
-		mat->albedo = glm::vec4(0, 1, 0, 1);
-
-		e.AddComponent<MaterialComponent>(mat);
+		auto target{ CreateEntity()};
+		target.AddComponent<NameComponent>("target");
+		auto& tr = target.GetComponent<TransformComponent>();
+		tr.m_Position = glm::vec3(6, 7, 9);
 
 		auto player{ CreateEntity() };
 		player.AddComponent<CameraComponent>();
@@ -231,9 +217,8 @@ int main()
 	sceneLayer->SetAssetsRef(app.GetAssetsRef());
 
 	sceneLayer->RegisterScene("Test", []() { return std::make_unique<TestScene>(); });
-	sceneLayer->RegisterScene("Test2", []() { return std::make_unique<Test2Scene>(); });
 
-	sceneLayer->SetActiveScene("Test2");
+	sceneLayer->SetActiveScene("Test");
 
 	app.PushLayer(sceneLayer);
 

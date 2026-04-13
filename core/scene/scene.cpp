@@ -35,7 +35,7 @@ namespace PhysicsEngine
 
 	Entity Scene::CreateEntity()
 	{
-		auto e{ Entity(m_Registry.create(), m_Registry) };
+		auto e{ Entity(m_Registry.create(), &m_Registry) };
 		e.AddComponent<TransformComponent>();
 		return e;
 	}
@@ -57,8 +57,8 @@ namespace PhysicsEngine
 		glEnable(GL_DEPTH_TEST);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		const entt::registry& creg{ GetRegistry() };
-		auto view = creg.view<TransformComponent, MeshComponent, MaterialComponent>();
+		const entt::registry* creg{ GetRegistry() };
+		auto view = creg->view<TransformComponent, MeshComponent, MaterialComponent>();
 
 		view.each([this](
 			const auto entity,
@@ -192,8 +192,8 @@ namespace PhysicsEngine
 
 	void Scene::OnEvent(Event& e)
 	{
-		auto& creg{ GetRegistry() };
-		auto view{ creg.view<ScriptComponent>() };
+		auto creg{ GetRegistry() };
+		auto view{ creg->view<ScriptComponent>() };
 		
 		view.each
 		(
@@ -213,8 +213,8 @@ namespace PhysicsEngine
 	void Scene::DestroyScripts()
 	{
 
-		auto& creg{ GetRegistry() };
-		auto view{ creg.view<ScriptComponent>() };
+		auto creg{ GetRegistry() };
+		auto view{ creg->view<ScriptComponent>() };
 		
 		view.each
 		(
@@ -244,6 +244,22 @@ namespace PhysicsEngine
 		view.each([aspect](CameraComponent& cam) {
 			cam.m_Aspect = aspect;
 			});
+	}
+
+	Entity Scene::GetEntity(const std::string& name) 
+	{
+		auto view = m_Registry.view<NameComponent>();
+		Entity result = Entity(entt::null, nullptr);
+
+		view.each(
+			[&](auto entity, NameComponent& nc) 
+			{
+				if (nc.m_Name == name)
+					result = Entity(entity, &m_Registry);
+			}
+		);
+
+		return result;
 	}
 
 	void Scene::SetAssetsRef(AssetManager* assetsRef)
