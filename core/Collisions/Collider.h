@@ -42,8 +42,10 @@ namespace PhysicsEngine
 	class BoxCollider : public PrimitiveCollider
 	{
 	public:
-		glm::vec3 halfExtents; // half width/height/depth
+		glm::vec3 m_HalfExtents; // half width/height/depth
 		PRIMITIVE_TYPE(BOX)
+
+		BoxCollider(glm::vec3 halfExtents) : m_HalfExtents{ halfExtents } {}
 	};
 
 	class CapsuleCollider : public PrimitiveCollider

@@ -183,7 +183,7 @@ class CubeScript : public PhysicsEngine::ScriptableEntity
 	}
 };
 
-class TestScene : public Scene
+class SpherePlaneCollideScene : public Scene
 {
 	void SetUp() override
 	{
@@ -200,10 +200,71 @@ class TestScene : public Scene
 		physicsTestEntity.AddComponent<NameComponent>("target");
 		physicsTestEntity.GetComponent<TransformComponent>().m_Position = glm::vec3(0.0, 10.0f, 0.0f);
 		auto& rb = physicsTestEntity.AddComponent<RigidbodyComponent>();
-		physicsTestEntity.AddComponent<ForceGeneratorComponent>().Bind<GravityForceGenerator>();
+		physicsTestEntity.AddComponent<ForceGeneratorComponent>().Bind<GravityForceGenerator>(glm::vec3(-1,0,0));
 
 		float sphereRadius = worldSize.x / 2.0f;
 		physicsTestEntity.AddComponent<ColliderComponent>().AddPrimitive<SphereCollider>(sphereRadius);
+
+		rb.m_InverseMass = 1.0f;
+	
+		Shader* s
+		{
+			m_AssetsRef->LoadShader( SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag" ).get(),
+		};
+
+		Material* mat{ m_AssetsRef->CreateMaterial("default", s, nullptr).get() };
+
+		physicsTestEntity.AddComponent<MaterialComponent>(mat);
+
+		// --- FLOOR ---
+		auto floorEntity{ CreateEntity() };
+		floorEntity.AddComponent<MeshComponent>(m_AssetsRef->LoadMesh(MODELS_DIR "quad.obj").get());
+
+		Material* floorMat{ m_AssetsRef->CreateMaterial("floor", s, nullptr).get()};
+		floorMat->albedo = glm::vec4(0.5, 0.0, 0.5, 1.0);
+		floorEntity.AddComponent<MaterialComponent>(floorMat);
+
+		floorEntity.GetComponent<TransformComponent>().m_Position = glm::vec3(0);
+
+		float floorLength{ 50.0f };
+		floorEntity.GetComponent<TransformComponent>().m_Scale = glm::vec3(floorLength, 0.0f, floorLength);
+		floorEntity.GetComponent<TransformComponent>().m_Rotation = glm::angleAxis(-3.14f / 2, glm::vec3(0, 0, 1));
+		floorEntity.GetComponent<TransformComponent>().m_Position = glm::vec3(-10, 0, 0);
+
+		floorEntity.AddComponent<ColliderComponent>().AddPrimitive<PlaneCollider>(glm::vec3(0.0f,1.0f,0.0f), 0.0f);
+
+
+		// --- PLAYER ---
+		auto player{ CreateEntity() };
+		player.AddComponent<CameraComponent>();
+		player.AddComponent<ScriptComponent>().Bind<PlayerMoveScript>();
+		SetMainCamera(player);
+	}
+};
+
+class BoxPlaneCollideScene : public Scene
+{
+	void SetUp() override
+	{
+		light.position = glm::vec3(0.0f, 100.0f, 10.0f); // fix lights?
+		light.color = glm::vec3(1.0f, 1.0f, 1.0f);
+
+		// --- PHYSICS TEST ---
+		auto physicsTestEntity{ CreateEntity() };
+		Mesh* m{ m_AssetsRef->LoadMesh(MODELS_DIR "cube.obj").get() };
+		auto localSize = m->GetBounds().size();
+		auto worldSize = localSize * physicsTestEntity.GetComponent<TransformComponent>().m_Scale;
+
+		physicsTestEntity.AddComponent<MeshComponent>(m);
+		physicsTestEntity.AddComponent<NameComponent>("target");
+		physicsTestEntity.GetComponent<TransformComponent>().m_Position = glm::vec3(0.0, 10.0f, 0.0f);
+		physicsTestEntity.GetComponent<TransformComponent>().m_Rotation = glm::angleAxis(3.14f / 4, glm::vec3(1, 0, 0));
+		auto& rb = physicsTestEntity.AddComponent<RigidbodyComponent>();
+		physicsTestEntity.AddComponent<ForceGeneratorComponent>().Bind<GravityForceGenerator>(glm::vec3(0,-1,0));
+
+		glm::vec3 halfExtents{ 0.5f * worldSize.x, 0.5f * worldSize.y, 0.5f * worldSize.z };
+
+		physicsTestEntity.AddComponent<ColliderComponent>().AddPrimitive<BoxCollider>(halfExtents);
 
 		rb.m_InverseMass = 1.0f;
 	
@@ -240,6 +301,7 @@ class TestScene : public Scene
 	}
 };
 
+
 int main()
 {
 	using namespace PhysicsEngine;
@@ -250,9 +312,10 @@ int main()
 	auto sceneLayer = std::make_shared<SceneLayer>();
 	sceneLayer->SetAssetsRef(app.GetAssetsRef());
 
-	sceneLayer->RegisterScene("Test", []() { return std::make_unique<TestScene>(); });
+	sceneLayer->RegisterScene("SpherePlane", []() { return std::make_unique<SpherePlaneCollideScene>(); });
+	sceneLayer->RegisterScene("BoxPlane", []() { return std::make_unique<BoxPlaneCollideScene>(); });
 
-	sceneLayer->SetActiveScene("Test");
+	sceneLayer->SetActiveScene("BoxPlane");
 
 	app.PushLayer(sceneLayer);
 

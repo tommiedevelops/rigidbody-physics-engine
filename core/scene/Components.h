@@ -77,14 +77,14 @@ namespace PhysicsEngine
 		std::function<ForceGenerator* (void)>  InstantiateForce { nullptr };
 		std::function<void (ForceGeneratorComponent*)>   DestroyForce     { nullptr };
 
-		template <typename T>
-		void Bind()
+		template <typename T, typename... Args>
+		void Bind(Args&&... args)
 		{
 			static_assert(std::is_base_of_v<ForceGenerator, T>, "T must derive from IForceGenerator");
 
-			InstantiateForce = []() -> ForceGenerator*
+			InstantiateForce = [... args = std::forward<Args>(args)]() -> ForceGenerator*
 			{
-				return new T();
+				return new T(args...);
 			};
 
 			DestroyForce = [](ForceGeneratorComponent* fg) -> void

@@ -25,17 +25,11 @@ namespace PhysicsEngine
 
 		if (data->contactsLeft <= 0) return 0; //contact budget spent, exit out
 
-		// World space origin on the sphere takes into account
-		// the entity's transform but also the collider's offset
-		// from the object's origin (omitted for now)
-		// ASSUMING SPHERE IS AT ORIGIN (OFFSET = IDENTITY) FOR NOW
-
 		const glm::vec3 sphereOrigin = sphereTransform.Transform(sphere.localPosition);
 
 		const glm::mat3 rotationOnly = glm::mat3(glm::toMat4(planeTransform.m_Rotation));
 		glm::vec3 planeNormal = glm::normalize(rotationOnly*plane.m_Normal);
 
-        //                                        translation component of model matrix
 		float worldOffset = glm::dot(planeNormal, glm::vec3(planeTransform.GetModelMatrix()[3])) + plane.m_PlaneOffset;
 
 		float radius = sphere.m_Radius;
@@ -44,6 +38,7 @@ namespace PhysicsEngine
 
 		if (signedDistance - radius >= 0) return 0; // there is no collision
 
+		// Add contacts
 		Contact* contact = data->contacts;
 
 		contact->normal = planeNormal;
@@ -61,38 +56,59 @@ namespace PhysicsEngine
 		// TODO
 	}
 
-	void BoxVsPlane(const BoxCollider& first, const PlaneCollider& second, CollisionData* data)
+	int BoxVsPlane(
+		const BoxCollider& box,
+		const PlaneCollider& plane,
+		TransformComponent& boxTransform,
+		TransformComponent& planeTransform,
+		CollisionData* data
+	)
 	{
-		glm::vec3 halfExtents{ first.halfExtents };
+		// COLLISION DETECTION PERFORMED IN WORLD SPACE
+		// ASSUMING NO LOCAL OFFSET TRANSFORM (ITS AT THE ORIGIN)
+
+		glm::vec3 halfExtents{ box.m_HalfExtents };
 
 		glm::vec3 vertices[8]
 		{
-			glm::vec3(-halfExtents.x, -halfExtents.y, -halfExtents.z),
-			glm::vec3(-halfExtents.x, -halfExtents.y, +halfExtents.z),
-			glm::vec3(-halfExtents.x, +halfExtents.y, -halfExtents.z),
-			glm::vec3(-halfExtents.x, +halfExtents.y, +halfExtents.z),
-			glm::vec3(+halfExtents.x, -halfExtents.y, -halfExtents.z),
-			glm::vec3(+halfExtents.x, -halfExtents.y, +halfExtents.z),
-			glm::vec3(+halfExtents.x, +halfExtents.y, -halfExtents.z),
-			glm::vec3(+halfExtents.x, +halfExtents.y, +halfExtents.z),
+			boxTransform.Transform(glm::vec3(-halfExtents.x, -halfExtents.y, -halfExtents.z)),
+			boxTransform.Transform(glm::vec3(-halfExtents.x, -halfExtents.y, +halfExtents.z)),
+			boxTransform.Transform(glm::vec3(-halfExtents.x, +halfExtents.y, -halfExtents.z)),
+			boxTransform.Transform(glm::vec3(-halfExtents.x, +halfExtents.y, +halfExtents.z)),
+			boxTransform.Transform(glm::vec3(+halfExtents.x, -halfExtents.y, -halfExtents.z)),
+			boxTransform.Transform(glm::vec3(+halfExtents.x, -halfExtents.y, +halfExtents.z)),
+			boxTransform.Transform(glm::vec3(+halfExtents.x, +halfExtents.y, -halfExtents.z)),
+			boxTransform.Transform(glm::vec3(+halfExtents.x, +halfExtents.y, +halfExtents.z))
 		};
 
-		for (unsigned int i{ 0 }; i < 8; ++i)
-		{
-			// transform vertices by local offset transform
-			vertices[i] = glm::vec3(first.GetOffset() * glm::vec4(vertices[i], 1.0f));
-		}
+		const glm::mat3 rotationOnly = glm::mat3(glm::toMat4(planeTransform.m_Rotation));
+		glm::vec3 planeNormal = glm::normalize(rotationOnly*plane.m_Normal);
+
+		float worldOffset = glm::dot(planeNormal, glm::vec3(planeTransform.GetModelMatrix()[3])) + plane.m_PlaneOffset;
+
+		int numContacts = 0;
 
 		for (auto vertex : vertices)
 		{
-			float distanceToPlane{ glm::dot(vertex, second.m_Normal) };
+			float distanceToPlane{ glm::dot(vertex, planeNormal) };
 			
-			if (distanceToPlane <= second.m_PlaneOffset)
+			if (distanceToPlane <= worldOffset)
 			{
 				// There's a contact
+				Contact* contact = data->contacts;
+				contact->normal = planeNormal;
 
+				contact->point = vertex;
+				contact->penetration = distanceToPlane;
+
+				data->contactsLeft--;
+				data->contacts++;  // advance pointer to next slot
+
+				numContacts++;
 			}
 		}
+
+		return numContacts;
 	}
 
 	void PlaneVsPlane(const PlaneCollider& first, const PlaneCollider& second, CollisionData* data)
@@ -165,6 +181,8 @@ namespace PhysicsEngine
 				BoxVsPlane(
 					static_cast<const BoxCollider&>(first),
 					static_cast<const PlaneCollider&>(second),
+					firstTransform,
+					secondTransform,
 					data
 				);
 				break;
@@ -189,6 +207,8 @@ namespace PhysicsEngine
 				BoxVsPlane(
 					static_cast<const BoxCollider&>(second),
 					static_cast<const PlaneCollider&>(first),
+					secondTransform,
+					firstTransform,
 					data
 				);
 				break;
