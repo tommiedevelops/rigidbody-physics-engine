@@ -42,7 +42,7 @@ namespace PhysicsEngine
 
 		float signedDistance = glm::dot(sphereOrigin, planeNormal) - worldOffset;
 
-		if (signedDistance >= 0) return 0; // there is no collision
+		if (signedDistance - radius >= 0) return 0; // there is no collision
 
 		Contact* contact = data->contacts;
 

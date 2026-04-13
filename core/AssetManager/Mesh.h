@@ -13,6 +13,14 @@ namespace PhysicsEngine
 		glm::vec3 normal{ 0 };
 	};
 
+	struct Bounds 
+	{
+		glm::vec3 min;
+		glm::vec3 max;
+		glm::vec3 size() const { return max - min; }
+		glm::vec3 center() const { return (min + max) * 0.5f; }
+	};
+
 	class Mesh
 	{
 	public:
@@ -21,16 +29,10 @@ namespace PhysicsEngine
 		unsigned int VAO, VBO, EBO;
 
 		Mesh(const std::string& path);
-	private:
+		Bounds& GetBounds() { return m_Bounds; }
 		
-		struct MeshBounds {
-			glm::vec3 min;
-			glm::vec3 max;
-			glm::vec3 size() const { return max - min; }
-			glm::vec3 center() const { return (min + max) * 0.5f; }
-		};
-
-		MeshBounds m_Bounds;
+	private:
+		Bounds m_Bounds;
 
 		void SetUpMeshRenderBuffers();
 	};

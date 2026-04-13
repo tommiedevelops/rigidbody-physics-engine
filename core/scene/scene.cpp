@@ -142,6 +142,7 @@ namespace PhysicsEngine
 				const auto& colliderB = m_Registry.get<ColliderComponent>(entities[j]);
 				auto& transformB = m_Registry.get<TransformComponent>(entities[j]);
 
+std::cout << transformB.m_Position;
 				for (auto& primA : colliderA.m_Primitives) {
 					for (auto& primB : colliderB.m_Primitives) {
 						ContactGenerator::DetectContacts(*primA, *primB, transformA, transformB, &data);

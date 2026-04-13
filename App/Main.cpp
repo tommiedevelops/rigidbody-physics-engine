@@ -193,12 +193,17 @@ class TestScene : public Scene
 		// --- PHYSICS TEST ---
 		auto physicsTestEntity{ CreateEntity() };
 		Mesh* m{ m_AssetsRef->LoadMesh(MODELS_DIR "sphere.obj").get() };
+		auto localSize = m->GetBounds().size();
+		auto worldSize = localSize * physicsTestEntity.GetComponent<TransformComponent>().m_Scale;
+
 		physicsTestEntity.AddComponent<MeshComponent>(m);
 		physicsTestEntity.AddComponent<NameComponent>("target");
 		physicsTestEntity.GetComponent<TransformComponent>().m_Position = glm::vec3(0.0, 10.0f, 0.0f);
 		auto& rb = physicsTestEntity.AddComponent<RigidbodyComponent>();
 		physicsTestEntity.AddComponent<ForceGeneratorComponent>().Bind<GravityForceGenerator>();
-		physicsTestEntity.AddComponent<ColliderComponent>().AddPrimitive<SphereCollider>(1.0f);
+
+		float sphereRadius = worldSize.x / 2.0f;
+		physicsTestEntity.AddComponent<ColliderComponent>().AddPrimitive<SphereCollider>(sphereRadius);
 
 		rb.m_InverseMass = 1.0f;
 	
