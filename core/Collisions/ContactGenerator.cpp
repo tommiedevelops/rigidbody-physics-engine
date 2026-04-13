@@ -1,7 +1,9 @@
 #include "ContactGenerator.h"
 #include "Collider.h"
+#include "Components.h" // better than this?
 
 #include <stdexcept>
+#include <iostream> // del
 
 namespace PhysicsEngine
 {
@@ -16,17 +18,29 @@ namespace PhysicsEngine
 		//TODO
 	}
 
-	unsigned int SphereVsPlane(const SphereCollider& first, const PlaneCollider& second, CollisionData* data)
+	unsigned int SphereVsPlane(const SphereCollider& sphere, const PlaneCollider& plane, TransformComponent& sphereTransform,
+		TransformComponent& planeTransform, CollisionData* data)
 	{
+		// All collision data needs to be in world space
+
 		if (data->contactsLeft <= 0) return 0; //contact budget spent, exit out
 
-		// signed distance of sphere origin to plane
-		glm::vec3 sphereOrigin = first.localPosition;
-		glm::vec3 planeNormal = glm::normalize(second.normal);
-		float planeOffset = second.planeOffset;
-		float radius = first.radius;
+		// World space origin on the sphere takes into account
+		// the entity's transform but also the collider's offset
+		// from the object's origin (omitted for now)
+		// ASSUMING SPHERE IS AT ORIGIN (OFFSET = IDENTITY) FOR NOW
 
-		float signedDistance = glm::dot(sphereOrigin, planeNormal) - planeOffset;
+		const glm::vec3 sphereOrigin = sphereTransform.Transform(sphere.localPosition);
+
+		const glm::mat3 rotationOnly = glm::mat3(glm::toMat4(planeTransform.m_Rotation));
+		glm::vec3 planeNormal = glm::normalize(rotationOnly*plane.m_Normal);
+
+        //                                        translation component of model matrix
+		float worldOffset = glm::dot(planeNormal, glm::vec3(planeTransform.GetModelMatrix()[3])) + plane.m_PlaneOffset;
+
+		float radius = sphere.m_Radius;
+
+		float signedDistance = glm::dot(sphereOrigin, planeNormal) - worldOffset;
 
 		if (signedDistance >= 0) return 0; // there is no collision
 
@@ -71,9 +85,9 @@ namespace PhysicsEngine
 
 		for (auto vertex : vertices)
 		{
-			float distanceToPlane{ glm::dot(vertex, second.normal) };
+			float distanceToPlane{ glm::dot(vertex, second.m_Normal) };
 			
-			if (distanceToPlane <= second.planeOffset)
+			if (distanceToPlane <= second.m_PlaneOffset)
 			{
 				// There's a contact
 
@@ -89,6 +103,8 @@ namespace PhysicsEngine
 	void ContactGenerator::DetectContacts(
 		const PrimitiveCollider& first,
 		const PrimitiveCollider& second,
+		TransformComponent& firstTransform,
+		TransformComponent& secondTransform,
 		CollisionData* data
 	)
 	{
@@ -118,6 +134,8 @@ namespace PhysicsEngine
 				SphereVsPlane(
 					static_cast<const SphereCollider&>(first),
 					static_cast<const PlaneCollider&>(second),
+					firstTransform,
+					secondTransform,
 					data
 				);
 				break;
@@ -162,6 +180,8 @@ namespace PhysicsEngine
 				SphereVsPlane(
 					static_cast<const SphereCollider&>(second),
 					static_cast<const PlaneCollider&>(first),
+					secondTransform,
+					firstTransform,
 					data
 				);
 				break;

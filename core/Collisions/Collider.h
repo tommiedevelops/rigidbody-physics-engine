@@ -34,8 +34,9 @@ namespace PhysicsEngine
 	class SphereCollider : public PrimitiveCollider
 	{
 	public:
-		float radius;
+		float m_Radius;
 		PRIMITIVE_TYPE(SPHERE)
+		SphereCollider(float radius) : m_Radius{ radius } {}
 	};
 
 	class BoxCollider : public PrimitiveCollider
@@ -56,12 +57,13 @@ namespace PhysicsEngine
 	class PlaneCollider : public PrimitiveCollider
 	{
 	public:
-		glm::vec3 normal;
-		float planeOffset;
+		glm::vec3 m_Normal;
+		float m_PlaneOffset;
 		PRIMITIVE_TYPE(PLANE)
+		PlaneCollider(glm::vec3 normal, float planeOffset) : m_Normal{ normal }, m_PlaneOffset{ planeOffset } {}
 	};
 
-	class ColliderComponent
+	struct ColliderComponent
 	{
 		// Supports composite shape made up of multiple primitives
 		std::vector<std::shared_ptr<PrimitiveCollider>> m_Primitives;

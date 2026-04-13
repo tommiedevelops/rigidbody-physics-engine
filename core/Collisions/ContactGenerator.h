@@ -4,6 +4,8 @@
 
 namespace PhysicsEngine
 {
+	class TransformComponent;
+
 	struct Contact
 	{
 		glm::vec3   normal;  // contact normal
@@ -20,9 +22,11 @@ namespace PhysicsEngine
 	class ContactGenerator
 	{
 	public:
-		void DetectContacts(
+		static void DetectContacts(
 			const PrimitiveCollider& first,
 			const PrimitiveCollider& second,
+			TransformComponent& firstTransform,
+			TransformComponent& secondTransform,
 			CollisionData* data
 		);
 	};

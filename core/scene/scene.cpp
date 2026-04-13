@@ -4,6 +4,8 @@
 #include "Components.h"
 #include "Rigidbody.h"
 #include "AssetManager.h"
+#include "ContactGenerator.h"
+#include "debug.h"
 
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -112,6 +114,50 @@ namespace PhysicsEngine
 		UpdateScripts(deltaTime);
 		UpdateForces(deltaTime);
 		UpdatePhysics(deltaTime);
+		UpdateCollisions();
+	}
+
+	void Scene::UpdateCollisions()
+	{
+		// maximum amount of contacts system willing to process
+		const int MAX_CONTACTS = 256;
+		Contact contactArray[MAX_CONTACTS];
+
+		CollisionData data;
+		data.contacts = contactArray;
+		data.contactsLeft = MAX_CONTACTS;
+		
+		std::vector<entt::entity> entities;
+		auto view = m_Registry.view<ColliderComponent, TransformComponent>();
+
+		view.each([&](auto entity, ColliderComponent&, TransformComponent&) {
+			entities.push_back(entity);
+			});
+
+		for (int i = 0; i < entities.size(); i++) {
+			for (int j = i + 1; j < entities.size(); j++) {
+				const auto& colliderA = m_Registry.get<ColliderComponent>(entities[i]);
+				auto& transformA = m_Registry.get<TransformComponent>(entities[i]);
+
+				const auto& colliderB = m_Registry.get<ColliderComponent>(entities[j]);
+				auto& transformB = m_Registry.get<TransformComponent>(entities[j]);
+
+				for (auto& primA : colliderA.m_Primitives) {
+					for (auto& primB : colliderB.m_Primitives) {
+						ContactGenerator::DetectContacts(*primA, *primB, transformA, transformB, &data);
+					}
+				}
+			}
+		}
+
+		if (data.contactsLeft != MAX_CONTACTS)
+		{
+			for (auto contact : contactArray)
+			{
+				std::cout << contact.normal << '\n';
+			}
+		}
+
 	}
 
 	void Scene::UpdatePhysics(float deltaTime)

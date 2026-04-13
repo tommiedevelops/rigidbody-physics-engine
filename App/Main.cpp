@@ -13,13 +13,7 @@
 
 using namespace PhysicsEngine;
 
-//temp
-std::ostream& operator<<(std::ostream& os, const glm::vec3& v) {
-	return os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
-}
-std::ostream& operator<<(std::ostream& os, const glm::quat& q) {
-	return os << "(" << q.w << ", " << q.x << ", " << q.y << ", " << q.z << ")";
-}
+#include "debug.h"
 
 // outputs: (1, 2, 3)
 class Cube2Script : public PhysicsEngine::ScriptableEntity 
@@ -231,6 +225,7 @@ class TestScene : public Scene
 		physicsTestEntity.GetComponent<TransformComponent>().m_Position = glm::vec3(0.0, 10.0f, 0.0f);
 		auto& rb = physicsTestEntity.AddComponent<RigidbodyComponent>();
 		physicsTestEntity.AddComponent<ForceGeneratorComponent>().Bind<GravityForceGenerator>();
+		physicsTestEntity.AddComponent<ColliderComponent>().AddPrimitive<SphereCollider>(1.0f);
 
 		rb.m_InverseMass = 1.0f;
 	
@@ -255,6 +250,9 @@ class TestScene : public Scene
 
 		float floorLength{ 50.0f };
 		floorEntity.GetComponent<TransformComponent>().m_Scale = glm::vec3(floorLength, 0.0f, floorLength);
+
+		floorEntity.AddComponent<ColliderComponent>().AddPrimitive<PlaneCollider>(glm::vec3(0.0f,1.0f,0.0f), 0.0f);
+
 
 		// --- PLAYER ---
 		auto player{ CreateEntity() };

@@ -42,6 +42,12 @@ namespace PhysicsEngine
 		glm::quat m_Rotation{1.0f, 0.0f, 0.0f, 0.0f};
 		glm::vec3 m_Scale{ 1.0f };
 
+		// Transforms local postion into world space
+		glm::vec3 Transform(const glm::vec3& position)
+		{
+			return glm::vec3(GetModelMatrix() * glm::vec4(position, 1.0));
+		}
+
 		glm::mat4 GetModelMatrix() const
 		{
 			glm::mat4 T = glm::translate(glm::mat4(1.0f), m_Position);
