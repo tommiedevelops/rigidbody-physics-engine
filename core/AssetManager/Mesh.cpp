@@ -13,7 +13,7 @@ namespace PhysicsEngine
     Mesh::Mesh(const std::string& path)
     {
 		Assimp::Importer import;
-		constexpr auto flags = aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals;
+		constexpr auto flags = aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_GenBoundingBoxes;
 
 		const auto scene = import.ReadFile(path, flags);
 
@@ -25,6 +25,10 @@ namespace PhysicsEngine
 
 		const auto mesh{ scene->mMeshes[0] };
 
+		// set mesh bounds
+		m_Bounds.min = glm::vec3(mesh->mAABB.mMin.x, mesh->mAABB.mMin.y, mesh->mAABB.mMin.z);
+		m_Bounds.max = glm::vec3(mesh->mAABB.mMax.x, mesh->mAABB.mMax.y, mesh->mAABB.mMax.z);
+			
 		std::vector<Vertex>       vertices;
 		std::vector<unsigned int> indices;
 
@@ -65,6 +69,7 @@ namespace PhysicsEngine
 		m_Indices = indices;
 
 		SetUpMeshRenderBuffers();
+
     }
 
     void Mesh::SetUpMeshRenderBuffers()

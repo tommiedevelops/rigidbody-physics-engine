@@ -22,6 +22,16 @@ namespace PhysicsEngine
 
 		Mesh(const std::string& path);
 	private:
+		
+		struct MeshBounds {
+			glm::vec3 min;
+			glm::vec3 max;
+			glm::vec3 size() const { return max - min; }
+			glm::vec3 center() const { return (min + max) * 0.5f; }
+		};
+
+		MeshBounds m_Bounds;
+
 		void SetUpMeshRenderBuffers();
 	};
 }

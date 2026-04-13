@@ -15,33 +15,6 @@ using namespace PhysicsEngine;
 
 #include "debug.h"
 
-// outputs: (1, 2, 3)
-class Cube2Script : public PhysicsEngine::ScriptableEntity 
-{
-	void OnCreate() override
-	{
-	}
-	void OnStart() override
-	{
-		using namespace PhysicsEngine;
-		auto& tr{ GetComponent<TransformComponent>() };
-		tr.m_Position.y = 50.0f;
-
-		auto& rb{ AddComponent<RigidbodyComponent>() };
-		rb.SetMass(1.0f);
-		AddComponent<ForceGeneratorComponent>().Bind<GravityForceGenerator>();
-	}
-
-	void OnUpdate(float dt) override
-	{
-		auto& tr{ GetComponent <PhysicsEngine::TransformComponent>() };
-		std::cout << tr.m_Position.y << '\n';
-	}
-	void OnDestroy() override
-	{
-	}
-};
-
 class PlayerMoveScript : public ScriptableEntity
 {
 
