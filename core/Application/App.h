@@ -16,9 +16,20 @@ namespace PhysicsEngine
 		void SetCurrentScene(Scene* newScene);
 		void OnEvent(Event& e);
 
-		AssetManager& GetAssetsRef()
+		AssetManager* GetAssetsRef()
 		{
-			return m_Assets;
+			return &m_Assets;
+		}
+
+		template <typename T>
+		T& GetLayer()
+		{
+			return m_LayerStack.Get<T>();
+		}
+
+		void PushLayer(std::shared_ptr<Layer> layer)
+		{
+			m_LayerStack.PushLayer(layer);
 		}
 
 	private:

@@ -2,6 +2,7 @@
 
 #include "Layer.h"
 #include <vector>
+#include <memory>
 
 namespace PhysicsEngine
 {
@@ -11,14 +12,14 @@ namespace PhysicsEngine
 		LayerStack() = default;
 		~LayerStack() = default;
 
-		void PushLayer(Layer* layer);
+		void PushLayer(std::shared_ptr<Layer> layer);
 
 		template <typename T>
 		T* Get()
 		{
 			static_assert(std::derived_from<T, Layer>, "T must derive from Layer");
 
-			for (Layer* layer : m_Layers)
+			for (auto layer : m_Layers)
 			{
 				if (T* result = dynamic_cast<T*>(layer)) // if i can cast Layer to T, bingo
 					return result;
@@ -27,12 +28,12 @@ namespace PhysicsEngine
 			return nullptr;
 		}
 
-		std::vector<Layer*>& GetLayers()
+		std::vector<std::shared_ptr<Layer>>& GetLayers()
 		{
 			return m_Layers;
 		}
 
 	private:
-		std::vector<Layer*> m_Layers;
+		std::vector<std::shared_ptr<Layer>> m_Layers;
 	};
 }

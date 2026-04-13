@@ -3,13 +3,22 @@
 #include "Layer.h"
 #include "Scene.h"
 
+#include <memory>
+#include <string>
+#include <functional>
+
 namespace PhysicsEngine
 {
 	class SceneLayer : public Layer
 	{
 	private:
-		Scene* m_ActiveScene{ nullptr };
+		std::unique_ptr<Scene> m_ActiveScene{ nullptr };
 
+		std::unordered_map <std::string, std::function<std::unique_ptr<Scene>()>> m_Factories;
+
+		float  m_CurrentAspect{ 16.0f / 9.0f }; // random
+
+		AssetManager* m_AssetsRef;
 	public:
 		void OnAttach() override;
 		void OnDetach() override;
@@ -17,7 +26,13 @@ namespace PhysicsEngine
 		void OnRender() override;
 		void OnEvent(Event& e) override;
 
-		void SetActiveScene(Scene* m_NewScene, float screenAspectRatio);
+		void RegisterScene(const std::string& name, std::function<std::unique_ptr<Scene>()> factory)
+		{
+			m_Factories.emplace(name, factory);
+		}
+
+		void SetAssetsRef(AssetManager* assetManager) { m_AssetsRef = assetManager; }
+		void SetActiveScene(const std::string& name);
 		void SetCameraAspect(float aspect);
 	};
 }

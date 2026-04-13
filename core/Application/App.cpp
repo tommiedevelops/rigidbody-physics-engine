@@ -7,7 +7,6 @@
 
 namespace PhysicsEngine
 {
-
 	App::App(WindowProperties& windowProperties)
 		: m_Window{windowProperties}
 		, m_Assets{}
@@ -20,27 +19,8 @@ namespace PhysicsEngine
 		);
 
 		Input::Init(m_Window.GetNativeWindow());
-
-		m_LayerStack.PushLayer(new SceneLayer());
-		m_LayerStack.PushLayer(new UILayer());
 	}
 
-	void App::SetCurrentScene(Scene* newScene)
-	{
-		if (!newScene)
-			throw std::logic_error("Provided scene was null\n");
-
-		newScene->SetAssetsRef(&m_Assets);
-		newScene->SetUp();
-
-		if(!newScene->GetMainCamera())
-			throw std::logic_error("No camera found");
-
-		float aspectRatio = (float)m_WindowProperties.Width / m_WindowProperties.Height;
-
-		SceneLayer* sceneLayer = m_LayerStack.Get<SceneLayer>();
-		sceneLayer->SetActiveScene(newScene, aspectRatio);
-	};
 	
 	void App::OnEvent(Event& e)
 	{
@@ -62,7 +42,7 @@ namespace PhysicsEngine
 
 			m_Window.PollEvents();
 
-			for (Layer* layer : m_LayerStack.GetLayers())
+			for (auto layer : m_LayerStack.GetLayers())
 			{
 				layer->OnUpdate(m_GameTime.GetDeltaTime());
 				layer->OnRender();

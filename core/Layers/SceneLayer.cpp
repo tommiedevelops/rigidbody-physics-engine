@@ -26,14 +26,12 @@ namespace PhysicsEngine
 
 	void SceneLayer::OnUpdate(float dt)
 	{
-		if (!m_ActiveScene) throw std::logic_error("Scene was null");
-		m_ActiveScene->OnUpdate(dt);
+		if (m_ActiveScene) m_ActiveScene->OnUpdate(dt);
 	}
 
 	void SceneLayer::OnRender()
 	{
-		if (!m_ActiveScene) throw std::logic_error("Scene was null");
-		m_ActiveScene->OnRender();
+		if (m_ActiveScene) m_ActiveScene->OnRender();
 	}
 
 	void SceneLayer::OnEvent(Event& e)
@@ -44,27 +42,25 @@ namespace PhysicsEngine
 			[this](WindowResizedEvent& e) -> bool
 			{
 				glViewport(0, 0, e.GetWidth(), e.GetHeight());
+				m_CurrentAspect = (float)e.GetWidth() / e.GetHeight();
 
-				if(m_ActiveScene)
-					m_ActiveScene->SetCameraAspect((float)e.GetWidth() / e.GetHeight());
+				if (m_ActiveScene)
+					m_ActiveScene->OnAspectRatioChanged(m_CurrentAspect);
 
 				return true;
 			}
 		);
 
-		m_ActiveScene->OnEvent(e);
+		if(m_ActiveScene)
+			m_ActiveScene->OnEvent(e);
 	}
 
-	void SceneLayer::SetActiveScene(Scene* newScene, float screenAspectRatio)
+	void SceneLayer::SetActiveScene(const std::string& name)
 	{
-		if (!newScene)
-		{
-			throw std::logic_error("Provided sceen is null");
-			return;
-		}
-
-		newScene->SetCameraAspect(screenAspectRatio);
-		m_ActiveScene = newScene;
+		m_ActiveScene = m_Factories.at(name)();
+		m_ActiveScene->SetAssetsRef(m_AssetsRef);
+		m_ActiveScene->SetUp();
+		m_ActiveScene->OnAspectRatioChanged(m_CurrentAspect);
 	}
 
 }

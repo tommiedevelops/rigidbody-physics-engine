@@ -169,6 +169,9 @@ class TestScene : public PhysicsEngine::Scene
 {
 	void SetUp() override
 	{
+		light.position = glm::vec3(1.0f, 3.0f, 0.0f); // fix lights?
+		light.color = glm::vec3(0.5f, 0.3f, 0.9f);
+
 		auto e{ CreateEntity() };
 		Mesh* m{ m_AssetsRef->LoadMesh(MODELS_DIR "cube.obj").get() };
 		e.AddComponent<MeshComponent>(m);
@@ -196,11 +199,14 @@ int main()
 	WindowProperties props{};
 	App app{props};
 
-	TestScene initialScene{};
-	initialScene.light.position = glm::vec3(1.0f, 3.0f, 0.0f); // fix lights?
-	initialScene.light.color = glm::vec3(0.5f, 0.3f, 0.9f);
+	auto sceneLayer = std::make_shared<SceneLayer>();
+	sceneLayer->SetAssetsRef(app.GetAssetsRef());
 
-	app.SetCurrentScene(&initialScene);
+	sceneLayer->RegisterScene("Test", []() { return std::make_unique<TestScene>(); });
+
+	sceneLayer->SetActiveScene("Test");
+
+	app.PushLayer(sceneLayer);
 
 	app.Run();
 }

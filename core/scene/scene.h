@@ -43,7 +43,8 @@ namespace PhysicsEngine
 		void OnUpdate(float dt);
 		void OnEvent(Event& e);
 
-		void SetCameraAspect(float aspect);
+		void OnAspectRatioChanged(float aspect);
+	
 		void SetMainCamera(Entity& e);
 		CameraComponent* GetMainCamera() { return m_MainCamera; }
 		void SetAssetsRef(AssetManager* assetsRef);

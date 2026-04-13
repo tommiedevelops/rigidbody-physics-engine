@@ -229,11 +229,6 @@ namespace PhysicsEngine
 
 	}
 
-	void Scene::SetCameraAspect(float aspectRatio)
-	{
-		m_MainCamera->m_Aspect = aspectRatio;
-	}
-
 	void Scene::SetMainCamera(Entity& e)
 	{
 		if (!e.HasComponent<CameraComponent>())
@@ -241,6 +236,14 @@ namespace PhysicsEngine
 		
 		m_MainCamera = &e.GetComponent<CameraComponent>();
 		m_MainCameraTransform = &e.GetComponent<TransformComponent>();
+	}
+
+	void Scene::OnAspectRatioChanged(float aspect) {
+		auto view = m_Registry.view<CameraComponent>();
+
+		view.each([aspect](CameraComponent& cam) {
+			cam.m_Aspect = aspect;
+			});
 	}
 
 	void Scene::SetAssetsRef(AssetManager* assetsRef)

@@ -22,6 +22,9 @@
 #include "Collisions/Collider.h"
 #include "Collisions/ContactGenerator.h"
 
+#include "Layers/SceneLayer.h"
+#include "Layers/UILayer.h"
+
 #include "Platform/Window.h"
 #include "Platform/GameTime.h"
 
