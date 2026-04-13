@@ -1,5 +1,6 @@
 #include "ContactResolver.h"
 #include "ContactGenerator.h"
+#include "Rigidbody.h"
 
 namespace PhysicsEngine
 {
@@ -18,28 +19,77 @@ namespace PhysicsEngine
 		for (auto i{ 0 }; i < numContacts; ++i)
 		{
 
-			// Construct matrix to transform world space points to contact space where the contact normal is +y
 			const auto contactNormal{ glm::normalize(contacts[i].normal) };
+			const auto contactPoint{ contacts[i].point };
+			const auto restitution{ contacts[i].restitution };
 
-			const glm::vec3 X_AXIS(1, 0, 0);
-			const glm::vec3 Y_AXIS(0, 1, 0);
-			
-			// If statement added for extra stability
-			glm::vec3 contactZAxis, contactYAxis;
-			if ( fabsf(glm::dot(X_AXIS, contactNormal)) > fabsf(glm::dot(Y_AXIS, contactNormal)) )
-			{ // normal is closer to the x-axis than y-axis
-				contactYAxis = Y_AXIS;
-				ConstructOrthonormalBasis(contactNormal, &contactYAxis, &contactZAxis);
-			}
-			else
+			RigidbodyComponent* bodyA{ contacts[i].bodyA };
+			RigidbodyComponent* bodyB{ contacts[i].bodyB };
+
+			glm::vec3 rA{ bodyA ? contactPoint - bodyA->m_LinearPosition : glm::vec3(0) };
+			glm::vec3 rB{ bodyB ? contactPoint - bodyB->m_LinearPosition : glm::vec3(0) };
+
+			auto vPointA = bodyA ? bodyA->m_LinearVelocity + glm::cross(bodyA->m_AngularVelocity, rA) : glm::vec3(0);
+			auto vPointB = bodyB ? bodyB->m_LinearVelocity + glm::cross(bodyB->m_AngularVelocity, rB) : glm::vec3(0);
+
+			auto relativeVelocity = vPointB - vPointA;
+
+			auto separatingVelocity = glm::dot(relativeVelocity, contactNormal);
+
+			if (separatingVelocity > 0)
+				continue; // no work to do
+
+			float newSeparatingVelocity = -restitution * separatingVelocity;
+
+			if (fabsf(separatingVelocity) < 0.01f)
+				newSeparatingVelocity = 0.0f;
+
+			float deltaVelocity = newSeparatingVelocity - separatingVelocity;
+
+			float totalInverseMass = 0.0f;
+
+			if (bodyA) totalInverseMass += bodyA->m_InverseMass;
+			if (bodyB) totalInverseMass += bodyB->m_InverseMass;
+
+			float angularEffect = 0.0f;
+
+			if (bodyA)
 			{
-				contactYAxis = X_AXIS;
-				ConstructOrthonormalBasis(contactNormal, &contactYAxis, &contactZAxis);
+				auto impulsiveTorqueA{ glm::cross(rA, contactNormal) };
+				auto deltaAngVelPerUnitImpulseA{ bodyA->m_InverseInertiaTensorWorldSpace * impulsiveTorqueA };
+				auto deltaLinVelPerUnitImpulseA{ glm::cross(deltaAngVelPerUnitImpulseA, rA) };
+				float angularEffectA{ glm::dot(deltaLinVelPerUnitImpulseA, contactNormal) };
+				angularEffect += angularEffectA;
 			}
 
-			glm::mat3 contactBasis{ contactNormal, contactYAxis, contactZAxis };
-			glm::mat3 inverseContactBasis{ glm::transpose(contactBasis) };
+			if (bodyB)
+			{
+				auto impulsiveTorqueB{ glm::cross(rB, contactNormal) };
+				auto deltaAngVelPerUnitImpulseB{ bodyB->m_InverseInertiaTensorWorldSpace * impulsiveTorqueB };
+				auto deltaLinVelPerUnitImpulseB{ glm::cross(deltaAngVelPerUnitImpulseB, rB) };
+				float angularEffectB{ glm::dot(deltaLinVelPerUnitImpulseB, contactNormal) };
+				angularEffect += angularEffectB;
+			}
 
+			float denominator{ totalInverseMass + angularEffect };
+
+			if (denominator <= 0)
+				continue;
+
+			float impulseMagnitude = deltaVelocity / denominator;
+			glm::vec3 impulse = impulseMagnitude * contactNormal;
+
+			if (bodyA)
+			{
+				bodyA->m_LinearVelocity -= impulse * bodyA->m_InverseMass;
+				bodyA->m_AngularVelocity -= bodyA->m_InverseInertiaTensorWorldSpace * glm::cross(rA, impulse);
+			}
+
+			if (bodyB)
+			{
+				bodyB->m_AngularVelocity += bodyB->m_InverseInertiaTensorWorldSpace * glm::cross(rB, impulse);
+				bodyB->m_LinearVelocity += impulse * bodyB->m_InverseMass;
+			}
 		}
 	}
 

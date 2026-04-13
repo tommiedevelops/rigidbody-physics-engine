@@ -273,7 +273,7 @@ namespace PhysicsEngine
 		// TODO
 	}
 
-	void ContactGenerator::DetectContacts(
+	unsigned int ContactGenerator::DetectContacts(
 		const PrimitiveCollider& first,
 		const PrimitiveCollider& second,
 		TransformComponent& firstTransform,
@@ -289,8 +289,8 @@ namespace PhysicsEngine
 		case Type::SPHERE:
 			switch (second.GetType())
 			{
-			case Type::SPHERE: 
-				SphereVsSphere(
+			case Type::SPHERE:
+				return SphereVsSphere(
 					static_cast<const SphereCollider&>(first),
 					static_cast<const SphereCollider&>(second),
 					firstTransform,
@@ -299,7 +299,7 @@ namespace PhysicsEngine
 				);
 				break;
 			case Type::BOX:
-				SphereVsBox(
+				return SphereVsBox(
 					static_cast<const SphereCollider&>(first),
 					static_cast<const BoxCollider&>(second),
 					firstTransform,
@@ -308,24 +308,21 @@ namespace PhysicsEngine
 				);
 				break;
 			case Type::PLANE:
-				SphereVsPlane(
+				return SphereVsPlane(
 					static_cast<const SphereCollider&>(first),
 					static_cast<const PlaneCollider&>(second),
 					firstTransform,
 					secondTransform,
 					data
 				);
-				break;
-			case Type::CAPSULE:
-				throw std::logic_error("NOT IMPLEMENTED");
 				break;
 			}
 			break;
 		case Type::BOX:
 			switch (second.GetType())
 			{
-			case Type::SPHERE: 
-				SphereVsBox(
+			case Type::SPHERE:
+				return SphereVsBox(
 					static_cast<const SphereCollider&>(second),
 					static_cast<const BoxCollider&>(first),
 					secondTransform,
@@ -334,7 +331,7 @@ namespace PhysicsEngine
 				);
 				break;
 			case Type::BOX:
-				BoxVsBox(
+				return BoxVsBox(
 					static_cast<const BoxCollider&>(first),
 					static_cast<const BoxCollider&>(second),
 					firstTransform,
@@ -343,24 +340,21 @@ namespace PhysicsEngine
 				);
 				break;
 			case Type::PLANE:
-				BoxVsPlane(
+				return BoxVsPlane(
 					static_cast<const BoxCollider&>(first),
 					static_cast<const PlaneCollider&>(second),
 					firstTransform,
 					secondTransform,
 					data
 				);
-				break;
-			case Type::CAPSULE:
-				throw std::logic_error("NOT IMPLEMENTED");
 				break;
 			}
 			break;
 		case Type::PLANE:
 			switch (second.GetType())
 			{
-			case Type::SPHERE: 
-				SphereVsPlane(
+			case Type::SPHERE:
+				return SphereVsPlane(
 					static_cast<const SphereCollider&>(second),
 					static_cast<const PlaneCollider&>(first),
 					secondTransform,
@@ -369,31 +363,14 @@ namespace PhysicsEngine
 				);
 				break;
 			case Type::BOX:
-				BoxVsPlane(
+				return BoxVsPlane(
 					static_cast<const BoxCollider&>(second),
 					static_cast<const PlaneCollider&>(first),
 					secondTransform,
 					firstTransform,
 					data
 				);
-				break;
-			case Type::PLANE:
-				PlaneVsPlane(
-					static_cast<const PlaneCollider&>(first),
-					static_cast<const PlaneCollider&>(second),
-					data
-				);
-				break;
-			case Type::CAPSULE:
-				throw std::logic_error("NOT IMPLEMENTED");
-				break;
 			}
-
-			break;
-		case Type::CAPSULE:
-			throw std::logic_error("NOT IMPLEMENTED");
-			break;
 		}
 	}
-
 }

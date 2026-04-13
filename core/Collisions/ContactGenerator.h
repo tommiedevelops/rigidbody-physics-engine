@@ -5,12 +5,18 @@
 namespace PhysicsEngine
 {
 	class TransformComponent;
+	class RigidbodyComponent;
 
 	struct Contact
 	{
 		glm::vec3   normal;  // contact normal
 		glm::vec3   point;   // contact point
 		float penetration;   // interpenetration depth
+
+		RigidbodyComponent* bodyA = nullptr;
+		RigidbodyComponent* bodyB = nullptr;
+
+		float restitution;
 	};
 
 	struct CollisionData
@@ -21,7 +27,7 @@ namespace PhysicsEngine
 
 	namespace ContactGenerator
 	{
-		void DetectContacts(
+		unsigned int DetectContacts(
 			const PrimitiveCollider& first,
 			const PrimitiveCollider& second,
 			TransformComponent& firstTransform,

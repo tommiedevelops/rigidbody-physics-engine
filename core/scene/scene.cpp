@@ -145,19 +145,29 @@ namespace PhysicsEngine
 				const auto& colliderB = m_Registry.get<ColliderComponent>(entities[j]);
 				auto& transformB = m_Registry.get<TransformComponent>(entities[j]);
 
+				// For primitives within the colliders
 				for (auto& primA : colliderA.m_Primitives) {
 					for (auto& primB : colliderB.m_Primitives) {
-						ContactGenerator::DetectContacts(*primA, *primB, transformA, transformB, &data);
+
+						if (ContactGenerator::DetectContacts(*primA, *primB, transformA, transformB, &data))
+						{
+							// set rigidbodies here	
+							Contact* contact = data.contacts - 1; // last written contact
+							contact->bodyA = m_Registry.try_get<RigidbodyComponent>(entities[i]);
+							contact->bodyB = m_Registry.try_get<RigidbodyComponent>(entities[j]);
+							contact->restitution = 0.5f;
+						}
+
 					}
 				}
 			}
 		}
 
-		if (data.contactsLeft -= MAX_CONTACTS)
+		unsigned int numContacts{ MAX_CONTACTS - data.contactsLeft };
+
+		if (numContacts == 0)
 			return; // no work to do
 
-		unsigned int numContacts{ MAX_CONTACTS - data.contactsLeft };
-		ContactResolver::PrepareContactData(contactArray, numContacts, deltaTime);
 		ContactResolver::ResolveContacts(contactArray, numContacts, deltaTime);
 	}
 

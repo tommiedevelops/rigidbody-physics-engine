@@ -17,6 +17,9 @@ namespace PhysicsEngine
 		// rigidbody's mass distribution
 		glm::mat3 m_InverseInertiaTensor;
 
+		// Same but in world space
+		glm::mat3 m_InverseInertiaTensorWorldSpace;
+
 		// For simplicity, the object's local space origin coincides with
 		// the center of mass, so I don't need to track c.o.m separately
 		glm::vec3 m_LinearPosition; // (c.o.m)
@@ -54,7 +57,6 @@ namespace PhysicsEngine
 		// For going from object space to world space
 		glm::mat4 m_ModelMatrix;
 
-		glm::mat3 m_InverseInertiaTensorWorldSpace;
 
 		// Accumulators reset to zero at the start of each frame
 		glm::vec3 m_LinearForceAccumulator{ 0.0f };
