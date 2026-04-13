@@ -220,14 +220,20 @@ class TestScene : public Scene
 {
 	void SetUp() override
 	{
-		light.position = glm::vec3(1.0f, 3.0f, -5.0f); // fix lights?
-		light.color = glm::vec3(0.5f, 0.3f, 0.9f);
+		light.position = glm::vec3(0.0f, 100.0f, 10.0f); // fix lights?
+		light.color = glm::vec3(1.0f, 1.0f, 1.0f);
 
-		auto e{ CreateEntity() };
+		// --- PHYSICS TEST ---
+		auto physicsTestEntity{ CreateEntity() };
 		Mesh* m{ m_AssetsRef->LoadMesh(MODELS_DIR "sphere.obj").get() };
-		e.AddComponent<MeshComponent>(m);
-		e.AddComponent<NameComponent>("target");
+		physicsTestEntity.AddComponent<MeshComponent>(m);
+		physicsTestEntity.AddComponent<NameComponent>("target");
+		physicsTestEntity.GetComponent<TransformComponent>().m_Position = glm::vec3(0.0, 10.0f, 0.0f);
+		auto& rb = physicsTestEntity.AddComponent<RigidbodyComponent>();
+		physicsTestEntity.AddComponent<ForceGeneratorComponent>().Bind<GravityForceGenerator>();
 
+		rb.m_InverseMass = 1.0f;
+	
 		Shader* s
 		{
 			m_AssetsRef->LoadShader( SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag" ).get(),
@@ -235,9 +241,22 @@ class TestScene : public Scene
 
 		Material* mat{ m_AssetsRef->CreateMaterial("default", s, nullptr).get() };
 
-		e.AddComponent<MaterialComponent>(mat);
+		physicsTestEntity.AddComponent<MaterialComponent>(mat);
 
+		// --- FLOOR ---
+		auto floorEntity{ CreateEntity() };
+		floorEntity.AddComponent<MeshComponent>(m_AssetsRef->LoadMesh(MODELS_DIR "quad.obj").get());
 
+		Material* floorMat{ m_AssetsRef->CreateMaterial("floor", s, nullptr).get()};
+		floorMat->albedo = glm::vec4(0.5, 0.0, 0.5, 1.0);
+		floorEntity.AddComponent<MaterialComponent>(floorMat);
+
+		floorEntity.GetComponent<TransformComponent>().m_Position = glm::vec3(0);
+
+		float floorLength{ 50.0f };
+		floorEntity.GetComponent<TransformComponent>().m_Scale = glm::vec3(floorLength, 0.0f, floorLength);
+
+		// --- PLAYER ---
 		auto player{ CreateEntity() };
 		player.AddComponent<CameraComponent>();
 		player.AddComponent<ScriptComponent>().Bind<PlayerMoveScript>();

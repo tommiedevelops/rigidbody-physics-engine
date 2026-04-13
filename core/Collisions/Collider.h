@@ -61,7 +61,7 @@ namespace PhysicsEngine
 		PRIMITIVE_TYPE(PLANE)
 	};
 
-	class Collider
+	class ColliderComponent
 	{
 		// Supports composite shape made up of multiple primitives
 		std::vector<std::shared_ptr<PrimitiveCollider>> m_Primitives;
