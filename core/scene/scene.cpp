@@ -78,7 +78,7 @@ namespace PhysicsEngine
 			// Prepare Material data
 			Material* material = materialComp.m_Material;
 
-			Shader* shader = material->m_Shader;
+			auto& shader{ material->m_Shader };
 			unsigned int shaderID = shader->GetID();
 			shader->Bind();
 
@@ -169,6 +169,7 @@ namespace PhysicsEngine
 			return; // no work to do
 
 		ContactResolver::ResolveContacts(contactArray, numContacts, deltaTime);
+		ContactResolver::ResolveInterpenetration(contactArray, numContacts, deltaTime);
 	}
 
 	void Scene::UpdatePhysics(float deltaTime)

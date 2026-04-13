@@ -14,6 +14,6 @@ namespace PhysicsEngine
 		void ResolveContacts(Contact* contacts, unsigned int numContacts, float deltaTime);
 
 		// Prepares contacts for processing by calculating relevant internal data
-		void PrepareContactData(Contact* contacts, unsigned int numContacts, float deltaTime);
+		void ResolveInterpenetration(Contact* contacts, unsigned int numContacts, float deltaTime);
 	};
 }

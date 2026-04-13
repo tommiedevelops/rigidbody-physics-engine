@@ -18,7 +18,6 @@ namespace PhysicsEngine
 	{
 		for (auto i{ 0 }; i < numContacts; ++i)
 		{
-
 			const auto contactNormal{ glm::normalize(contacts[i].normal) };
 			const auto contactPoint{ contacts[i].point };
 			const auto restitution{ contacts[i].restitution };
@@ -93,10 +92,41 @@ namespace PhysicsEngine
 		}
 	}
 
-	// Prepares contacts for processing by calculating relevant internal data
-	void ContactResolver::PrepareContactData(Contact* contacts, unsigned int numContacts, float deltaTime)
+	void ContactResolver::ResolveInterpenetration(Contact* contacts, unsigned int numContacts, float deltaTime)
 	{
-		//TODO
+		for (unsigned int i = 0; i < numContacts; ++i)
+		{
+			Contact& contact = contacts[i];
+
+			glm::vec3 normal = glm::normalize(contact.normal);
+			float penetration = contact.penetration;
+
+			if (penetration <= 0.0f)
+				continue;
+
+			RigidbodyComponent* bodyA = contact.bodyA;
+			RigidbodyComponent* bodyB = contact.bodyB;
+
+			float invMassA = bodyA ? bodyA->m_InverseMass : 0.0f;
+			float invMassB = bodyB ? bodyB->m_InverseMass : 0.0f;
+
+			float totalInverseMass = invMassA + invMassB;
+
+			if (totalInverseMass <= 0.0f)
+				continue;
+
+			glm::vec3 correction = normal * penetration;
+
+			if (bodyA)
+			{
+				bodyA->m_LinearPosition -= correction * (invMassA / totalInverseMass);
+			}
+
+			if (bodyB)
+			{
+				bodyB->m_LinearPosition += correction * (invMassB / totalInverseMass);
+			}
+		}
 	}
 
 }

@@ -13,9 +13,9 @@ namespace PhysicsEngine
 		float diffuse{0.8f};
 		float specular{0.5f};
 
-		Texture* m_Texture{};
-		Shader*  m_Shader{};
+		std::shared_ptr<Texture>  m_Texture{};
+		std::shared_ptr<Shader>  m_Shader{};
 
-		Material(Shader* shader, Texture* texture) : m_Shader{ shader }, m_Texture{ texture } {}
+		Material(const std::shared_ptr<Shader>& shader, const std::shared_ptr<Texture>& texture) : m_Shader{ shader }, m_Texture{ texture } {}
 	};
 }

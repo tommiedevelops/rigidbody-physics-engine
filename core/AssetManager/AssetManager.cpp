@@ -51,7 +51,7 @@ namespace PhysicsEngine
 		return texture;
 	}
 	std::shared_ptr<Material> 
-	AssetManager::CreateMaterial(const std::string& name, Shader* shader, Texture* texture)
+	AssetManager::CreateMaterial(const std::string& name, std::shared_ptr<Shader> shader, std::shared_ptr<Texture> texture)
 	{
 		auto it{ m_Materials.find(name) };
 

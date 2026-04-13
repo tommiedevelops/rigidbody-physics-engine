@@ -207,10 +207,7 @@ class SpherePlaneCollideScene : public Scene
 
 		rb.m_InverseMass = 1.0f;
 	
-		Shader* s
-		{
-			m_AssetsRef->LoadShader( SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag" ).get(),
-		};
+		auto s { m_AssetsRef->LoadShader( SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag" ) };
 
 		Material* mat{ m_AssetsRef->CreateMaterial("default", s, nullptr).get() };
 
@@ -267,10 +264,7 @@ class SphereSphereCollideScene : public Scene
 
 		rb.m_InverseMass = 1.0f;
 
-		Shader* s
-		{
-			m_AssetsRef->LoadShader(SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag").get(),
-		};
+		auto s { m_AssetsRef->LoadShader(SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag") };
 
 		Material* mat{ m_AssetsRef->CreateMaterial("default", s, nullptr).get() };
 
@@ -327,10 +321,7 @@ class BoxPlaneCollideScene : public Scene
 
 		rb.m_InverseMass = 1.0f;
 	
-		Shader* s
-		{
-			m_AssetsRef->LoadShader( SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag" ).get(),
-		};
+		auto s { m_AssetsRef->LoadShader( SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag" ) };
 
 		Material* mat{ m_AssetsRef->CreateMaterial("default", s, nullptr).get() };
 
@@ -405,10 +396,7 @@ class SphereBoxCollideScene : public Scene
 
 		rb.m_InverseMass = 1.0f;
 	
-		Shader* s
-		{
-			m_AssetsRef->LoadShader( SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag" ).get(),
-		};
+		auto s { m_AssetsRef->LoadShader( SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag" ) };
 
 		Material* mat{ m_AssetsRef->CreateMaterial("default", s, nullptr).get() };
 
@@ -451,9 +439,6 @@ class BoxBoxCollideScene : public Scene
 {
 	void SetUp() override
 	{
-		light.position = glm::vec3(0.0f, 100.0f, 10.0f); // fix lights?
-		light.color = glm::vec3(1.0f, 1.0f, 1.0f);
-
 		// --- BOX 1 ---
 		auto box1Entity{ CreateEntity() };
 
@@ -472,10 +457,7 @@ class BoxBoxCollideScene : public Scene
 		box1Entity.AddComponent<RigidbodyComponent>().SetMass(1.0f);
 		box1Entity.AddComponent<ForceGeneratorComponent>().Bind<GravityForceGenerator>(glm::vec3(0, -1, 0));
 
-		Shader* s
-		{
-			m_AssetsRef->LoadShader( SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag" ).get(),
-		};
+		auto s { m_AssetsRef->LoadShader( SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag" ) };
 
 		Material* box1Mat{ m_AssetsRef->CreateMaterial("floor", s, nullptr).get() };
 		box1Mat->albedo = glm::vec4(0.5, 0.0, 0.5, 1.0);
@@ -586,10 +568,7 @@ class TennisRacketScene : public Scene {
 		rb.SetInertiaTensor(inertiaTensor);
 		rb.SetMass(1.0f);
 
-		Shader* s
-		{
-			m_AssetsRef->LoadShader(SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag").get(),
-		};
+		auto s { m_AssetsRef->LoadShader(SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag") };
 
 		Material* boxMat{ m_AssetsRef->CreateMaterial("floor", s, nullptr).get() };
 		boxMat->albedo = glm::vec4(0.5, 0.0, 0.5, 1.0);
