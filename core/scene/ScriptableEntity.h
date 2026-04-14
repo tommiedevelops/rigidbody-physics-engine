@@ -1,12 +1,18 @@
 #pragma once
 
-#include <entt/entt.hpp>
 #include "Scene.h"
+
+#include <entt/entt.hpp>
+#include <memory>
 
 namespace PhysicsEngine
 {
 	class Event;
 	class TransformComponent;
+	class Mesh;
+	class Shader;
+	class Texture;
+	class Material;
 
 	class ScriptableEntity
 	{
@@ -43,8 +49,16 @@ namespace PhysicsEngine
 		};
 		
 		Scene* m_Scene{ nullptr };
-	private:
+
+		std::shared_ptr<Mesh>     LoadMesh(const std::string& path);
+		std::shared_ptr<Shader>   LoadShader(const std::string& vertexPath, const std::string& fragmentPath);
+		std::shared_ptr<Texture>  LoadTexture(const std::string& path);
+		std::shared_ptr<Material> CreateMaterial(const std::string& name, std::shared_ptr<Shader> shader, std::shared_ptr<Texture> texture);
+		std::unique_ptr<Material> CreateMaterial(std::shared_ptr<Shader> shader, std::shared_ptr<Texture> texture);
+		std::shared_ptr<Material> GetMaterial(const std::string& name);
+
 		entt::entity m_Entity{ entt::null };
+	private:
 
 		friend class Scene;
 	};

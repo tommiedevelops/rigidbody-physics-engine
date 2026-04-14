@@ -370,6 +370,7 @@ namespace PhysicsEngine
 					firstTransform,
 					data
 				);
+				break;
 			}
 		}
 	}

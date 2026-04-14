@@ -38,7 +38,7 @@ add_library(core
 
 	Core/Platform/Window.cpp
 	Core/Platform/GameTime.cpp
-)
+ "Core/Scene/ScriptableEntity.cpp")
 
 find_package(OpenGL REQUIRED)
 target_link_libraries(core PUBLIC OpenGL::GL)
@@ -65,7 +65,7 @@ target_include_directories(core
 		External
 )
 
-add_executable(app App/Main.cpp)
+add_executable(app App/Main.cpp App/PlayerMoveScript.cpp) 
 
 target_link_libraries(app PRIVATE core)
 

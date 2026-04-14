@@ -63,6 +63,12 @@ namespace PhysicsEngine
 
 		return material;
 	}
+	std::unique_ptr<Material> 
+	AssetManager::CreateMaterial(std::shared_ptr<Shader> shader, std::shared_ptr<Texture> texture)
+	{
+		auto material{ std::make_unique<Material>(shader, texture) };
+		return material;
+	}
 
 	std::shared_ptr<Material>
 	AssetManager::GetMaterial(const std::string& name)

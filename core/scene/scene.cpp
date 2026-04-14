@@ -77,6 +77,7 @@ namespace PhysicsEngine
 
 			// Prepare Material data
 			auto material = materialComp.m_Material;
+			if (!material) return;
 
 			auto& shader{ material->m_Shader };
 			unsigned int shaderID = shader->GetID();
@@ -318,6 +319,11 @@ namespace PhysicsEngine
 		);
 
 		return result;
+	}
+
+	void Scene::DestroyEntity(entt::entity e)
+	{
+		m_Registry.destroy(e);
 	}
 
 	void Scene::SetAssetsRef(AssetManager* assetsRef)

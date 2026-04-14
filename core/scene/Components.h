@@ -114,14 +114,14 @@ namespace PhysicsEngine
 
 		bool HasStarted = false;
 
-		template <typename T>
-		void Bind()
+		template <typename T, typename... Args>
+		void Bind(Args&&... args)
 		{
 			static_assert(std::is_base_of_v<ScriptableEntity, T>, "T must derive from ScriptableEntity");
 
-			InstantiateScript = []() -> ScriptableEntity*
+			InstantiateScript = [args...]() -> ScriptableEntity*
 			{
-				return new T();
+				return new T(args...);
 			};
 
 			DestroyScript = [](ScriptComponent* sc) -> void

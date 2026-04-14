@@ -37,6 +37,8 @@ namespace PhysicsEngine
 
 		Entity GetEntity(const std::string& name);
 
+		void DestroyEntity(entt::entity e);
+
 		virtual void SetUp() {};
 		void OnRender();
 		void OnUpdate(float dt);
@@ -47,6 +49,7 @@ namespace PhysicsEngine
 		void SetMainCamera(Entity& e);
 		CameraComponent* GetMainCamera() { return m_MainCamera; }
 		void SetAssetsRef(AssetManager* assetsRef);
+		AssetManager* GetAssetsRef() const { return m_AssetsRef; }
 	protected:
 		AssetManager* m_AssetsRef{ nullptr };
 	private:
