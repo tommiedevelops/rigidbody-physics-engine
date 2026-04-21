@@ -6,38 +6,15 @@
 namespace Talk
 {
     using namespace PhysicsEngine;
-
-    static float RandomFloat(float min, float max)
-    {
-        return min + (max - min) * (static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
-    }
-
-    static glm::vec3 RandomVec3(float min, float max)
-    {
-        return glm::vec3(
-            RandomFloat(min, max),
-            RandomFloat(min, max),
-            RandomFloat(min, max)
-        );
-    }
-
-    static glm::vec4 RandomColour()
-    {
-        return glm::vec4(
-            RandomFloat(0.0f, 1.0f),
-            RandomFloat(0.0f, 1.0f),
-            RandomFloat(0.0f, 1.0f),
-            1.0f
-        );
-    }
-
-    class MovingCubeScript : public ScriptableEntity
+    
+    class MovingSphereScript : public ScriptableEntity
     {
     public:
         glm::vec3 m_Velocity{ 0.0f };
+        glm::vec3 m_RotationalVelocity{ 0.0f };
         float m_HalfExtent{ 100.0f };
 
-        MovingCubeScript(glm::vec3 velocity, float halfExtent) : m_Velocity{ velocity }, m_HalfExtent{ halfExtent } {}
+        MovingSphereScript(glm::vec3 velocity, float halfExtent) : m_Velocity{ velocity }, m_HalfExtent{ halfExtent } {}
 
         void OnCreate() override
         {
@@ -50,8 +27,6 @@ namespace Talk
         void OnUpdate(float dt) override
         {
             auto& transform = GetComponent<TransformComponent>();
-
-            transform.m_Position += m_Velocity * dt;
 
             const glm::vec3& p = transform.m_Position;
 
@@ -71,13 +46,16 @@ namespace Talk
         }
     };
 
-    class CubeSpawnerScript : public ScriptableEntity
+    class SphereSpawnerScript : public ScriptableEntity
     {
     public:
-        float m_BoxSideLength{ 300.0f };
-        float m_SpawnInterval{ 0.01f };
+        float m_BoxSideLength{ 100.0f };
+        float m_SpawnInterval{ 0.5f };
         float m_MinSpeed{ 3.0f };
-        float m_MaxSpeed{ 10.0f };
+        float m_MaxSpeed{ 30.0f };
+        float m_CubeScale = 3.0f;
+
+        SphereSpawnerScript(float cubeScale) : m_CubeScale{ cubeScale } {}
 
     private:
         float m_SpawnTimer{ 0.0f };
@@ -125,17 +103,29 @@ namespace Talk
             auto sharedMaterial = std::shared_ptr<Material>(std::move(material));
             cube.AddComponent<MaterialComponent>(sharedMaterial);
 
+			auto localSize = mesh->GetBounds().size();
+			auto worldSize = localSize * cube.GetComponent<TransformComponent>().m_Scale;
+
+            cube.AddComponent<ColliderComponent>().AddPrimitive<BoxCollider>(localSize/2.0f);
+
             auto& transform = cube.GetComponent<TransformComponent>();
             transform.m_Position = RandomVec3(-halfExtent, halfExtent);
+            transform.m_Scale = glm::vec3(m_CubeScale, m_CubeScale, m_CubeScale);
 
             auto vel{ glm::normalize(RandomVec3(-1.0f, 1.0f)) * RandomFloat(m_MinSpeed, m_MaxSpeed) };
-            auto angVel{ glm::normalize(RandomVec3(-1.0f, 1.0f)) * RandomFloat(m_MinSpeed, m_MaxSpeed) };
+            auto angVel{ glm::normalize(RandomVec3(-1.0f, 1.0f)) * RandomFloat(m_MinSpeed, m_MaxSpeed / 5.0f) };
 
-            cube.AddComponent<ScriptComponent>().Bind<MovingCubeScript>(vel,halfExtent);
+            auto& rb { cube.AddComponent<RigidbodyComponent>() };
+            rb.m_AngularVelocity = angVel;
+
+            rb.m_LinearVelocity = vel;
+            rb.m_AngularVelocity = angVel;
+
+            cube.AddComponent<ScriptComponent>().Bind<MovingSphereScript>(vel,halfExtent);
         }
     };
 
-    class LinearMotionDemoScene : public Scene
+    class RandomSpheresCollidingScene : public Scene
     {
         void SetUp() override
         {
@@ -143,7 +133,8 @@ namespace Talk
 
             auto spawner = CreateEntity();
             spawner.AddComponent<NameComponent>("target");
-            spawner.AddComponent<ScriptComponent>().Bind<CubeSpawnerScript>();
+            float cubeScale = 5.0f;
+            spawner.AddComponent<ScriptComponent>().Bind<SphereSpawnerScript>(cubeScale);
      
             auto player = CreateEntity();
             player.AddComponent<ScriptComponent>().Bind<PlayerMoveScript>();

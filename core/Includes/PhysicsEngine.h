@@ -16,6 +16,7 @@
 #include "Scene/ScriptableEntity.h"
 
 #include "Physics/IForceGenerator.h"
+#include "Physics/GravityForceGenerator.h"
 #include "Physics/Rigidbody.h"
 #include "Physics/RigidbodyForceRegistry.h"
 

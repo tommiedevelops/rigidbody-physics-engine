@@ -26,7 +26,6 @@ namespace PhysicsEngine
 		rb->m_LinearPosition = tr->m_Position;
 		rb->m_Orientation = tr->m_Rotation;
 
-		std::cout << "Constructed rigidbody\n";
 	}
 
 	Scene::Scene()

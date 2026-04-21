@@ -39,7 +39,6 @@ namespace PhysicsEngine
 		{
 			m_GameTime.Update();
 			m_Window.ProcessInput();
-
 			m_Window.PollEvents();
 
 			for (auto layer : m_LayerStack.GetLayers())
@@ -47,7 +46,7 @@ namespace PhysicsEngine
 				layer->OnUpdate(m_GameTime.GetDeltaTime());
 				layer->OnRender();
 			}
-			
+
 			m_Window.SwapBuffers();
 		}
 
