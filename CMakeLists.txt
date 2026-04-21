@@ -10,6 +10,7 @@ add_subdirectory(external/glad)
 add_subdirectory(external/glm)
 add_subdirectory(external/entt)
 add_subdirectory(external/assimp)
+add_subdirectory(external/imgui)
 
 add_library(core
 	Core/Application/App.cpp
@@ -38,7 +39,8 @@ add_library(core
 
 	Core/Platform/Window.cpp
 	Core/Platform/GameTime.cpp
- "Core/Scene/ScriptableEntity.cpp")
+	Core/Scene/ScriptableEntity.cpp
+)
 
 find_package(OpenGL REQUIRED)
 target_link_libraries(core PUBLIC OpenGL::GL)
@@ -47,6 +49,7 @@ target_link_libraries(core PUBLIC glad)
 target_link_libraries(core PUBLIC glm) 
 target_link_libraries(core PUBLIC EnTT::EnTT)
 target_link_libraries(core PUBLIC assimp)
+target_link_libraries(core PUBLIC imgui)
 
 target_include_directories(core
 	PUBLIC
