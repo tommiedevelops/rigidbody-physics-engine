@@ -18,6 +18,7 @@ namespace PhysicsEngine
 
 	void SceneLayer::OnAttach()
 	{
+		std::cout << "Hello from Scene Layer!\n";
 	}
 
 	void SceneLayer::OnDetach()

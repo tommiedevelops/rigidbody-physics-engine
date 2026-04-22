@@ -28,6 +28,9 @@ int main()
 
 	app.PushLayer(sceneLayer);
 
+	auto uiLayer = std::make_shared<UILayer>();
+	app.PushLayer(uiLayer);
+
 	app.Run();
 	return 0;
 }
