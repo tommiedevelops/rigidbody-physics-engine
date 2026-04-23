@@ -30,7 +30,6 @@ namespace PhysicsEngine
 		void PushLayer(std::shared_ptr<Layer> layer)
 		{
 			m_LayerStack.PushLayer(layer);
-			layer->OnAttach();
 		}
 
 	private:
