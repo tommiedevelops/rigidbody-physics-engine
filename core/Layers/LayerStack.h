@@ -4,6 +4,8 @@
 #include <vector>
 #include <memory>
 
+#include <iostream> // FOR DEBUG
+
 namespace PhysicsEngine
 {
 	class LayerStack
@@ -14,8 +16,14 @@ namespace PhysicsEngine
 
 		void PushLayer(std::shared_ptr<Layer> layer);
 
+		void SetWindowRef(Window* window)
+		{
+			if (!window) throw std::logic_error("Window is null");
+			m_Window = window;
+		}
+
 		template <typename T>
-		T* Get()
+		T* GetLayer()
 		{
 			static_assert(std::derived_from<T, Layer>, "T must derive from Layer");
 
@@ -35,5 +43,6 @@ namespace PhysicsEngine
 
 	private:
 		std::vector<std::shared_ptr<Layer>> m_Layers;
+		Window* m_Window;
 	};
 }

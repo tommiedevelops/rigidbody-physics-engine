@@ -5,6 +5,8 @@
 #include "Event.h"
 #include "Input.h"
 
+#include <iostream> // for DEBUG
+
 namespace PhysicsEngine
 {
 	App::App(WindowProperties& windowProperties)
@@ -14,6 +16,8 @@ namespace PhysicsEngine
 		, m_LayerStack{}
 		, m_WindowProperties{windowProperties}
 	{
+		m_LayerStack.SetWindowRef(&m_Window);
+
 		m_Window.SetEventCallback(
 			[this](Event& e) { OnEvent(e); }
 		);

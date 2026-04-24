@@ -13,6 +13,17 @@ namespace PhysicsEngine
 	{
 
 		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+
+		ImGuiIO& io = ImGui::GetIO();
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
+		if (!m_Window) throw std::logic_error("Window was null");
+		auto window{ m_Window->GetNativeWindow() };
+
+		ImGui_ImplGlfw_InitForOpenGL(window, true);
+		ImGui_ImplOpenGL3_Init();
+
 		std::cout << "Hello from UI Layer!\n";
 	}
 

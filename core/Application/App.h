@@ -13,7 +13,6 @@ namespace PhysicsEngine
 	public:
 		App(WindowProperties& windowProperties);
 		void Run();
-		void SetCurrentScene(Scene* newScene);
 		void OnEvent(Event& e);
 
 		AssetManager* GetAssetsRef()
@@ -24,12 +23,12 @@ namespace PhysicsEngine
 		template <typename T>
 		T& GetLayer()
 		{
-			return m_LayerStack.Get<T>();
+			return m_LayerStack.GetLayer<T>();
 		}
 
-		void PushLayer(std::shared_ptr<Layer> layer)
+		LayerStack& GetLayerStack()
 		{
-			m_LayerStack.PushLayer(layer);
+			return m_LayerStack;
 		}
 
 	private:

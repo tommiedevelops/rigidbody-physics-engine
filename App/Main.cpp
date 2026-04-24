@@ -26,10 +26,10 @@ int main()
 
 	sceneLayer->SetActiveScene("SphereBox");
 
-	app.PushLayer(sceneLayer);
+	app.GetLayerStack().PushLayer(sceneLayer);
 
 	auto uiLayer = std::make_shared<UILayer>();
-	app.PushLayer(uiLayer);
+	app.GetLayerStack().PushLayer(uiLayer);
 
 	app.Run();
 	return 0;
