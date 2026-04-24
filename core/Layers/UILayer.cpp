@@ -29,14 +29,29 @@ namespace PhysicsEngine
 
 	void UILayer::OnDetach()
 	{
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
+		ImGui::DestroyContext();
 	}
 
 	void UILayer::OnUpdate(float dt)
 	{
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+		float value = 0;
+		ImGui::Begin("My Window");
+		ImGui::Text("Hello");
+		ImGui::SliderFloat("Value", &value, 0.0f, 1.0f);
+		ImGui::End();
+
 	}
 
 	void UILayer::OnRender()
 	{
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
 	void UILayer::OnEvent(Event& e)
