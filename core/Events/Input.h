@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 #include <glfw/glfw3.h>
+#include <optional>
 
 namespace PhysicsEngine
 {
@@ -21,10 +22,14 @@ namespace PhysicsEngine
 			return glfwGetMouseButton(s_Window, button) == GLFW_PRESS;
 		}
 
-		static glm::vec2 GetMousePosition() {
+		static std::optional<glm::vec2> GetMousePosition() {
 			double x, y;
+
+			if (!(GLFW_CURSOR_DISABLED == glfwGetInputMode(s_Window, GLFW_CURSOR)))
+				return {};
+
 			glfwGetCursorPos(s_Window, &x, &y);
-			return { (float)x, (float)y };
+			return glm::vec2((float)x, (float)y);
 		}
 
 		static void SetCursorEnabled(bool enabled) {

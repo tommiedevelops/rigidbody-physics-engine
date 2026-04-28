@@ -4,6 +4,10 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
+#include "Event.h"
+#include "KeyEvent.h"
+#include "Input.h"
+
 #include <iostream> // temp
 
 namespace PhysicsEngine
@@ -42,10 +46,9 @@ namespace PhysicsEngine
 
 		float value = 0;
 		ImGui::Begin("My Window");
-		ImGui::Text("Hello");
-		ImGui::SliderFloat("Value", &value, 0.0f, 1.0f);
+			ImGui::Text("Hello");
+			ImGui::SliderFloat("Value", &value, 0.0f, 1.0f);
 		ImGui::End();
-
 	}
 
 	void UILayer::OnRender()
@@ -56,5 +59,20 @@ namespace PhysicsEngine
 
 	void UILayer::OnEvent(Event& e)
 	{
+		EventDispatcher dispatcher(e);
+
+		dispatcher.Dispatch<KeyPressedEvent>(
+			[this](KeyPressedEvent& e) -> bool
+			{
+				if (e.GetKeyCode() == GLFW_KEY_ESCAPE)
+				{
+					std::cout << "ESCAPE\n";
+					Input::SetCursorEnabled(true);
+					// Take control of any mouse movements and mouse clicks
+				}
+				return true;
+			}
+		);
+
 	}
 }

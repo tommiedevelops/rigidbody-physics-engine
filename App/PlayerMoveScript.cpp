@@ -57,7 +57,7 @@ namespace Talk
 
 	void PlayerMoveScript::OnStart()
 	{
-		m_LastMousePos = Input::GetMousePosition();
+		m_LastMousePos = Input::GetMousePosition().value_or(m_LastMousePos);
 
 		auto& transform{ GetComponent<TransformComponent>() };
 		transform.m_Position = glm::vec3(0.0f, 10.0f, -20.0f);
@@ -81,7 +81,7 @@ namespace Talk
 
 		// Handle Mouse
 		m_Sensitivity = 1.0f;
-		glm::vec2 mousePos = Input::GetMousePosition();
+		glm::vec2 mousePos = Input::GetMousePosition().value_or(m_LastMousePos);
 		glm::vec2 deltaMousePos = (mousePos - m_LastMousePos) * m_Sensitivity;
 		m_LastMousePos = mousePos;
 

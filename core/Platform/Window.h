@@ -35,7 +35,6 @@ namespace PhysicsEngine
 		void PollEvents();
 		void SwapBuffers();
 		void Start();
-		void ProcessInput();
 
 		GLFWwindow* GetNativeWindow() { return m_Window;  }
 

@@ -42,7 +42,6 @@ namespace PhysicsEngine
 		while (!m_Window.ShouldClose())
 		{
 			m_GameTime.Update();
-			m_Window.ProcessInput();
 			m_Window.PollEvents();
 
 			for (auto layer : m_LayerStack.GetLayers())
