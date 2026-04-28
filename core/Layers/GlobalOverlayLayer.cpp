@@ -1,4 +1,4 @@
-#include "UILayer.h"
+#include "GlobalOverlayLayer.h"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -13,8 +13,7 @@
 
 namespace PhysicsEngine
 {
-	// Implement with IMGUI
-	void UILayer::OnAttach()
+	void GlobalOverlayLayer::OnAttach()
 	{
 
 		IMGUI_CHECKVERSION();
@@ -32,33 +31,43 @@ namespace PhysicsEngine
 		std::cout << "Hello from UI Layer!\n";
 	}
 
-	void UILayer::OnDetach()
+	void GlobalOverlayLayer::OnDetach()
 	{
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 	}
 
-	void UILayer::OnUpdate(float dt)
+	void GlobalOverlayLayer::OnUpdate(float dt)
 	{
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
+		auto& scenes{ m_SceneLayer->GetFactories() };
+
 		float value = 0;
-		ImGui::Begin("My Window");
-			ImGui::Text("Hello");
+		ImGui::Begin("Scene Selector");
+
+			for (auto it{ scenes.begin() }; it != scenes.end(); ++it)
+			{
+				if (ImGui::Button(it->first.c_str()))
+				{
+					m_SceneLayer->SetActiveScene(it->first);
+				}
+			}
+
 			ImGui::SliderFloat("Value", &value, 0.0f, 1.0f);
 		ImGui::End();
 	}
 
-	void UILayer::OnRender()
+	void GlobalOverlayLayer::OnRender()
 	{
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
-	void UILayer::OnEvent(Event& e)
+	void GlobalOverlayLayer::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
 

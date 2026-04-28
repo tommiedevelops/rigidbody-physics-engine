@@ -31,8 +31,9 @@ namespace PhysicsEngine
 			m_Factories.emplace(name, factory);
 		}
 
+		std::unordered_map<std::string, std::function<std::unique_ptr<Scene>()>>& GetFactories() { return m_Factories; }
+
 		void SetAssetsRef(AssetManager* assetManager) { m_AssetsRef = assetManager; }
 		void SetActiveScene(const std::string& name);
-		void SetCameraAspect(float aspect);
 	};
 }

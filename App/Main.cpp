@@ -24,12 +24,12 @@ int main()
 	sceneLayer->RegisterScene("BoxBox", []() { return std::make_unique<Talk::BoxBoxCollideScene>(); });
 	sceneLayer->RegisterScene("WorldsColliding", []() { return std::make_unique<Talk::RandomSpheresCollidingScene>(); });
 
-	sceneLayer->SetActiveScene("SphereBox");
+	sceneLayer->SetActiveScene("LinearMotionScene");
 
 	app.GetLayerStack().PushLayer(sceneLayer);
 
-	auto uiLayer = std::make_shared<UILayer>();
-	app.GetLayerStack().PushLayer(uiLayer);
+	auto globalOverlay = std::make_shared<GlobalOverlayLayer>(sceneLayer);
+	app.GetLayerStack().PushLayer(globalOverlay);
 
 	app.Run();
 	return 0;

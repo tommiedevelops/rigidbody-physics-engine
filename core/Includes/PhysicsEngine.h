@@ -24,7 +24,7 @@
 #include "Collisions/ContactGenerator.h"
 
 #include "Layers/SceneLayer.h"
-#include "Layers/UILayer.h"
+#include "Layers/GlobalOverlayLayer.h"
 
 #include "Platform/Window.h"
 #include "Platform/GameTime.h"

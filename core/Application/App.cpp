@@ -1,7 +1,7 @@
 #include "app.h"
 
 #include "SceneLayer.h"
-#include "UILayer.h"
+#include "GlobalOverlayLayer.h"
 #include "Event.h"
 #include "Input.h"
 

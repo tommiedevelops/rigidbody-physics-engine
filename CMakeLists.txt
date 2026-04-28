@@ -17,7 +17,7 @@ add_library(core
 	
 	Core/Layers/LayerStack.cpp
 	Core/Layers/SceneLayer.cpp
-	Core/Layers/UILayer.cpp
+	Core/Layers/GlobalOverlayLayer.cpp
 
 	Core/AssetManager/AssetManager.cpp
 	Core/AssetManager/Shader.cpp
