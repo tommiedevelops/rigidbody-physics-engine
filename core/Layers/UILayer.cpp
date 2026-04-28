@@ -7,6 +7,7 @@
 #include "Event.h"
 #include "KeyEvent.h"
 #include "Input.h"
+#include "MouseEvent.h"
 
 #include <iostream> // temp
 
@@ -60,6 +61,21 @@ namespace PhysicsEngine
 	void UILayer::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
+
+		dispatcher.Dispatch<MouseButtonPressedEvent>(
+			[this](MouseButtonPressedEvent& e) -> bool
+			{
+				auto& io{ ImGui::GetIO() };
+				if (io.WantCaptureMouse)
+				{ // ImGui consumed this event
+					e.SetHandled();
+					return true;
+				}
+
+				Input::SetCursorEnabled(false);
+				return true;
+			}
+		);
 
 		dispatcher.Dispatch<KeyPressedEvent>(
 			[this](KeyPressedEvent& e) -> bool
