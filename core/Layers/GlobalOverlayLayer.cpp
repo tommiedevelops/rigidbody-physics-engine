@@ -49,15 +49,12 @@ namespace PhysicsEngine
 		float value = 0;
 		ImGui::Begin("Scene Selector");
 
+		// OPT: Can cache this instead of doing it OnUpdate
 			for (auto it{ scenes.begin() }; it != scenes.end(); ++it)
 			{
 				if (ImGui::Button(it->first.c_str()))
-				{
 					m_SceneLayer->SetActiveScene(it->first);
-				}
 			}
-
-			ImGui::SliderFloat("Value", &value, 0.0f, 1.0f);
 		ImGui::End();
 	}
 
@@ -76,28 +73,13 @@ namespace PhysicsEngine
 			{
 				auto& io{ ImGui::GetIO() };
 				if (io.WantCaptureMouse)
-				{ // ImGui consumed this event
-					e.SetHandled();
 					return true;
-				}
 
 				Input::SetCursorEnabled(false);
-				return true;
+				return false;
 			}
 		);
 
-		dispatcher.Dispatch<KeyPressedEvent>(
-			[this](KeyPressedEvent& e) -> bool
-			{
-				if (e.GetKeyCode() == GLFW_KEY_ESCAPE)
-				{
-					std::cout << "ESCAPE\n";
-					Input::SetCursorEnabled(true);
-					// Take control of any mouse movements and mouse clicks
-				}
-				return true;
-			}
-		);
 
 	}
 }

@@ -82,7 +82,13 @@ namespace Talk
 		// Handle Mouse
 		m_Sensitivity = 1.0f;
 		glm::vec2 mousePos = Input::GetMousePosition().value_or(m_LastMousePos);
-		glm::vec2 deltaMousePos = (mousePos - m_LastMousePos) * m_Sensitivity;
+
+		// Handles the case wehre jump is too far 
+		float tolerance = 500.0f;
+		glm::vec2 deltaMousePos = (mousePos - m_LastMousePos);
+		bool mouseJumpedTooFar = glm::dot(deltaMousePos, deltaMousePos) > tolerance;
+		deltaMousePos = mouseJumpedTooFar ? glm::vec2(0.0f, 0.0f) : deltaMousePos * m_Sensitivity;
+
 		m_LastMousePos = mousePos;
 
 		m_Yaw += deltaMousePos.x;

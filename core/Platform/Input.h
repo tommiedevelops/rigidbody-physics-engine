@@ -31,6 +31,11 @@ namespace PhysicsEngine
 			glfwGetCursorPos(s_Window, &x, &y);
 			return glm::vec2((float)x, (float)y);
 		}
+		
+		static void SetMousePosition(float x, float y) 
+		{
+			glfwSetCursorPos(s_Window, x, y);
+		}
 
 		static void SetCursorEnabled(bool enabled) {
 			glfwSetInputMode(s_Window, GLFW_CURSOR,

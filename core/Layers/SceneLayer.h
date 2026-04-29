@@ -19,6 +19,8 @@ namespace PhysicsEngine
 		float  m_CurrentAspect{ 16.0f / 9.0f }; // random
 
 		AssetManager* m_AssetsRef;
+
+		glm::vec2 m_LastMousePosition{};
 	public:
 		void OnAttach() override;
 		void OnDetach() override;

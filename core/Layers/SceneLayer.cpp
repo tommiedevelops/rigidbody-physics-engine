@@ -5,7 +5,8 @@
 
 #include "SceneLayer.h"
 
-#include <glad/glad.h>
+#include "Input.h"
+
 #include <iostream>
 
 namespace PhysicsEngine
@@ -27,6 +28,7 @@ namespace PhysicsEngine
 
 	void SceneLayer::OnUpdate(float dt)
 	{
+		m_LastMousePosition = Input::GetMousePosition().value_or(glm::vec2(0, 0));
 		if (m_ActiveScene) m_ActiveScene->OnUpdate(dt);
 	}
 
@@ -51,6 +53,22 @@ namespace PhysicsEngine
 				return true;
 			}
 		);
+
+		dispatcher.Dispatch<KeyPressedEvent>(
+			[this](KeyPressedEvent& e) -> bool
+			{
+				if (e.GetKeyCode() == GLFW_KEY_ESCAPE)
+				{
+					std::cout << "ESCAPE\n";
+					Input::SetCursorEnabled(true);
+					return true;
+				}
+
+				// Otherwise propagate the event to the scene
+				return false;
+			}
+		);
+
 
 		if(m_ActiveScene)
 			m_ActiveScene->OnEvent(e);

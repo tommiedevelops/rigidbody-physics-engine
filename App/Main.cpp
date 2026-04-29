@@ -24,7 +24,7 @@ int main()
 	sceneLayer->RegisterScene("BoxBox", []() { return std::make_unique<Talk::BoxBoxCollideScene>(); });
 	sceneLayer->RegisterScene("WorldsColliding", []() { return std::make_unique<Talk::RandomSpheresCollidingScene>(); });
 
-	sceneLayer->SetActiveScene("LinearMotionScene");
+	sceneLayer->SetActiveScene("AxisTheoremScene");
 
 	app.GetLayerStack().PushLayer(sceneLayer);
 
