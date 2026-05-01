@@ -33,6 +33,13 @@ namespace PhysicsEngine
 		// When a rigidbody is constructed sync RB data to Transform
 		// NOTE: DO NOT MODIFY TRANSFORM DIRECTLY. USE RIGIDBODY
 		m_Registry.on_construct<RigidbodyComponent>().connect<&Scene::SyncRigidbodyWithTransformComponentCallback>(this);
+
+		// Generate a default white texture
+		glGenTextures(1, &m_WhiteTexture);
+		glBindTexture(GL_TEXTURE_2D, m_WhiteTexture);
+		unsigned char white[] = { 255, 255, 255 ,255 };
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, white);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	Entity Scene::CreateEntity()
@@ -100,10 +107,21 @@ namespace PhysicsEngine
 			int normalMatLoc = glGetUniformLocation(shaderID, "normalMatrix");
 			glUniformMatrix3fv(normalMatLoc, 1, GL_FALSE, glm::value_ptr(normalMat));
 
+			glActiveTexture(GL_TEXTURE0);
+
+			if (material->m_Texture)
+				glBindTexture(GL_TEXTURE_2D, material->m_Texture->GetID());
+			else
+				glBindTexture(GL_TEXTURE_2D, m_WhiteTexture);
+
+			glUniform1i(glGetUniformLocation(shaderID, "tex"), 0);
 			glBindVertexArray(meshComp.m_Mesh->VAO);
 
 			GLsizei numIndices = static_cast<GLsizei>(meshComp.m_Mesh->m_Indices.size());
 			glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, (void*)0);
+
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, 0);
 
 			glBindVertexArray(0);
 		});

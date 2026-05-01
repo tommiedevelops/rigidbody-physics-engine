@@ -56,6 +56,7 @@ namespace PhysicsEngine
 		entt::registry m_Registry; // can't copy this
 		CameraComponent* m_MainCamera{ nullptr }; 
 		TransformComponent* m_MainCameraTransform{ nullptr };
+		unsigned int m_WhiteTexture;
 
 		void UpdateCollisions(float deltaTime);
 		void UpdatePhysics(float deltaTime);

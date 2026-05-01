@@ -13,7 +13,7 @@ namespace PhysicsEngine
 		std::string path;
 
 		Texture(const std::string pathToTex);
-		unsigned int getID() const;
+		unsigned int GetID() const;
 
 	};
 }

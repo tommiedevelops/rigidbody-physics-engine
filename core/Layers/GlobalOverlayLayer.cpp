@@ -13,6 +13,7 @@
 
 namespace PhysicsEngine
 {
+
 	void GlobalOverlayLayer::OnAttach()
 	{
 
@@ -46,15 +47,17 @@ namespace PhysicsEngine
 
 		auto& scenes{ m_SceneLayer->GetFactories() };
 
-		float value = 0;
 		ImGui::Begin("Scene Selector");
-
 		// OPT: Can cache this instead of doing it OnUpdate
-			for (auto it{ scenes.begin() }; it != scenes.end(); ++it)
-			{
-				if (ImGui::Button(it->first.c_str()))
-					m_SceneLayer->SetActiveScene(it->first);
-			}
+		for (auto it{ scenes.begin() }; it != scenes.end(); ++it)
+		{
+			if (ImGui::Button(it->first.c_str()))
+				m_SceneLayer->SetActiveScene(it->first);
+		}
+		ImGui::End();
+
+		ImGui::Begin("Debug Information");
+
 		ImGui::End();
 	}
 
@@ -71,8 +74,7 @@ namespace PhysicsEngine
 		dispatcher.Dispatch<MouseButtonPressedEvent>(
 			[this](MouseButtonPressedEvent& e) -> bool
 			{
-				auto& io{ ImGui::GetIO() };
-				if (io.WantCaptureMouse)
+				if (ImGui::GetIO().WantCaptureMouse)
 					return true;
 
 				Input::SetCursorEnabled(false);

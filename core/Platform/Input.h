@@ -42,6 +42,11 @@ namespace PhysicsEngine
 				enabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 		}
 
+		static bool GetCursorEnabled()
+		{
+			return glfwGetInputMode(s_Window, GLFW_CURSOR);
+		}
+
 	private:
 		inline static GLFWwindow* s_Window = nullptr;
 

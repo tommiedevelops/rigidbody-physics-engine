@@ -186,8 +186,9 @@ namespace Talk
 			rb.m_InverseMass = 1.0f;
 
 			auto s { m_AssetsRef->LoadShader(SHADERS_DIR "shader.vert", SHADERS_DIR "shader.frag") };
+			auto tex{ m_AssetsRef->LoadTexture(TEXTURES_DIR "container.jpg") };
 
-			auto mat{ m_AssetsRef->CreateMaterial("default", s, nullptr)};
+			auto mat{ m_AssetsRef->CreateMaterial("default", s, tex)};
 
 			physicsTestEntity.AddComponent<MaterialComponent>(mat);
 

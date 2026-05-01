@@ -9,7 +9,7 @@
 
 namespace PhysicsEngine
 {
-	unsigned int Texture::getID() const
+	unsigned int Texture::GetID() const
 	{
 		return m_ID;
 	}
@@ -51,5 +51,6 @@ namespace PhysicsEngine
 		}
 
 		stbi_image_free(data);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }
