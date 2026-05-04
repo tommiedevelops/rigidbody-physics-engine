@@ -1,9 +1,9 @@
 #include "Mesh.h"
 #include "glad/glad.h"
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+#define TINYOBJLOADER_IMPLEMENTATION
+#define TINYOBJLOADER_DISABLE_FAST_FLOAT
+#include "tiny_obj_loader.h"
 
 #include <string>
 #include <iostream>
@@ -12,61 +12,86 @@ namespace PhysicsEngine
 {
     Mesh::Mesh(const std::string& path)
     {
-		Assimp::Importer import;
-		constexpr auto flags = aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_GenBoundingBoxes;
+		tinyobj::attrib_t attrib;
+		std::vector<tinyobj::shape_t> shapes;
+		std::vector<tinyobj::material_t> materials;
 
-		const auto scene = import.ReadFile(path, flags);
+		std::string warn;
+		std::string err;
 
-		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode || !scene->HasMeshes())
-		{
-			std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
-			throw std::logic_error("There was an error loading the model");
+		bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, path.c_str());
+
+		if (!warn.empty()) {
+			std::cout << warn << std::endl;
 		}
 
-		const auto mesh{ scene->mMeshes[0] };
+		if (!err.empty()) {
+			std::cerr << err << std::endl;
+		}
 
-		// set mesh bounds
-		m_Bounds.min = glm::vec3(mesh->mAABB.mMin.x, mesh->mAABB.mMin.y, mesh->mAABB.mMin.z);
-		m_Bounds.max = glm::vec3(mesh->mAABB.mMax.x, mesh->mAABB.mMax.y, mesh->mAABB.mMax.z);
+		if (!ret)
+			throw std::logic_error("Error opening obj file");
 			
 		std::vector<Vertex>       vertices;
 		std::vector<unsigned int> indices;
 
-		for (unsigned int i{ 0 }; i < mesh->mNumVertices; ++i)
-		{
-			Vertex vertex{ };
-			vertex.position.x = mesh->mVertices[i].x;
-			vertex.position.y = mesh->mVertices[i].y;
-			vertex.position.z = mesh->mVertices[i].z;
+        int totalVertexCount{ 0 };
+        for (size_t s = 0; s < shapes.size(); s++)
+        {
+            size_t index_offset = 0;
+            for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++)
+            {
+                size_t fv = size_t(shapes[s].mesh.num_face_vertices[f]);
 
-			if (mesh->mNormals)
-			{
-				vertex.normal.x = mesh->mNormals[i].x;
-				vertex.normal.y = mesh->mNormals[i].y;
-				vertex.normal.z = mesh->mNormals[i].z;
-			}
+                for (size_t v = 0; v < fv; v++)
+                {
+                    Vertex vertex{};
 
-			if (mesh->mTextureCoords[0])
-			{
-				vertex.uv.x = mesh->mTextureCoords[0][i].x;
-				vertex.uv.y = mesh->mTextureCoords[0][i].y;
-			}
+                    // Vertices
+                    tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
+                    tinyobj::real_t vx = attrib.vertices[3 * size_t(idx.vertex_index) + 0];
+                    tinyobj::real_t vy = attrib.vertices[3 * size_t(idx.vertex_index) + 1];
+                    tinyobj::real_t vz = attrib.vertices[3 * size_t(idx.vertex_index) + 2];
 
-			vertices.push_back(vertex);
-		}
+                    vertex.position.x = vx;
+                    vertex.position.y = vy;
+                    vertex.position.z = vz;
+                    
 
-		for (unsigned int faceIdx{ 0 }; faceIdx < mesh->mNumFaces; ++faceIdx)
-		{
-			const auto& face = mesh->mFaces[faceIdx];
+                    // Normals
+                    if (idx.normal_index >= 0)
+                    {
+						tinyobj::real_t nx = attrib.normals[3 * size_t(idx.normal_index) + 0];
+						tinyobj::real_t ny = attrib.normals[3 * size_t(idx.normal_index) + 1];
+						tinyobj::real_t nz = attrib.normals[3 * size_t(idx.normal_index) + 2];
 
-			for (unsigned int j = 0; j < face.mNumIndices; ++j)
-			{
-				indices.push_back(face.mIndices[j]);
-			}
-		}
+                        vertex.normal.x = nx;
+                        vertex.normal.y = ny;
+                        vertex.normal.z = nz;
+                    }
 
-		m_Vertices = vertices;
-		m_Indices = indices;
+                    // uvs
+                    if (idx.texcoord_index >= 0)
+                    {
+                     	tinyobj::real_t tx = attrib.texcoords[2 * size_t(idx.texcoord_index) + 0];
+						tinyobj::real_t ty = attrib.texcoords[2 * size_t(idx.texcoord_index) + 1];
+
+                        vertex.uv.x = tx;
+                        vertex.uv.y = ty;
+                    }
+
+                    vertices.push_back(vertex);
+                    indices.push_back(vertices.size() - 1);
+
+                }
+                
+                index_offset += fv;
+            }
+
+        }
+
+        m_Vertices = vertices;
+        m_Indices = indices;
 
 		SetUpMeshRenderBuffers();
 

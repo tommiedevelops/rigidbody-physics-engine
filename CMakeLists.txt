@@ -5,7 +5,6 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_subdirectory(external/glfw)
 add_subdirectory(external/glad)
 add_subdirectory(external/glm)
 add_subdirectory(external/entt)
@@ -44,12 +43,18 @@ add_library(core
 
 find_package(OpenGL REQUIRED)
 target_link_libraries(core PUBLIC OpenGL::GL)
-target_link_libraries(core PUBLIC glfw) 
 target_link_libraries(core PUBLIC glad) 
 target_link_libraries(core PUBLIC glm) 
 target_link_libraries(core PUBLIC EnTT::EnTT)
 target_link_libraries(core PUBLIC assimp)
 target_link_libraries(core PUBLIC imgui)
+
+if (EMSCRIPTEM)
+	target_link_options(core PRIVATE -sUSE_GLFW=3)
+else()
+	add_subdirectory(external/glfw)
+	target_link_libraries(core PUBLIC glfw)
+endif()
 
 target_include_directories(core
 	PUBLIC
