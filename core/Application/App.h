@@ -31,6 +31,7 @@ namespace PhysicsEngine
 			return m_LayerStack;
 		}
 
+		void MainLoop();
 	private:
 		Window               m_Window;
 		WindowProperties&    m_WindowProperties;

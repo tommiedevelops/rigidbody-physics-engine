@@ -8,7 +8,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_subdirectory(external/glad)
 add_subdirectory(external/glm)
 add_subdirectory(external/entt)
-add_subdirectory(external/assimp)
 add_subdirectory(external/imgui)
 
 add_library(core
@@ -46,10 +45,9 @@ target_link_libraries(core PUBLIC OpenGL::GL)
 target_link_libraries(core PUBLIC glad) 
 target_link_libraries(core PUBLIC glm) 
 target_link_libraries(core PUBLIC EnTT::EnTT)
-target_link_libraries(core PUBLIC assimp)
 target_link_libraries(core PUBLIC imgui)
 
-if (EMSCRIPTEM)
+if (EMSCRIPTEN)
 	target_link_options(core PRIVATE -sUSE_GLFW=3)
 else()
 	add_subdirectory(external/glfw)
@@ -74,6 +72,17 @@ target_include_directories(core
 )
 
 add_executable(app App/Main.cpp App/PlayerMoveScript.cpp) 
+
+if (EMSCRIPTEN)
+	target_link_options(app PRIVATE
+        -sUSE_GLFW=3
+        -sMIN_WEBGL_VERSION=2
+        -sMAX_WEBGL_VERSION=2
+        -sALLOW_MEMORY_GROWTH=1
+        --preload-file ${CMAKE_SOURCE_DIR}/Assets@/Assets
+    )
+    set_target_properties(app PROPERTIES SUFFIX ".html")
+endif()
 
 target_link_libraries(app PRIVATE core)
 

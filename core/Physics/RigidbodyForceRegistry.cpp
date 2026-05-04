@@ -1,6 +1,6 @@
 #include "RigidbodyForceRegistry.h"
 #include "Rigidbody.h"
-#include "IForceGenerator.h"]
+#include "IForceGenerator.h"
 #include <iostream>
 
 namespace PhysicsEngine

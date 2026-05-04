@@ -5,10 +5,23 @@
 #include "Event.h"
 #include "Input.h"
 
+#ifdef __EMSCRIPTEN__
+	#include <emscripten.h>
+#endif
+
+
 #include <iostream> // for DEBUG
 
 namespace PhysicsEngine
 {
+
+	static App* s_Instance = nullptr;
+
+	static void EmscriptenMainLoop()
+	{
+		s_Instance->MainLoop();
+	}
+
 	App::App(WindowProperties& windowProperties)
 		: m_Window{windowProperties}
 		, m_Assets{}
@@ -36,11 +49,9 @@ namespace PhysicsEngine
 		}
 	}
 
-	void App::Run()
+
+	void App::MainLoop()
 	{
-		
-		while (!m_Window.ShouldClose())
-		{
 			m_GameTime.Update();
 			m_Window.PollEvents();
 
@@ -51,7 +62,19 @@ namespace PhysicsEngine
 			}
 
 			m_Window.SwapBuffers();
-		}
+	}
 
+	void App::Run()
+	{
+		s_Instance = this;
+		
+#ifdef __EMSCRIPTEN__
+		emscripten_set_main_loop(EmscriptenMainLoop, 0, 1);
+#else
+		while (!m_Window.ShouldClose())
+		{
+			MainLoop();
+		}
+#endif
 	};
 }

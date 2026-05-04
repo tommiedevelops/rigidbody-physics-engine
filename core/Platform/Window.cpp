@@ -13,6 +13,13 @@ namespace PhysicsEngine
 	{
 		/* ---- Window Init ---- */
 		glfwInit();
+
+#ifdef __EMSCRIPTEN__
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+#endif
+
 		m_Window = glfwCreateWindow(properties.Width, properties.Height, properties.Title.c_str(), NULL, NULL);
 
 		if (!m_Window)

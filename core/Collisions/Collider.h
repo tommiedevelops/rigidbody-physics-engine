@@ -7,7 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <memory>
 
-#define PRIMITIVE_TYPE(type) PrimitiveType GetType() const override { return PrimitiveType::##type; }
+#define PRIMITIVE_TYPE(type) PrimitiveType GetType() const override { return PrimitiveType::type; }
 
 namespace PhysicsEngine
 {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "texture.h"
-#include "shader.h"
+#include "Texture.h"
+#include "Shader.h"
 #include <glm/glm.hpp>
 
 namespace PhysicsEngine
