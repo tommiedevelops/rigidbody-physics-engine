@@ -70,6 +70,7 @@ namespace PhysicsEngine
 		
 #ifdef __EMSCRIPTEN__
 		emscripten_set_main_loop(EmscriptenMainLoop, 0, 1);
+		emscripten_hide_mouse();
 #else
 		while (!m_Window.ShouldClose())
 		{

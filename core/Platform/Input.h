@@ -4,6 +4,9 @@
 #include <glfw/glfw3.h>
 #include <optional>
 
+// DEBUG
+#include <iostream>
+
 namespace PhysicsEngine
 {
 	 class Input

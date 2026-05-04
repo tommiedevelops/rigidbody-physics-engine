@@ -71,7 +71,7 @@ namespace PhysicsEngine
 				data.EventCallback(e);
 			}
 		);
-
+		
 		glfwSetKeyCallback(m_Window,
 			[](GLFWwindow* window, int key, int scancode, int action, int mods) 
 			{
@@ -100,6 +100,8 @@ namespace PhysicsEngine
 				}
 			}
 		);
+
+		glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
 
 	Window::~Window()
