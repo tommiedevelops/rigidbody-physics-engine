@@ -4,7 +4,7 @@
 - A **Rigidbody** is a way of modelling the translational and rotational motion of arbitrary 3D objects based on the assumption that it is 'rigid' (More like a rock, less like a sponge).
 - A **Physics Engine** is a module of code that is responsible for calculating the motion of objects in a scene based on (semi) accurate physics and reporting that data to the part of code that updates the object's data and render's it to the screen.
 - Thus, this project is an implementation of a system for simulating accurate physics in a 3D scene, and a clean API for a programmer to integrate it into some application. 
-- It is heavily inspired by **Ian Millington's Game Physics Engine Development**
+
 ## Demo
 - You can interact with a working demo of an Application which uses the project [here](https://tommiedevelops.github.io/rigidbody-physics-engine/).
 <div align="center">
@@ -69,6 +69,9 @@ This project makes use of various open source libraries including
 - There's no meaningful debug information yet
 - There's probably pollution in the project from my Visual Studio work and CMake building. If so, very sorry in advance.
 
+## Learning Resources
+- The project is heavily inspired by the text **Ian Millington's Game Physics Engine Development** and [TheCherno](https://www.youtube.com/@TheCherno)'s YouTube series on game engines.
+- It's also my first time programming in C++ and OpenGL which I learned at [learncpp.com](learncpp.com) and [learnopengl.com](learnopengl.com) respectively!
 
 ## I did a talk on it
 
