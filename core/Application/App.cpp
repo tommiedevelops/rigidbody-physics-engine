@@ -49,7 +49,6 @@ namespace PhysicsEngine
 		}
 	}
 
-
 	void App::MainLoop()
 	{
 			m_GameTime.Update();
