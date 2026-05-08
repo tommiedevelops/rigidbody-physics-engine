@@ -8,7 +8,7 @@
 ## Demo
 - You can interact with a working demo of an Application which uses the project [here](https://tommiedevelops.github.io/rigidbody-physics-engine/).
 <div align="center">
-    <img src="Docs/demo.png" width = "500">
+    <img src="docs/demo.png" width = "500">
     <p><em>A screenshot of the 'Linear Motion Scene' demo in my example application which uses the Rigidbody Physics Engine. On the left is a small GUI rendered with ImGui for scene selection. A large number of colored cubes are rendered to the screen, moving in random directions</em></p>
 </div>
 
@@ -30,7 +30,7 @@
 - The Physics Engine cares about entites in the Scene that have the Rigidbody Component. It will take its rigidbody data as well as any forces acting on the rigidbody and perform an Euler Integration to report the object's new position and orientation based on the physics simulation.
 
 <div align="center">
-    <img src="Docs/Diagrams/system_diagram.svg" width = "800">
+    <img src="docs/Diagrams/system_diagram.svg" width = "800">
     <p><em>
     From bottom to top, the user starts by inputting any .obj 3D models, any .mtl files corresponing to those models, any texture files (.png/.jpg) for use in constructing Materials for Entities in the scene as well as any custom SetUp() logic or runtime ScriptableEntity logic. When the application is run, it enters the Main Loop which Polls of new events, and updates Time.deltaTime and updates each Layer in the LayerStack. When the SceneLayer is Updated, it updates the Physics System and afterward any entity data. Then, the objects are rendered to the screen and the loop repeats.
     </em></p>
